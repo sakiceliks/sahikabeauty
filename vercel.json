@@ -1,14 +1,6 @@
 {
   "version": 2,
-  "regions": ["iad1", "fra1"],
   "framework": "nextjs",
-  "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install",
-  "devCommand": "pnpm dev",
-  "env": {
-    "NEXT_PUBLIC_SITE_URL": "https://yourdomain.com"
-  },
   "functions": {
     "app/api/**/*.js": {
       "maxDuration": 30
@@ -46,7 +38,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp))",
+      "source": "/:path*\\.(css|js|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp)",
       "headers": [
         {
           "key": "Cache-Control",

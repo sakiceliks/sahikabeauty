@@ -25,42 +25,46 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: {
-          DEFAULT: "#e6a1b3", // Pastel pembe (iddialı ana renk)
-          dark: "#cc7f95",    // Daha koyu pembe
-          light: "#f3c4d0",   // Daha açık pembe
-        },
         title: {
-          DEFAULT: "#a05f9e", // Zarif mor/lila (başlık rengi)
+          DEFAULT: "#1e3a8a", // Lacivert (başlık için kontrast)
         },
-        secondary: {
-          DEFAULT: "#e6d6f2", // Pastel lila
-          100: "#f0e6f7",     
-          200: "#d8bde8",     
-        },
-        accent: {
-          DEFAULT: "#f7c58a", // Pastel şeftali / altın
-          100: "#f9d7ad",     
-          200: "#ecaa62",     
-        },
+  primary: {
+    DEFAULT: "#D5E8DB", // Pastel yeşil
+    dark: "#BDD9C5",
+    light: "#E8F3EB",
+  },
+  secondary: {
+    DEFAULT: "#E2EFE8", // Açık mint
+    100: "#F0F7F3",
+    200: "#D4E7DD",
+  },
+  accent: {
+    DEFAULT: "#FCE4D8", // Sıcak şeftali
+    100: "#FEF1EA",
+    200: "#F9D2BC",
+  },
         neutral: {
-          50: "#faf7f9",   // Çok açık bej/pembe beyaz
-          100: "#f3ecef",  
-          200: "#e4d9dd",  
-          300: "#cbbac1",  
-          400: "#9c8893",  
-          500: "#6f5b66",  
+          50: "#f9fafb",  
+          100: "#f3f4f6",  
+          200: "#e5e7eb",  
+          300: "#d1d5db",  
+          400: "#9ca3af",  
+          500: "#6b7280",  
+          600: "#4b5563",  
+          700: "#374151",  
+          800: "#1f2937",  
+          900: "#111827",  
         },
         soft: {
-          blush: "#f9d0d9",    // Toz pembe
-          lavender: "#d9c2f0", // Pastel lavanta
-          peach: "#fcd5b5",    // Yumuşak şeftali
-          beige: "#f1e2d2",    // Zarif bej
+          sky: "#bae6fd",      // Soft gökyüzü mavisi
+          powder: "#e0f2fe",   // Pudra mavisi
+          ice: "#e0f7fa",      // Buz mavisi
+          sand: "#fef9c3",     // Yumuşak pastel bej
         },
         nature: {
-          mint: "#bce3c0",    // Yumuşak nane yeşili (destek)
-          sage: "#cfdccf",    // Hafif adaçayı
-          olive: "#a6b79b",   // Soft zeytin yeşili
+          mint: "#bbf7d0",     // Pastel mint yeşili
+          sage: "#d9f99d",     // Açık yeşilimsi
+          sea: "#7dd3fc",      // Pastel deniz mavisi
         }
       },
       keyframes: {
