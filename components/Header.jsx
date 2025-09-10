@@ -19,7 +19,7 @@ const Header = () => {
   const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
   const [mobileNav, setMobileNav] = useState(false);
   return (
-    <header className="pb-6 xl:pb-[50px] fixed z-40 w-full bg-accent-100 xl:bg-transparent">
+    <header className="pb-6 xl:pb-[50px] static z-40 w-full bg-accent-100 xl:bg-transparent">
       {/* topbar */}
       <div className="bg-primary mb-6 xl:mb-[50px] xl:h-[50px] py-4 xl:py-0">
         <div className="container mx-auto h-full">

@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.0",
+    "@vercel/blob": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.2",
     "framer-motion": "^11.2.11",
     "lucide-react": "^0.395.0",
+    "mongodb": "^6.19.0",
     "next": "14.2.4",
     "react": "^18",
     "react-countup": "^6.5.3",

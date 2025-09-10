@@ -94,23 +94,44 @@ const ServiceDetails = () => {
                 <p className="text-gray-600 text-sm">{service.duration || "30-60 dk"}</p>
               </div>
               <div className="bg-primary/5 border border-primary/10 rounded-xl p-4 text-center">
-                <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                <h3 className="font-semibold text-sm">Popülerlik</h3>
-                <p className="text-gray-600 text-sm">Çok Tercih Edilen</p>
+                <Award className="w-8 h-8 text-primary mx-auto mb-2" />
+                <h3 className="font-semibold text-sm">Kullanılan Cihaz</h3>
+                <div className="relative w-full h-20 mb-2">
+                  <Image
+                    src={`/assets/devices/${service.slug}.png`}
+                    alt={service.device}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-gray-600 text-sm">{service.device || "Gelişmiş Teknoloji"}</p>
               </div>
             </div>
 
             {/* Kullanılan Cihaz */}
             {service.device && (
               <div className="bg-gradient-to-r from-accent/5 to-secondary/5 border rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-4">
                   <Award className="w-6 h-6 text-primary" />
                   <h2 className="text-xl font-semibold">Kullanılan Teknoloji</h2>
                 </div>
-                <p className="text-gray-700 font-medium">{service.device}</p>
-                <p className="text-sm text-gray-600 mt-2">
-                  En son teknoloji cihazlarla güvenli ve etkili uygulama
-                </p>
+                <div className="flex items-center gap-6">
+                  <div className="relative w-32 h-32 bg-white/50 rounded-xl overflow-hidden shadow-lg">
+                    <Image
+                      src={`/assets/devices/${service.slug}.png`}
+                      alt={service.device}
+                      fill
+                      className="object-contain p-2"
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-700 font-medium text-lg mb-2">{service.device}</p>
+                    <p className="text-sm text-gray-600">
+                      En son teknoloji cihazlarla güvenli ve etkili uygulama
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
