@@ -33,8 +33,8 @@ const Nav = () => {
               href={link.href}
               key={index}
               className={`${
-                pathname === link.href && "border-b-2 border-accent"
-              } uppercase`}
+                pathname === link.href && "border-b-2 text-title border-accent"
+              } uppercase text-black font-bold`}
             >
               {link.name}
             </Link>

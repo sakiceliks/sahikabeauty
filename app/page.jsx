@@ -100,7 +100,7 @@ const Home = () => {
               <motion.h1
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
-                className="h1 mb-6"
+                className="h1 mb-6 text-title"
               >
                 Doğal Güzellik <br /> Burada Başlar
               </motion.h1>

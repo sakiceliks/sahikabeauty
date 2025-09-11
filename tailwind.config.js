@@ -31,7 +31,7 @@ module.exports = {
     light: "#a8d1a8",   // Daha açık ton
   },
   title:{
-    DEFAULT:"#945f57"
+    DEFAULT:"#BE3D2B"
   },
   secondary: {
     DEFAULT: "#f0f8f0", // Çok açık pastel yeşil/beyaz
