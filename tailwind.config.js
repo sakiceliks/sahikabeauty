@@ -24,49 +24,47 @@ module.exports = {
       secondary: "var(--font-montserrat)",
     },
     extend: {
-      colors: {
-        title: {
-          DEFAULT: "#1e3a8a", // Lacivert (başlık için kontrast)
-        },
+     colors: {
   primary: {
-    DEFAULT: "#D5E8DB", // Pastel yeşil
-    dark: "#BDD9C5",
-    light: "#E8F3EB",
+    DEFAULT: "#8fbc8f", // Ana pastel yeşil (Dark Sea Green)
+    dark: "#7aa67a",    // Daha koyu ton
+    light: "#a8d1a8",   // Daha açık ton
+  },
+  title:{
+    DEFAULT:"#945f57"
   },
   secondary: {
-    DEFAULT: "#E2EFE8", // Açık mint
-    100: "#F0F7F3",
-    200: "#D4E7DD",
+    DEFAULT: "#f0f8f0", // Çok açık pastel yeşil/beyaz
+    100: "#e6f2e6",     // Hafif pastel yeşil
+    200: "#d4e8d4",     // Orta pastel yeşil
   },
   accent: {
-    DEFAULT: "#FCE4D8", // Sıcak şeftali
-    100: "#FEF1EA",
-    200: "#F9D2BC",
+    DEFAULT: "#98d4aa", // Accent pastel yeşil (Mint Green)
+    100: "#c1e7ce",     // Açık accent
+    200: "#7fc693",     // Daha canlı accent
   },
-        neutral: {
-          50: "#f9fafb",  
-          100: "#f3f4f6",  
-          200: "#e5e7eb",  
-          300: "#d1d5db",  
-          400: "#9ca3af",  
-          500: "#6b7280",  
-          600: "#4b5563",  
-          700: "#374151",  
-          800: "#1f2937",  
-          900: "#111827",  
-        },
-        soft: {
-          sky: "#bae6fd",      // Soft gökyüzü mavisi
-          powder: "#e0f2fe",   // Pudra mavisi
-          ice: "#e0f7fa",      // Buz mavisi
-          sand: "#fef9c3",     // Yumuşak pastel bej
-        },
-        nature: {
-          mint: "#bbf7d0",     // Pastel mint yeşili
-          sage: "#d9f99d",     // Açık yeşilimsi
-          sea: "#7dd3fc",      // Pastel deniz mavisi
-        }
-      },
+  neutral: {
+    50: "#f9faf9",      // En açık nötr
+    100: "#f3f6f3",     // Açık gri-yeşil
+    200: "#e8ebe8",     // Orta açık gri
+    300: "#d6dad6",     // Orta gri
+    400: "#a8b0a8",     // Koyu gri
+    500: "#758075",     // Ana nötr
+  },
+  // Ek renkler
+  soft: {
+    mint: "#b8e6b8",    // Yumuşak nane yeşili
+    sage: "#c9d6c9",    // Adaçayı yeşili
+    eucalyptus: "#a8d8a8", // Okaliptüs yeşili
+    seafoam: "#9fd9b7",    // Deniz köpüğü yeşili
+  },
+  // Doğal tonlar
+  nature: {
+    moss: "#8db68d",    // Yosun yeşili
+    leaf: "#7fb069",    // Yaprak yeşili
+    bamboo: "#a4c49a",  // Bambu yeşili
+  }
+},
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

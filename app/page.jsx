@@ -37,13 +37,22 @@ const Home = () => {
         
         const blogsData = await blogsRes.json();
         const servicesData = await servicesRes.json();
+        console.log('blogsData:', blogsData);
+        console.log('servicesData:', JSON.stringify(servicesData, null, 2));
         
         if (blogsData && Array.isArray(blogsData)) {
           setBlogs(blogsData);
         }
         
-        if (servicesData && Array.isArray(servicesData)) {
-          setServices(servicesData.slice(0, 3));
+        if (Array.isArray(servicesData)) {
+          setServices(servicesData);
+        } else if (servicesData && Array.isArray(servicesData.data)) {
+          // Eğer API response'u { data: [...] } şeklindeyse
+          setServices(servicesData.data);
+          console.warn('servicesData.data kullanıldı:', servicesData.data);
+        } else {
+          setServices([]);
+          console.warn('servicesData beklenen formatta değil:', servicesData);
         }
       } catch (error) {
         console.error('Veri yükleme hatası:', error);
@@ -135,7 +144,7 @@ const Home = () => {
                 }}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
-                className="hidden xl:flex fixed bottom-0"
+                className="hidden bottom-0"
               >
                 <Image
                   src={"/assets/home/img.png"}
@@ -191,56 +200,61 @@ const Home = () => {
               [...Array(3)].map((_, index) => (
                 <ServiceCardSkeleton key={index} />
               ))
+            ) : services.length === 0 ? (
+              <div className="col-span-3 text-center text-gray-500 font-semibold py-10">Veri yok</div>
             ) : (
               // Veriler yüklendiğinde servisleri göster
-              services.map((service, index) => (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0, transition: { delay: index * 0.2, duration: 0.8 } }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1 text-sm font-semibold text-primary">
-                      {service.price}
-                    </div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-semibold">{service.title}</h3>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm text-gray-600">{service.rating}</span>
+              services.map((service, index) => {
+                console.log('service:', service);
+                return (
+                  <motion.div
+                    key={service.id || index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0, transition: { delay: index * 0.2, duration: 0.8 } }}
+                    viewport={{ once: true }}
+                    className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1 text-sm font-semibold text-primary">
+                        {service.price}
                       </div>
                     </div>
                     
-                    <p className="text-gray-600 mb-4">{service.description}</p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <Clock className="w-4 h-4" />
-                        {service.duration}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-xl font-semibold">{service.title}</h3>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm text-gray-600">{service.rating}</span>
+                        </div>
                       </div>
                       
-                      <Link 
-                        href={`/hizmetler/${service.slug}`}
-                        className="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors font-medium"
-                      >
-                        Detaylar
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      <p className="text-gray-600 mb-4">{service.description}</p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-sm text-gray-500">
+                          <Clock className="w-4 h-4" />
+                          {service.duration}
+                        </div>
+                        
+                        <Link 
+                          href={`/hizmetler/${service.slug}`}
+                          className="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors font-medium"
+                        >
+                          Detaylar
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))
+                  </motion.div>
+                );
+              })
             )}
           </div>
         </div>
