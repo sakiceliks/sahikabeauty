@@ -20,8 +20,7 @@ const Header = () => {
   const [mobileNav, setMobileNav] = useState(false);
   return (
     <header className="pb-6 xl:pb-[50px] static z-40 w-full bg-accent-100 xl:bg-transparent">
-      {/* topbar */}
-      <div className="bg-primary mb-6 xl:mb-[50px] xl:h-[50px] py-4 xl:py-0">
+      <div className="bg-[#EAEAE8] mb-6 xl:mb-[50px] xl:h-[50px] py-4 xl:py-0">
         <div className="container mx-auto h-full">
           <div className="flex items-center justify-between h-full">
             {/* phone & email */}
@@ -31,17 +30,17 @@ const Header = () => {
               className="flex flex-col lg:flex-row items-center h-full gap-2 xl:gap-6 w-full justify-between xl:w-auto xl:justify-normal"
             >
               {/* phone */}
-              <div className="flex items-center gap-2 text-title ">
-                <a href="tel:+905304348349" className="flex items-center gap-2 text-white hover:text-accent transition">
+              <div className="flex items-center gap-2 text-title font-bold ">
+                <a href="tel:+905304348349" className="flex items-center gap-2 text-black hover:text-accent  transition">
                   <FaPhoneAlt />
                   0530 434 83 49
                 </a>
-                <a href="https://wa.me/905304348349" target="_blank" rel="noopener noreferrer" className="ml-2 text-white underline hover:text-green-600 transition">
+                <a href="https://wa.me/905304348349" target="_blank" rel="noopener noreferrer" className="ml-2 text-black font-bold hover:text-green-600 transition">
                   WhatsApp
                 </a>
               </div>
               {/* email */}
-              <div className="flex items-center gap-2 text-white">
+              <div className="flex items-center gap-2 text-black">
                 <IoMdMail />
                 <span>sahikabeauty@gmail.com</span>
               </div>

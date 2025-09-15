@@ -18,15 +18,16 @@ export default function AdminPanel() {
     title: '',
     description: '',
     image: '',
-    device: '',
+    device: { name: '', imageUrl: '' }, // Yeni yapı: name ve imageUrl içeriyor
     duration: '',
     benefits: [''],
     detailedDescription: '',
     faq: [{ question: '', answer: '' }],
-    reviews: []
+    reviews: [],
+    published: false,
   });
 
-  // Fetch services
+  // Hizmetleri getir
   const fetchServices = async () => {
     try {
       setLoading(true);
@@ -37,7 +38,7 @@ export default function AdminPanel() {
         setFilteredServices(data.data);
       }
     } catch (error) {
-      console.error('Error fetching services:', error);
+      console.error('Hizmetleri getirirken hata oluştu:', error);
     } finally {
       setLoading(false);
     }
@@ -47,12 +48,12 @@ export default function AdminPanel() {
     fetchServices();
   }, []);
 
-  // Filter services
+  // Hizmetleri filtrele
   useEffect(() => {
     let filtered = services;
 
     if (searchTerm) {
-      filtered = filtered.filter(service => 
+      filtered = filtered.filter(service =>
         service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         service.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -65,31 +66,37 @@ export default function AdminPanel() {
     setFilteredServices(filtered);
   }, [searchTerm, selectedCategory, services]);
 
-  // Handle file upload
+  // Dosya yüklemeyi yönet
   const handleFileUpload = async (e, type = 'service') => {
     const file = e.target.files[0];
     if (!file) return;
 
     setUploading(true);
-    
+
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', type); // service veya device olarak belirt
+      const formDataToSend = new FormData();
+      formDataToSend.append('file', file);
+      formDataToSend.append('type', type);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
-        body: formData,
+        body: formDataToSend,
       });
 
       const data = await response.json();
       console.log('Yükleme API cevabı:', data);
       if (response.ok) {
-        // Vercel Blob API: url, pathname veya downloadUrl olabilir
         const imageUrl = data.url || data.pathname || data.downloadUrl || (data.blob && (data.blob.url || data.blob.pathname || data.blob.downloadUrl));
         if (imageUrl) {
           if (type === 'device') {
-            // Cihaz görseli başarıyla yüklendi
+            // Cihaz görseli başarıyla yüklendiğinde URL'i device alanına ekle
+            setFormData(prev => ({
+              ...prev,
+              device: {
+                ...prev.device,
+                imageUrl: imageUrl
+              }
+            }));
             alert('Cihaz görseli başarıyla yüklendi!');
           } else {
             setFormData(prev => ({ ...prev, image: imageUrl }));
@@ -109,13 +116,28 @@ export default function AdminPanel() {
     }
   };
 
-  // Handle form input changes
+  // Form input değişikliklerini yönet
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    
+    // device alanı için özel yönetim
+    if (name === 'device.name') {
+        setFormData(prev => ({
+            ...prev,
+            device: {
+                ...prev.device,
+                name: value
+            }
+        }));
+    } else {
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    }
   };
 
-  // Handle array fields
+  // Dizi alanlarını yönet
   const handleArrayChange = (field, index, value) => {
     setFormData(prev => ({
       ...prev,
@@ -123,7 +145,7 @@ export default function AdminPanel() {
     }));
   };
 
-  // Add array item
+  // Dizi öğesi ekle
   const addArrayItem = (field, defaultValue) => {
     setFormData(prev => ({
       ...prev,
@@ -131,7 +153,7 @@ export default function AdminPanel() {
     }));
   };
 
-  // Remove array item
+  // Dizi öğesi kaldır
   const removeArrayItem = (field, index) => {
     setFormData(prev => ({
       ...prev,
@@ -139,17 +161,17 @@ export default function AdminPanel() {
     }));
   };
 
-  // Handle FAQ changes
+  // FAQ değişikliklerini yönet
   const handleFaqChange = (index, field, value) => {
     setFormData(prev => ({
       ...prev,
-      faq: prev.faq.map((faq, i) => 
+      faq: prev.faq.map((faq, i) =>
         i === index ? { ...faq, [field]: value } : faq
       )
     }));
   };
 
-  // Reset form
+  // Formu sıfırla
   const resetForm = () => {
     setFormData({
       slug: '',
@@ -157,21 +179,22 @@ export default function AdminPanel() {
       title: '',
       description: '',
       image: '',
-      device: '',
+      device: { name: '', imageUrl: '' },
       duration: '',
       benefits: [''],
       detailedDescription: '',
       faq: [{ question: '', answer: '' }],
-      reviews: []
+      reviews: [],
+      published: false,
     });
     setEditingService(null);
     setShowForm(false);
   };
 
-  // Handle create/update
+  // Oluştur/Güncelle'yi yönet
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const url = editingService ? `/api/services/${editingService.id}` : '/api/services';
       const method = editingService ? 'PUT' : 'POST';
@@ -189,17 +212,17 @@ export default function AdminPanel() {
       if (data.success) {
         await fetchServices();
         resetForm();
-        alert(editingService ? 'Service updated successfully!' : 'Service created successfully!');
+        alert(editingService ? 'Hizmet başarıyla güncellendi!' : 'Hizmet başarıyla oluşturuldu!');
       } else {
-        alert(`Error: ${data.error}`);
+        alert(`Hata: ${data.error}`);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Error submitting form');
+      console.error('Form gönderilirken hata oluştu:', error);
+      alert('Form gönderilirken hata oluştu');
     }
   };
 
-  // Handle edit
+  // Düzenleme
   const handleEdit = (service) => {
     setFormData({
       slug: service.slug || '',
@@ -207,20 +230,21 @@ export default function AdminPanel() {
       title: service.title || '',
       description: service.description || '',
       image: service.image || '',
-      device: service.device || '',
+      device: service.device || { name: '', imageUrl: '' }, // Yeni yapıya uygun düzenleme
       duration: service.duration || '',
       benefits: service.benefits || [''],
       detailedDescription: service.detailedDescription || '',
       faq: service.faq || [{ question: '', answer: '' }],
-      reviews: service.reviews || []
+      reviews: service.reviews || [],
+      published: service.published || false,
     });
     setEditingService(service);
     setShowForm(true);
   };
 
-  // Handle delete
+  // Silme
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
+    if (!confirm('Bu hizmeti silmek istediğinizden emin misiniz?')) return;
 
     try {
       const response = await fetch(`/api/services/${id}`, {
@@ -231,20 +255,20 @@ export default function AdminPanel() {
 
       if (data.success) {
         await fetchServices();
-        alert('Service deleted successfully!');
+        alert('Hizmet başarıyla silindi!');
       } else {
-        alert(`Error: ${data.error}`);
+        alert(`Hata: ${data.error}`);
       }
     } catch (error) {
-      console.error('Error deleting service:', error);
-      alert('Error deleting service');
+      console.error('Hizmet silinirken hata oluştu:', error);
+      alert('Hizmet silinirken hata oluştu');
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-white text-xl">Yükleniyor...</div>
       </div>
     );
   }
@@ -252,38 +276,38 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto py-8">
-        {/* Header */}
+        {/* Başlık */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Services Admin Panel</h1>
+          <h1 className="text-3xl font-bold">Hizmetler Yönetim Paneli</h1>
           <button
             onClick={() => setShowForm(true)}
             className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold transition-colors"
           >
-            Add New Service
+            Yeni Hizmet Ekle
           </button>
         </div>
 
-        {/* Filters */}
+        {/* Filtreler */}
         <div className="bg-gray-800 p-6 rounded-lg mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Search</label>
+              <label className="block text-sm font-medium mb-2">Arama</label>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search services..."
+                placeholder="Hizmetlerde ara..."
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Category</label>
+              <label className="block text-sm font-medium mb-2">Kategori</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">All Categories</option>
+                <option value="">Tüm Kategoriler</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
@@ -292,19 +316,20 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        {/* Services Table */}
+        {/* Hizmetler Tablosu */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-700">
                 <tr>
                   <th className="px-6 py-4 text-left">ID</th>
-                  <th className="px-6 py-4 text-left">Title</th>
-                  <th className="px-6 py-4 text-left">Category</th>
+                  <th className="px-6 py-4 text-left">Başlık</th>
+                  <th className="px-6 py-4 text-left">Kategori</th>
                   <th className="px-6 py-4 text-left">Slug</th>
-                  <th className="px-6 py-4 text-left">Device</th>
-                  <th className="px-6 py-4 text-left">Duration</th>
-                  <th className="px-6 py-4 text-left">Actions</th>
+                  <th className="px-6 py-4 text-left">Cihaz</th>
+                  <th className="px-6 py-4 text-left">Süre</th>
+                  <th className="px-6 py-4 text-left">Yayınlandı</th>
+                  <th className="px-6 py-4 text-left">Eylemler</th>
                 </tr>
               </thead>
               <tbody>
@@ -321,30 +346,38 @@ export default function AdminPanel() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <div className="relative w-8 h-8 bg-gray-700 rounded-lg overflow-hidden">
-                          <img 
-                            src={`/assets/devices/${service.slug}.png`}
-                            alt={service.device}
-                            className="w-full h-full object-contain"
-                            onError={(e) => e.target.style.display = 'none'}
-                          />
+                          {service.device?.imageUrl ? (
+                            <img
+                              src={service.device.imageUrl}
+                              alt={service.device.name}
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-600 flex items-center justify-center text-xs">?</div>
+                          )}
                         </div>
-                        <span className="text-sm">{service.device || "Gelişmiş Teknoloji"}</span>
+                        <span className="text-sm">{service.device?.name || "Gelişmiş Teknoloji"}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">{service.duration}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${service.published ? 'bg-green-500' : 'bg-red-500'}`}>
+                        {service.published ? 'Evet' : 'Hayır'}
+                      </span>
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEdit(service)}
                           className="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded text-sm transition-colors"
                         >
-                          Edit
+                          Düzenle
                         </button>
                         <button
                           onClick={() => handleDelete(service.id)}
                           className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors"
                         >
-                          Delete
+                          Sil
                         </button>
                       </div>
                     </td>
@@ -356,7 +389,7 @@ export default function AdminPanel() {
 
           {filteredServices.length === 0 && (
             <div className="text-center py-8 text-gray-400">
-              No services found
+              Hiç hizmet bulunamadı.
             </div>
           )}
         </div>
@@ -366,13 +399,13 @@ export default function AdminPanel() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-gray-800 p-8 rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-6">
-                {editingService ? 'Edit Service' : 'Add New Service'}
+                {editingService ? 'Hizmeti Düzenle' : 'Yeni Hizmet Ekle'}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Title *</label>
+                    <label className="block text-sm font-medium mb-2">Başlık *</label>
                     <input
                       type="text"
                       name="title"
@@ -396,7 +429,7 @@ export default function AdminPanel() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Category *</label>
+                    <label className="block text-sm font-medium mb-2">Kategori *</label>
                     <select
                       name="category"
                       value={formData.category}
@@ -404,7 +437,7 @@ export default function AdminPanel() {
                       required
                       className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="">Select Category</option>
+                      <option value="">Kategori Seçin</option>
                       {categories.map(cat => (
                         <option key={cat.id} value={cat.id}>{cat.name}</option>
                       ))}
@@ -412,7 +445,7 @@ export default function AdminPanel() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Duration</label>
+                    <label className="block text-sm font-medium mb-2">Süre</label>
                     <input
                       type="text"
                       name="duration"
@@ -423,60 +456,59 @@ export default function AdminPanel() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Device</label>
+                    <label className="block text-sm font-medium mb-2">Cihaz</label>
                     <div className="space-y-4">
                       <input
                         type="text"
-                        name="device"
-                        value={formData.device}
+                        name="device.name" // name alanını güncelledim
+                        value={formData.device.name} // değerini güncelledim
                         onChange={handleInputChange}
+                        placeholder="Cihaz Adı"
                         className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
-                      {formData.slug && (
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 bg-gray-700/50 p-2 rounded-lg">
-                            <div className="relative w-12 h-12 bg-gray-800 rounded-lg overflow-hidden">
-                              <img 
-                                src={`/assets/devices/${formData.slug}.png`}
-                                alt={formData.device}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 bg-gray-700/50 p-2 rounded-lg">
+                          <div className="relative w-12 h-12 bg-gray-800 rounded-lg overflow-hidden">
+                            {formData.device.imageUrl ? (
+                              <img
+                                src={formData.device.imageUrl}
+                                alt={formData.device.name}
                                 className="w-full h-full object-contain"
-                                onError={(e) => e.target.style.display = 'none'}
                               />
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              <p>Cihaz görseli konumu:</p>
-                              <code className="text-xs">/assets/devices/{formData.slug}.png</code>
-                            </div>
+                            ) : (
+                              <div className="w-full h-full bg-gray-600 flex items-center justify-center text-xs">?</div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <label className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded cursor-pointer text-sm">
-                              {uploading ? 'Cihaz Görseli Yükleniyor...' : 'Cihaz Görseli Yükle'}
-                              <input
-                                type="file"
-                                onChange={(e) => handleFileUpload(e, 'device')}
-                                className="hidden"
-                                accept="image/png"
-                                disabled={uploading}
-                              />
-                            </label>
-                            <span className="text-xs text-gray-400">
-                              Not: Yalnızca PNG formatı desteklenir
-                            </span>
+                          <div className="text-sm text-gray-400">
+                            <p>Yüklenen cihaz görseli:</p>
+                            <code className="text-xs break-all">{formData.device.imageUrl || 'Henüz görsel yüklenmedi.'}</code>
                           </div>
                         </div>
-                      )}
+                        <div className="flex items-center gap-2">
+                          <label className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded cursor-pointer text-sm">
+                            {uploading ? 'Cihaz Görseli Yükleniyor...' : 'Cihaz Görseli Yükle'}
+                            <input
+                              type="file"
+                              onChange={(e) => handleFileUpload(e, 'device')}
+                              className="hidden"
+                              accept="image/*"
+                              disabled={uploading}
+                            />
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Image</label>
+                    <label className="block text-sm font-medium mb-2">Resim</label>
                     <div className="flex flex-col gap-2">
                       <input
                         type="text"
                         name="image"
                         value={formData.image}
                         onChange={handleInputChange}
-                        placeholder="Image URL"
+                        placeholder="Resim URL'si"
                         className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       <div className="flex items-center gap-2">
@@ -492,9 +524,9 @@ export default function AdminPanel() {
                         </label>
                         {formData.image && (
                           <div className="w-10 h-10 rounded overflow-hidden">
-                            <img 
-                              src={formData.image} 
-                              alt="Preview" 
+                            <img
+                              src={formData.image}
+                              alt="Önizleme"
                               className="w-full h-full object-cover"
                             />
                           </div>
@@ -502,10 +534,24 @@ export default function AdminPanel() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Yeni eklenen Yayınlandı Checkbox'ı */}
+                  <div className="col-span-2 flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="published"
+                      name="published"
+                      checked={formData.published}
+                      onChange={handleInputChange}
+                      className="form-checkbox h-5 w-5 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="published" className="text-sm font-medium">Yayınlandı</label>
+                  </div>
+
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Description *</label>
+                  <label className="block text-sm font-medium mb-2">Açıklama *</label>
                   <textarea
                     name="description"
                     value={formData.description}
@@ -517,7 +563,7 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Detailed Description</label>
+                  <label className="block text-sm font-medium mb-2">Detaylı Açıklama</label>
                   <textarea
                     name="detailedDescription"
                     value={formData.detailedDescription}
@@ -527,9 +573,9 @@ export default function AdminPanel() {
                   />
                 </div>
 
-                {/* Benefits */}
+                {/* Faydalar */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Benefits</label>
+                  <label className="block text-sm font-medium mb-2">Faydalar</label>
                   {formData.benefits.map((benefit, index) => (
                     <div key={index} className="flex gap-2 mb-2">
                       <input
@@ -543,7 +589,7 @@ export default function AdminPanel() {
                         onClick={() => removeArrayItem('benefits', index)}
                         className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded"
                       >
-                        Remove
+                        Kaldır
                       </button>
                     </div>
                   ))}
@@ -552,25 +598,25 @@ export default function AdminPanel() {
                     onClick={() => addArrayItem('benefits', '')}
                     className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm"
                   >
-                    Add Benefit
+                    Fayda Ekle
                   </button>
                 </div>
 
-                {/* FAQ */}
+                {/* SSS (Sıkça Sorulan Sorular) */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">FAQ</label>
+                  <label className="block text-sm font-medium mb-2">SSS</label>
                   {formData.faq.map((faq, index) => (
                     <div key={index} className="bg-gray-700 p-4 rounded-lg mb-4">
                       <div className="grid grid-cols-1 gap-4">
                         <input
                           type="text"
-                          placeholder="Question"
+                          placeholder="Soru"
                           value={faq.question}
                           onChange={(e) => handleFaqChange(index, 'question', e.target.value)}
                           className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2"
                         />
                         <textarea
-                          placeholder="Answer"
+                          placeholder="Cevap"
                           value={faq.answer}
                           onChange={(e) => handleFaqChange(index, 'answer', e.target.value)}
                           className="w-full bg-gray-600 border border-gray-500 rounded px-4 py-2"
@@ -581,7 +627,7 @@ export default function AdminPanel() {
                           onClick={() => removeArrayItem('faq', index)}
                           className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded self-start"
                         >
-                          Remove FAQ
+                          SSS'yi Kaldır
                         </button>
                       </div>
                     </div>
@@ -591,24 +637,24 @@ export default function AdminPanel() {
                     onClick={() => addArrayItem('faq', { question: '', answer: '' })}
                     className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm"
                   >
-                    Add FAQ
+                    SSS Ekle
                   </button>
                 </div>
 
-                {/* Form Actions */}
+                {/* Form Eylemleri */}
                 <div className="flex justify-end space-x-4 pt-6">
                   <button
                     type="button"
                     onClick={resetForm}
                     className="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg transition-colors"
                   >
-                    Cancel
+                    İptal
                   </button>
                   <button
                     type="submit"
                     className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold transition-colors"
                   >
-                    {editingService ? 'Update Service' : 'Create Service'}
+                    {editingService ? 'Hizmeti Güncelle' : 'Hizmet Oluştur'}
                   </button>
                 </div>
               </form>
