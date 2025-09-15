@@ -10,6 +10,7 @@ import { BlogCardSkeleton, ServiceCardSkeleton } from "@/components/Skeletons";
 import FeaturedServices from "@/components/FeaturedServices";
 import BlogSection from "@/components/BlogSection";
 import StatsSection from "@/components/StatsSection";
+import { Sparkles } from "lucide-react";
 
 const Home = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
