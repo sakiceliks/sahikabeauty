@@ -11,7 +11,7 @@ import FeaturedServices from "@/components/FeaturedServices";
 import BlogSection from "@/components/BlogSection";
 import StatsSection from "@/components/StatsSection";
 import { Sparkles } from "lucide-react";
-
+import Link from "next/link";
 const Home = () => {
  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
   const [blogs, setBlogs] = useState([]);
