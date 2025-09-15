@@ -19,7 +19,8 @@ export const services = [
     image: "/assets/services/lazer-epilasyon.png",
     device: "Falcon 4 Pro",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Uzman ekip tarafından uygulama",
       "Hijyenik ve güvenli ortam",
       "Son teknoloji cihazlar",
@@ -72,7 +73,8 @@ export const services = [
     image: "/assets/services/igneli-epilasyon.png",
     device: "Profesyonel İğneli Epilasyon Cihazı",
     duration: "15-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "İnce ve beyaz tüylerde etkili sonuç",
       "Kalıcı çözüm",
       "Uzman estetisyen tarafından uygulama",
@@ -121,7 +123,8 @@ export const services = [
     image: "/assets/services/cilt-bakimi.png",
     device: "HydraFacial Cihazı",
     duration: "60-90 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Cildin derinlemesine temizliği",
       "Gözeneklerin sıkılaşması",
       "Canlı ve parlak bir görünüm",
@@ -168,7 +171,8 @@ export const services = [
     image: "/assets/services/leke-bakimi.png",
     device: "Q-Switched Lazer",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Güneş ve yaşlılık lekelerinde azalma",
       "Cilt tonu eşitsizliğinin giderilmesi",
       "Ciltte aydınlanma",
@@ -216,7 +220,8 @@ export const services = [
     image: "/assets/services/akne-bakimi.png",
     device: "Mavi Işık Terapi Cihazı",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Akne oluşumunu önleme",
       "Var olan akneleri kurutma",
       "Akne izlerini azaltma",
@@ -264,7 +269,8 @@ export const services = [
     image: "/assets/services/yosun-peeling.png",
     device: "Profesyonel Peeling Sistemi",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Cilt tonunu eşitleme",
       "Sivilce ve akne izlerini azaltma",
       "İnce çizgi ve kırışıklıklarda azalma",
@@ -314,7 +320,8 @@ export const services = [
     image: "/assets/services/g5-masaji.png",
     device: "G5 Masaj Cihazı",
     duration: "30-45 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Selülit görünümünde azalma",
       "Bölgesel incelme",
       "Ödem atma",
@@ -362,7 +369,8 @@ export const services = [
     image: "/assets/services/emslimfit.png",
     device: "EmSlimFit",
     duration: "30 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Yağ yakımını hızlandırma",
       "Kas kütlesini artırma",
       "Vücut şekillendirme",
@@ -410,7 +418,8 @@ export const services = [
     image: "/assets/services/primex.png",
     device: "Primex",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Cilt gençleştirme",
       "Vücut ve yüz sıkılaştırma",
       "Selülit görünümünde azalma",
@@ -458,7 +467,8 @@ export const services = [
     image: "/assets/services/sculpture.png",
     device: "Sculpture Heykeltraş Cihazı",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Bölgesel incelme",
       "Yağ dokusunda azalma",
       "Vücut kontürünü belirginleştirme",
@@ -508,7 +518,8 @@ export const services = [
     image: "/assets/services/dudak-renklendirme.png",
     device: "Kalıcı Makyaj Cihazı",
     duration: "120-150 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Dudaklara daha canlı bir görünüm",
       "Asimetri problemini giderme",
       "Her zaman bakımlı dudaklar",
@@ -556,7 +567,8 @@ export const services = [
     image: "/assets/services/eyeliner-dipliner.png",
     device: "Kalıcı Makyaj Cihazı",
     duration: "60-90 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Gözlerin daha belirgin görünmesi",
       "Makyaja harcanan zamanı azaltma",
       "Terlemeye ve suya dayanıklı",
@@ -604,7 +616,8 @@ export const services = [
     image: "/assets/services/kas-pigmentasyon.png",
     device: "Kalıcı Makyaj Cihazı",
     duration: "90-120 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Kaşlardaki boşlukları doldurma",
       "Daha dolgun ve simetrik kaşlar",
       "Yüz hatlarını belirginleştirme",
@@ -652,7 +665,8 @@ export const services = [
     image: "/assets/services/microblading.png",
     device: "Microblading Kalemi",
     duration: "90-120 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Doğal kıl görünümü",
       "Seyrek kaşları doldurma",
       "Simetrik kaşlar",
@@ -702,7 +716,8 @@ export const services = [
     image: "/assets/services/ipek-kirpik.png",
     device: "Profesyonel Kirpik Uygulama Kiti",
     duration: "90-120 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Daha uzun ve dolgun kirpikler",
       "Makyaja ihtiyaç duymama",
       "Gözlerin daha çekici görünmesi",
@@ -750,7 +765,8 @@ export const services = [
     image: "/assets/services/protez-tirnak.png",
     device: "UV/LED Tırnak Kurutma Lambası",
     duration: "90-120 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Dayanıklı ve sağlam tırnaklar",
       "Estetik ve şık görünüm",
       "Tırnak yeme alışkanlığından kurtulma",
@@ -800,7 +816,8 @@ export const services = [
     image: "/assets/services/sac-bakimi.png",
     device: "Profesyonel Saç Bakım Cihazları",
     duration: "60-90 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Saç dökülmesini azaltma",
       "Saçları güçlendirme",
       "Canlı ve parlak saçlar",
@@ -850,7 +867,8 @@ export const services = [
     image: "/assets/services/cilt-genclestirme.png",
     device: "HIFU Cihazı",
     duration: "60-90 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "İnce çizgi ve kırışıklıklarda azalma",
       "Yüzde lifting etkisi",
       "Kolajen üretimini artırma",
@@ -898,7 +916,8 @@ export const services = [
     image: "/assets/services/24k-altin-bakim.png",
     device: "Ultrasonik Cilt Bakım Cihazı",
     duration: "60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Cilde parlaklık ve ışıltı katma",
       "Cilt yenilenmesini hızlandırma",
       "Detoks etkisi",
@@ -946,7 +965,8 @@ export const services = [
     image: "/assets/services/ignesiz-mezoterapi.png",
     device: "Elektroporasyon Cihazı",
     duration: "45-60 dk",
-    benefits: [
+ deviceImg:"",   
+benefits: [
       "Ciltte gençleşme ve sıkılaşma",
       "Kırışıklık ve leke görünümünde azalma",
       "Ağrısız ve konforlu işlem",
