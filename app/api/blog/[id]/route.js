@@ -1,39 +1,55 @@
-// app/api/blog/[id]/route.js
-import { NextResponse } from 'next/server';
-import { readFile, writeFile } from 'fs/promises';
-import path from 'path';
+import { NextResponse } from "next/server"
+import { BlogModel } from "@/models/blog"
 
-const dataFilePath = path.join(process.cwd(), 'data', 'blog.json');
+const blogModel = new BlogModel()
 
-// DELETE - Blog yazısını sil
+// GET - blog yazısını ID ile getir
+export async function GET(request, { params }) {
+  try {
+    const blog = await blogModel.findById(params.id)
+    if (!blog) {
+      return NextResponse.json({ success: false, error: "Blog not found" }, { status: 404 })
+    }
+    return NextResponse.json({ success: true, data: blog })
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+  }
+}
+
+// PUT - blog yazısını güncelle
+export async function PUT(request, { params }) {
+  try {
+    const body = await request.json()
+
+    if (body.slug) {
+      const existing = await blogModel.findBySlug(body.slug)
+      if (existing && existing._id.toString() !== params.id) {
+        return NextResponse.json(
+          { success: false, error: "Slug already exists" },
+          { status: 400 }
+        )
+      }
+    }
+
+    const updated = await blogModel.update(params.id, body)
+    return NextResponse.json({ success: true, data: updated })
+  } catch (error) {
+    if (error.message === "Blog not found") {
+      return NextResponse.json({ success: false, error: error.message }, { status: 404 })
+    }
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+  }
+}
+
+// DELETE - blog yazısını sil
 export async function DELETE(request, { params }) {
   try {
-    const { id } = params;
-    
-    const data = await readFile(dataFilePath, 'utf8');
-    let blogPosts = JSON.parse(data);
-    
-    const index = blogPosts.findIndex(post => post.id === parseInt(id));
-    
-    if (index === -1) {
-      return NextResponse.json({
-        success: false,
-        error: 'Blog yazısı bulunamadı'
-      }, { status: 404 });
-    }
-    
-    blogPosts.splice(index, 1);
-    
-    await writeFile(dataFilePath, JSON.stringify(blogPosts, null, 2));
-    
-    return NextResponse.json({
-      success: true,
-      message: 'Blog yazısı başarıyla silindi'
-    });
+    const result = await blogModel.delete(params.id)
+    return NextResponse.json({ success: true, message: result.message })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: 'Blog yazısı silinirken hata oluştu'
-    }, { status: 500 });
+    if (error.message === "Blog not found") {
+      return NextResponse.json({ success: false, error: error.message }, { status: 404 })
+    }
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
   }
 }

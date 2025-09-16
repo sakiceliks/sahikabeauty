@@ -1,164 +1,57 @@
 import { NextResponse } from "next/server"
-import { readFile, writeFile } from "fs/promises"
-import path from "path"
+import { BlogModel } from "@/models/blog"
 
-const dataFilePath = path.join(process.cwd(), "data", "blog.json")
+const blogModel = new BlogModel()
 
-// GET - Tüm blog yazılarını getir
-export async function GET() {
-  console.log("[v0] GET /api/blog called")
+// GET - tüm blog yazıları veya filtreleme
+export async function GET(request) {
   try {
-    console.log("[v0] Reading file from:", dataFilePath)
-    const data = await readFile(dataFilePath, "utf8")
-    console.log("[v0] File content:", data)
+    const { searchParams } = new URL(request.url)
+    const category = searchParams.get("category")
+    const search = searchParams.get("search")
 
-    let blogPosts = []
-    if (data.trim()) {
-      blogPosts = JSON.parse(data)
+    let blogs
+
+    if (search) {
+      blogs = await blogModel.search(search)
+    } else if (category) {
+      blogs = (await blogModel.findAll()).filter((p) => p.category === category)
+    } else {
+      blogs = await blogModel.findAll()
     }
-    console.log("[v0] Parsed blog posts:", blogPosts)
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: blogPosts,
-      },
-      { status: 200 },
-    )
+    return NextResponse.json({ success: true, data: blogs, count: blogs.length })
   } catch (error) {
-    console.log("[v0] GET error:", error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Blog yazıları okunurken hata oluştu",
-      },
-      { status: 500 },
-    )
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
   }
 }
 
-// POST - Yeni blog yazısı oluştur
+// POST - yeni blog yazısı oluştur
 export async function POST(request) {
-  console.log("[v0] POST /api/blog called")
   try {
-    console.log("[v0] Parsing request body...")
-    const newPost = await request.json()
-    console.log("[v0] New post data:", newPost)
+    const body = await request.json()
 
-    console.log("[v0] Reading existing blog posts...")
-    const data = await readFile(dataFilePath, "utf8")
-    console.log("[v0] Existing data:", data)
-
-    let blogPosts = []
-    if (data.trim()) {
-      blogPosts = JSON.parse(data)
-    }
-    console.log("[v0] Parsed existing posts:", blogPosts)
-
-    console.log("[v0] Calculating new ID...")
-    const existingIds = blogPosts.map((post) => post.id)
-    console.log("[v0] Existing IDs:", existingIds)
-
-    const newId = blogPosts.length > 0 ? Math.max(...existingIds) + 1 : 1
-    console.log("[v0] Generated new ID:", newId)
-
-    newPost.id = newId
-
-    // Tarih ekle (eğer yoksa)
-    if (!newPost.date) {
-      newPost.date = new Date().toLocaleDateString("tr-TR")
-      console.log("[v0] Added date:", newPost.date)
+    const required = ["slug", "title", "content", "category"]
+    for (const field of required) {
+      if (!body[field]) {
+        return NextResponse.json(
+          { success: false, error: `Missing field: ${field}` },
+          { status: 400 }
+        )
+      }
     }
 
-    // Görüntülenme sayısı (eğer yoksa)
-    if (!newPost.views) {
-      newPost.views = 0
-      console.log("[v0] Added views:", newPost.views)
-    }
-
-    console.log("[v0] Final post object:", newPost)
-    blogPosts.push(newPost)
-    console.log("[v0] Updated posts array:", blogPosts)
-
-    console.log("[v0] Writing to file...")
-    await writeFile(dataFilePath, JSON.stringify(blogPosts, null, 2))
-    console.log("[v0] File written successfully")
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: newPost,
-      },
-      { status: 201 },
-    )
-  } catch (error) {
-    console.log("[v0] POST error:", error)
-    console.log("[v0] Error stack:", error.stack)
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Blog yazısı oluşturulurken hata oluştu: " + error.message,
-      },
-      { status: 500 },
-    )
-  }
-}
-
-// PUT - Blog yazısını güncelle
-export async function PUT(request) {
-  console.log("[v0] PUT /api/blog called")
-  try {
-    console.log("[v0] Parsing update request...")
-    const updatedPost = await request.json()
-    console.log("[v0] Update data:", updatedPost)
-
-    const { id } = updatedPost
-    console.log("[v0] Looking for post with ID:", id)
-
-    const data = await readFile(dataFilePath, "utf8")
-    let blogPosts = []
-    if (data.trim()) {
-      blogPosts = JSON.parse(data)
-    }
-    console.log("[v0] Current posts count:", blogPosts.length)
-
-    const index = blogPosts.findIndex((post) => post.id === id)
-    console.log("[v0] Found post at index:", index)
-
-    if (index === -1) {
-      console.log("[v0] Post not found with ID:", id)
+    const existing = await blogModel.findBySlug(body.slug)
+    if (existing) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Blog yazısı bulunamadı",
-        },
-        { status: 404 },
+        { success: false, error: "Slug already exists" },
+        { status: 400 }
       )
     }
 
-    console.log("[v0] Updating post at index:", index)
-    blogPosts[index] = { ...blogPosts[index], ...updatedPost }
-    console.log("[v0] Updated post:", blogPosts[index])
-
-    await writeFile(dataFilePath, JSON.stringify(blogPosts, null, 2))
-    console.log("[v0] Update written to file")
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: blogPosts[index],
-      },
-      { status: 200 },
-    )
+    const blog = await blogModel.create(body)
+    return NextResponse.json({ success: true, data: blog }, { status: 201 })
   } catch (error) {
-    console.log("[v0] PUT error:", error)
-    console.log("[v0] Error stack:", error.stack)
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Blog yazısı güncellenirken hata oluştu",
-      },
-      { status: 500 },
-    )
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
   }
 }
