@@ -99,8 +99,9 @@ const HomeClient = () => {
         ])
 
         if (blogsRes.ok) {
-          const blogsData = await blogsRes.json()
-          if (blogsData && Array.isArray(blogsData)) {
+          const blogsJson = await blogsRes.json()
+          const blogsData = blogsJson?.data || []
+          if (Array.isArray(blogsData)) {
             setBlogs(blogsData.slice(0, 3))
           }
         }
