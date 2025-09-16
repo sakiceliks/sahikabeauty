@@ -12,7 +12,10 @@ export async function GET() {
     const data = await readFile(dataFilePath, "utf8")
     console.log("[v0] File content:", data)
 
-    const blogPosts = JSON.parse(data)
+    let blogPosts = []
+    if (data.trim()) {
+      blogPosts = JSON.parse(data)
+    }
     console.log("[v0] Parsed blog posts:", blogPosts)
 
     return NextResponse.json(
@@ -46,7 +49,10 @@ export async function POST(request) {
     const data = await readFile(dataFilePath, "utf8")
     console.log("[v0] Existing data:", data)
 
-    const blogPosts = JSON.parse(data)
+    let blogPosts = []
+    if (data.trim()) {
+      blogPosts = JSON.parse(data)
+    }
     console.log("[v0] Parsed existing posts:", blogPosts)
 
     console.log("[v0] Calculating new ID...")
@@ -110,7 +116,10 @@ export async function PUT(request) {
     console.log("[v0] Looking for post with ID:", id)
 
     const data = await readFile(dataFilePath, "utf8")
-    const blogPosts = JSON.parse(data)
+    let blogPosts = []
+    if (data.trim()) {
+      blogPosts = JSON.parse(data)
+    }
     console.log("[v0] Current posts count:", blogPosts.length)
 
     const index = blogPosts.findIndex((post) => post.id === id)
