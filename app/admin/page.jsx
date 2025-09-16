@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { categories } from "../../data/services"
 import { useToast } from "../../components/ui/use-toast"
+import { Edit, Trash2 } from "lucide-react"
 
 export default function AdminPanel() {
   const [services, setServices] = useState([])
@@ -422,7 +423,7 @@ export default function AdminPanel() {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        service.published ? "bg-green-500/20 text-green-400" : "bg-destructive/20 text-destructive"
+                        service.published ? "bg-green-500/20 text-black" : "bg-destructive/20 text-destructive"
                       }`}
                     >
                       {service.published ? "Evet" : "Hayır"}
@@ -437,19 +438,49 @@ export default function AdminPanel() {
                       {service.featured ? "Evet" : "Hayır"}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(service)}
-                        className="bg-accent/20 hover:bg-accent/30 text-accent px-3 py-1 rounded text-sm transition-colors"
-                      >
-                        Düzenle
-                      </button>
-                      <button onClick={() => handleDelete(service.id)} className="btn-destructive text-sm px-3 py-1">
-                        Sil
-                      </button>
-                    </div>
-                  </td>
+<td className="px-6 py-4">
+  <div className="flex items-center gap-2">
+    {/* Edit Button */}
+    <button
+      onClick={() => handleEdit(service)}
+      className="
+        inline-flex items-center gap-2 px-3 py-2
+        bg-blue-50 hover:bg-blue-100 
+        text-blue-600 hover:text-blue-700
+        border border-blue-200 hover:border-blue-300
+        rounded-lg text-sm font-medium
+        transition-all duration-200 ease-in-out
+        hover:scale-105 active:scale-95
+        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+        shadow-sm hover:shadow-md
+      "
+      aria-label="Hizmeti düzenle"
+    >
+      <Edit className="w-4 h-4" />
+      <span className="hidden sm:inline">Düzenle</span>
+    </button>
+
+    {/* Delete Button */}
+    <button
+      onClick={() => handleDelete(service.id)}
+      className="
+        inline-flex items-center gap-2 px-3 py-2
+        bg-red-50 hover:bg-red-100 
+        text-red-600 hover:text-red-700
+        border border-red-200 hover:border-red-300
+        rounded-lg text-sm font-medium
+        transition-all duration-200 ease-in-out
+        hover:scale-105 active:scale-95
+        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+        shadow-sm hover:shadow-md
+      "
+      aria-label="Hizmeti sil"
+    >
+      <Trash2 className="w-4 h-4" />
+      <span className="hidden sm:inline">Sil</span>
+    </button>
+  </div>
+</td>
                 </tr>
               ))}
             </tbody>
