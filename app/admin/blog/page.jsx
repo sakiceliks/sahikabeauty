@@ -140,10 +140,10 @@ export default function BlogYonetim() {
     setUploading(true)
 
     try {
-      const url = editingPost ? `/api/blog` : "/api/blog"
+      const url = editingPost ? `/api/blog/${editingPost._id}` : "/api/blog"
       const method = editingPost ? "PUT" : "POST"
 
-      const submitData = editingPost ? { ...formData, id: editingPost.id } : formData
+      const submitData = editingPost ? formData : formData
 
       const response = await fetch(url, {
         method,
@@ -313,8 +313,8 @@ export default function BlogYonetim() {
             </thead>
             <tbody>
               {posts.map((post, index) => (
-                <tr key={post.id} className="border-b border-border hover:bg-muted/10 transition-colors">
-                  <td className="px-6 py-4 text-foreground">{post.id}</td>
+                <tr key={post._id} className="border-b border-border hover:bg-muted/10 transition-colors">
+                  <td className="px-6 py-4 text-foreground">{post._id}</td>
                   <td className="px-6 py-4 font-semibold text-foreground">{post.title}</td>
                   <td className="px-6 py-4">
                     <span className="bg-primary/20 text-primary px-2 py-1 rounded text-xs font-medium">
@@ -332,7 +332,7 @@ export default function BlogYonetim() {
                       >
                         Düzenle
                       </button>
-                      <button onClick={() => handleDelete(post.id)} className="btn-destructive text-sm px-3 py-1">
+                      <button onClick={() => handleDelete(post._id)} className="btn-destructive text-sm px-3 py-1">
                         Sil
                       </button>
                     </div>

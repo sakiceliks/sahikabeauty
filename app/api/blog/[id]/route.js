@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server"
 import { BlogModel } from "@/models/blog"
+import { ObjectId } from "mongodb"
 
 const blogModel = new BlogModel()
 
-// GET - blog yazısını ID ile getir
+// GET - blog yazısını ID veya slug ile getir
 export async function GET(request, { params }) {
   try {
-    const blog = await blogModel.findById(params.id)
+    let blog
+    if (ObjectId.isValid(params.id)) {
+      blog = await blogModel.findById(params.id)
+    } else {
+      blog = await blogModel.findBySlug(params.id)
+    }
     if (!blog) {
       return NextResponse.json({ success: false, error: "Blog not found" }, { status: 404 })
     }
