@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { authService } from "@/lib/auth"
 import LoginForm from "@/components/Auth/LoginForm"
-import Sidebar from "@/components/Admin/Sidebar"
+import Sidebar from "@/components/admin/Sidebar"
 import { Toaster } from "@/components/ui/toaster"
 
 export default function AdminLayout({ children }) {
