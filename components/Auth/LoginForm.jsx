@@ -93,7 +93,7 @@ export default function LoginForm({ onLoginSuccess }) {
         </form>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          <p>Demo hesap: admin / admin123</p>
+          {/* <p>Demo hesap: admin / admin123</p> */}
         </div>
       </div>
     </div>
