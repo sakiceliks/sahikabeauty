@@ -2,37 +2,245 @@
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, Sparkles } from "lucide-react"
-import { services } from "@/data/services"
+import { 
+  Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, Sparkles 
+} from "lucide-react"
 import JsonLd from "@/components/JsonLd"
 import { generateServiceSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { useState, useEffect } from "react"
 
+
+const Skeleton = ({ className = "" }) => (
+  <div className={`animate-pulse bg-muted rounded-md ${className}`} />
+)
+
+const ServiceDetailsSkeleton = () => (
+  <div className="min-h-screen bg-background">
+    {/* Hero Section Skeleton */}
+    <section className="hero-gradient pt-32 pb-16">
+      <div className="container mx-auto px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Breadcrumb skeleton */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <Skeleton className="h-4 w-16" />
+            <span className="text-muted-foreground">/</span>
+            <Skeleton className="h-4 w-20" />
+            <span className="text-muted-foreground">/</span>
+            <Skeleton className="h-4 w-24" />
+          </div>
+          
+          {/* Title skeleton */}
+          <Skeleton className="h-12 w-96 mx-auto mb-6" />
+          
+          {/* Description skeleton */}
+          <div className="space-y-2 mb-8 max-w-2xl mx-auto">
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-3/4 mx-auto" />
+          </div>
+          
+          {/* Stats skeleton */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Skeleton key={i} className="w-5 h-5" />
+                ))}
+              </div>
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          
+          {/* Buttons skeleton */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Skeleton className="h-12 w-48" />
+            <Skeleton className="h-12 w-32" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Content Section Skeleton */}
+    <section className="py-16">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
+          {/* Image skeleton */}
+          <div className="relative">
+            <Skeleton className="w-full h-[500px] rounded-2xl" />
+            <div className="absolute -bottom-6 -right-6">
+              <Skeleton className="w-48 h-20 rounded-xl" />
+            </div>
+          </div>
+          
+          {/* Content skeleton */}
+          <div className="space-y-8">
+            {/* Technology card skeleton */}
+            <div className="card-professional">
+              <div className="flex items-center gap-3 mb-6">
+                <Skeleton className="w-10 h-10 rounded-full" />
+                <Skeleton className="h-6 w-48" />
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <Skeleton className="w-32 h-32 rounded-xl" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-6 w-40" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </div>
+            </div>
+            
+            {/* Benefits card skeleton */}
+            <div className="card-professional">
+              <Skeleton className="h-6 w-32 mb-6" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3">
+                    <Skeleton className="w-5 h-5 rounded-full" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Process card skeleton */}
+            <div className="card-professional">
+              <Skeleton className="h-6 w-40 mb-6" />
+              <div className="space-y-4">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <Skeleton className="w-8 h-8 rounded-full" />
+                    <div className="space-y-1 flex-1">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-3 w-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Testimonials section skeleton */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <Skeleton className="h-8 w-64 mx-auto mb-4" />
+            <div className="max-w-2xl mx-auto space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4 mx-auto" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="card-professional">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, j) => (
+                      <Skeleton key={j} className="w-4 h-4" />
+                    ))}
+                  </div>
+                  <Skeleton className="h-3 w-16" />
+                </div>
+                <div className="space-y-2 mb-4">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Skeleton className="w-10 h-10 rounded-full" />
+                  <div className="space-y-1">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+)
+
+
+
+const TestimonialsSkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {[...Array(3)].map((_, i) => (
+      <div key={i} className="card-professional">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex gap-1">
+            {[...Array(5)].map((_, j) => (
+              <Skeleton key={j} className="w-4 h-4" />
+            ))}
+          </div>
+          <Skeleton className="h-3 w-16" />
+        </div>
+        <div className="space-y-2 mb-4">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+        </div>
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-10 h-10 rounded-full" />
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-3 w-32" />
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)
+
 const ServiceDetails = () => {
   const { slug } = useParams()
-  const service = services.find((s) => s.slug === slug)
+  const [service, setService] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [dbTestimonials, setDbTestimonials] = useState([])
   const [testimonialsLoading, setTestimonialsLoading] = useState(true)
 
   useEffect(() => {
-    if (service) {
-      fetchTestimonials()
-    }
-  }, [service])
-
-  const fetchTestimonials = async () => {
-    try {
-      const response = await fetch(`/api/testimonial?serviceId=${service.id}&approved=true`)
-      const data = await response.json()
-
-      if (data.success) {
-        setDbTestimonials(data.data)
+    const fetchData = async () => {
+      if (!slug) {
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching testimonials:", error)
-    } finally {
-      setTestimonialsLoading(false)
-    }
+      
+      setLoading(true);
+
+      try {
+        const serviceRes = await fetch(`/api/services/${slug}`);
+        const serviceData = await serviceRes.json();
+        
+        if (serviceData.success) {
+          setService(serviceData.data);
+          
+          const testimonialsRes = await fetch(`/api/testimonial?serviceId=${serviceData.data._id}&approved=true`);
+          const testimonialsData = await testimonialsRes.json();
+          
+          if (testimonialsData.success) {
+            setDbTestimonials(testimonialsData.data);
+          } else {
+            console.error("Error fetching testimonials:", testimonialsData.message);
+          }
+        } else {
+          setService(null);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setService(null);
+      } finally {
+        setLoading(false);
+        setTestimonialsLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [slug]);
+ if (loading) {
+    return <ServiceDetailsSkeleton />;
   }
 
   if (!service) {
@@ -46,16 +254,16 @@ const ServiceDetails = () => {
           <p className="text-muted-foreground">Aradığınız hizmet mevcut değil.</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const serviceSchema = generateServiceSchema(service)
+  const serviceSchema = generateServiceSchema(service);
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Ana Sayfa", url: "/" },
     { name: "Hizmetler", url: "/hizmetler" },
     { name: service.category, url: `/hizmetler?category=${service.category}` },
     { name: service.title },
-  ])
+  ]);
 
   const allTestimonials = [
     ...(service.reviews || []),
@@ -72,29 +280,29 @@ const ServiceDetails = () => {
       afterImage: testimonial.afterImage,
       isFromDb: true,
     })),
-  ]
+  ];
 
   const averageRating =
     allTestimonials.length > 0
-      ? allTestimonials.reduce((acc, review) => acc + (review.rating || 5), 0) / allTestimonials.length
-      : 5
+      ? allTestimonials.reduce((acc, review) => acc + (review.rating || 5), 0) /
+        allTestimonials.length
+      : 5;
 
   const getDeviceName = () => {
-    if (typeof service.device === "string") return service.device
-    if (service.device && service.device.name) return service.device.name
-    return "Gelişmiş Teknoloji"
-  }
+    if (typeof service.device === "string") return service.device;
+    if (service.device && service.device.name) return service.device.name;
+    return "Gelişmiş Teknoloji";
+  };
 
   const getDeviceImageUrl = () => {
-    if (service.device && service.device.imageUrl) return service.device.imageUrl
-    return "https://styirqnih357hnts.public.blob.vercel-storage.com/devices%5Cfalcon-4pro-png-1757973572136.png"
-  }
+    if (service.device && service.device.imageUrl) return service.device.imageUrl;
+    return "https://styirqnih357hnts.public.blob.vercel-storage.com/devices%5Cfalcon-4pro-png-1757973572136.png";
+  };
 
   return (
     <>
       <JsonLd data={serviceSchema} />
       <JsonLd data={breadcrumbSchema} />
-
       <div className="min-h-screen bg-background">
         <section className="hero-gradient pt-32 pb-16">
           <div className="container mx-auto px-6">
@@ -104,22 +312,15 @@ const ServiceDetails = () => {
               transition={{ duration: 0.8 }}
               className="max-w-4xl mx-auto text-center"
             >
-              {/* Breadcrumb */}
               <nav className="text-sm text-muted-foreground mb-6">
                 <span>Ana Sayfa</span>
                 <span className="mx-2">/</span>
                 <span>Hizmetler</span>
                 <span className="mx-2">/</span>
-                <span className="text-primary font-medium">{service.category}</span>
+                <span className="text-primary capitalize font-medium">{service.category}</span>
               </nav>
-
-              {/* Title */}
               <h1 className="h1 text-gradient mb-6">{service.title}</h1>
-
-              {/* Description */}
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">{service.description}</p>
-
-              {/* Rating & Stats */}
               <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
                 <div className="flex items-center gap-2">
                   <div className="flex">
@@ -136,19 +337,15 @@ const ServiceDetails = () => {
                     {averageRating.toFixed(1)} ({allTestimonials.length} değerlendirme)
                   </span>
                 </div>
-
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="w-4 h-4 text-primary" />
                   <span>{service.duration || "30-60 dk"}</span>
                 </div>
-
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-primary" />
                   <span>1000+ Memnun Müşteri</span>
                 </div>
               </div>
-
-              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -170,11 +367,9 @@ const ServiceDetails = () => {
             </motion.div>
           </div>
         </section>
-
         <section className="py-16">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
-              {/* Service Image */}
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -191,8 +386,6 @@ const ServiceDetails = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
-
-                {/* Floating stats card */}
                 <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-xl border border-border">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -205,8 +398,6 @@ const ServiceDetails = () => {
                   </div>
                 </div>
               </motion.div>
-
-              {/* Service Information */}
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -214,7 +405,6 @@ const ServiceDetails = () => {
                 viewport={{ once: true }}
                 className="space-y-8"
               >
-                {/* Technology Card */}
                 <div className="card-professional">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -222,7 +412,6 @@ const ServiceDetails = () => {
                     </div>
                     <h2 className="text-2xl font-semibold">Kullanılan Teknoloji</h2>
                   </div>
-
                   <div className="flex flex-col sm:flex-row items-center gap-6">
                     <div className="relative w-32 h-32 bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl overflow-hidden shadow-lg">
                       <Image
@@ -231,7 +420,7 @@ const ServiceDetails = () => {
                         fill
                         className="object-contain p-4"
                         onError={(e) => {
-                          e.target.src = "/assets/devices/default.png"
+                          e.target.src = "/assets/devices/default.png";
                         }}
                       />
                     </div>
@@ -244,8 +433,6 @@ const ServiceDetails = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Benefits */}
                 <div className="card-professional">
                   <h2 className="text-2xl font-semibold mb-6">Avantajlar</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -271,8 +458,6 @@ const ServiceDetails = () => {
                     ))}
                   </div>
                 </div>
-
-                {/* Process Steps */}
                 <div className="card-professional">
                   <h2 className="text-2xl font-semibold mb-6">Uygulama Süreci</h2>
                   <div className="space-y-4">
@@ -296,7 +481,6 @@ const ServiceDetails = () => {
                 </div>
               </motion.div>
             </div>
-
             {service.faq && service.faq.length > 0 && (
               <motion.section
                 initial={{ opacity: 0, y: 40 }}
@@ -311,7 +495,6 @@ const ServiceDetails = () => {
                     Hizmetimiz hakkında merak ettiğiniz soruların yanıtları
                   </p>
                 </div>
-
                 <div className="max-w-3xl mx-auto grid gap-6">
                   {service.faq.map((item, index) => (
                     <motion.div
@@ -329,7 +512,6 @@ const ServiceDetails = () => {
                 </div>
               </motion.section>
             )}
-
             <motion.section
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -343,7 +525,6 @@ const ServiceDetails = () => {
                   Hizmetimizi deneyimleyen müşterilerimizin görüşleri ve sonuçları
                 </p>
               </div>
-
               {testimonialsLoading ? (
                 <div className="text-center py-8">
                   <div className="text-lg">Yorumlar yükleniyor...</div>
@@ -372,11 +553,9 @@ const ServiceDetails = () => {
                         </div>
                         <span className="text-xs text-muted-foreground">{review.date || "2024"}</span>
                       </div>
-
                       <blockquote className="text-muted-foreground italic mb-4 leading-relaxed">
                         "{review.comment}"
                       </blockquote>
-
                       {(review.beforeImage || review.afterImage) && (
                         <div className="mb-4">
                           <div className="grid grid-cols-2 gap-2">
@@ -409,7 +588,6 @@ const ServiceDetails = () => {
                           </div>
                         </div>
                       )}
-
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent text-white rounded-full flex items-center justify-center text-sm font-semibold">
                           {review.name.charAt(0)}
@@ -433,7 +611,6 @@ const ServiceDetails = () => {
                 </div>
               )}
             </motion.section>
-
             <motion.section
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -448,7 +625,6 @@ const ServiceDetails = () => {
                     Uzman ekibimizle iletişime geçin ve size özel tedavi planınızı oluşturalım. İlk konsültasyonunuz
                     ücretsiz!
                   </p>
-
                   <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
                     <a
                       href="https://wa.me/905304348349"
@@ -467,7 +643,6 @@ const ServiceDetails = () => {
                       Ara
                     </a>
                   </div>
-
                   <div className="mt-8 flex items-center justify-center gap-6 text-sm opacity-80">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4" />
@@ -483,8 +658,6 @@ const ServiceDetails = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Background decoration */}
                 <div className="absolute inset-0 opacity-10">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
                   <div className="absolute bottom-0 right-0 w-48 h-48 bg-white rounded-full translate-x-24 translate-y-24"></div>
@@ -495,7 +668,7 @@ const ServiceDetails = () => {
         </section>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ServiceDetails
+export default ServiceDetails;
