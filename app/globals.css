@@ -73,6 +73,7 @@
     --chart-4: 0 0% 68%;
     --chart-5: 0 0% 75%;
   }
+  
 
   * {
     @apply border-border;
