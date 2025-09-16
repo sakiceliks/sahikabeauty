@@ -3,50 +3,158 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply font-secondary bg-secondary text-base text-primary;
+  :root {
+    /* Updated to use specified monochrome color palette */
+    /* Monochrome palette with grays and button blue */
+    --background: 0 0% 88%; /* #E0E0E0 - Light gray background */
+    --foreground: 0 0% 0%; /* #000000 - Pure black text */
+    --card: 0 0% 88%; /* #E0E0E0 - Light gray cards */
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 88%;
+    --popover-foreground: 0 0% 0%;
+
+    /* Primary using button color */
+    --primary: 210 73% 25%; /* #174067 - Button blue */
+    --primary-foreground: 0 0% 100%; /* White text on blue */
+
+    /* Secondary using medium gray */
+    --secondary: 0 0% 63%; /* #A0A0A0 - Medium gray */
+    --secondary-foreground: 0 0% 0%;
+
+    /* Muted using lighter gray */
+    --muted: 0 0% 75%; /* #C0C0C0 - Light gray */
+    --muted-foreground: 0 0% 50%; /* #808080 - Dark gray */
+
+    /* Accent using darker gray */
+    --accent: 0 0% 68%; /* #ADADAD - Additional gray */
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%; /* Red for errors */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 0 0% 75%; /* #C0C0C0 - Light gray border */
+    --input: 0 0% 88%; /* #E0E0E0 - Light input background */
+    --ring: 210 73% 25%; /* #174067 - Button blue focus ring */
+    --radius: 0.75rem;
+
+    /* Chart colors using the specified palette */
+    --chart-1: 210 73% 25%; /* #174067 - Button blue */
+    --chart-2: 0 0% 63%; /* #A0A0A0 - Medium gray */
+    --chart-3: 0 0% 50%; /* #808080 - Dark gray */
+    --chart-4: 0 0% 68%; /* #ADADAD - Additional gray */
+    --chart-5: 0 0% 75%; /* #C0C0C0 - Light gray */
   }
+
+  .dark {
+    /* Dark mode using inverted monochrome palette */
+    --background: 0 0% 0%; /* #000000 - Black background */
+    --foreground: 0 0% 88%; /* #E0E0E0 - Light gray text */
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 88%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 88%;
+    --primary: 210 73% 35%; /* Lighter blue for dark mode */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 88%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 0 0% 30%;
+    --accent-foreground: 0 0% 88%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 210 73% 35%;
+    --chart-1: 210 73% 35%;
+    --chart-2: 0 0% 63%;
+    --chart-3: 0 0% 50%;
+    --chart-4: 0 0% 68%;
+    --chart-5: 0 0% 75%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  /* Typography system with Marcellus for headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-primary;
+    @apply font-heading font-normal text-balance;
   }
+
   .h1 {
-    @apply text-[64px] leading-none xl:text-[72px] xl:leading-[76px];
+    @apply text-4xl lg:text-5xl xl:text-6xl font-heading;
   }
   .h2 {
-    @apply text-[48px] leading-[54px];
+    @apply text-3xl lg:text-4xl font-heading;
   }
   .h3 {
-    @apply text-[36px] leading-[48px];
+    @apply text-2xl lg:text-3xl font-heading;
   }
   .h4 {
-    @apply text-xl;
+    @apply text-xl lg:text-2xl font-heading;
   }
-  .lead {
-    @apply text-lg mb-8;
+
+  /* Body text with Poppins */
+  p,
+  span,
+  div {
+    @apply font-body;
   }
-  a {
-    @apply font-primary;
+}
+
+@layer components {
+  /* Updated button styles with specified button color */
+  .btn-primary {
+    @apply bg-beauty-button hover:bg-beauty-button/80 text-white font-medium py-3 px-8 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md font-body;
   }
-}
 
-.btn {
-  @apply bg-accent min-w-[178px] rounded-tl-[30px] rounded-bl-[30px] rounded-tr-[4px] rounded-br-[24px] font-primary uppercase tracking-[1px] h-[58px] pl-8 pr-6 flex items-center justify-center text-white;
-}
+  .btn-secondary {
+    @apply bg-beauty-medium hover:bg-beauty-medium/80 text-beauty-black font-medium py-3 px-8 rounded-xl transition-all duration-300 border border-border font-body;
+  }
 
-.input {
-  @apply h-[54px] bg-white rounded-full px-6;
-}
+  .btn-accent {
+    @apply bg-beauty-darker hover:bg-beauty-darker/80 text-beauty-black font-medium py-3 px-8 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md font-body;
+  }
 
-.textarea {
-  @apply h-[120px] rounded-[20px] px-6 pt-4 resize-none;
-}
+  /* Updated card styles with monochrome palette */
+  .card-professional {
+    @apply bg-beauty-light border border-beauty-lightest rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm;
+  }
 
-.input,
-.textarea {
-  @apply outline-none ring-1 ring-accent/80 focus:ring-1 focus:ring-accent font-primary text-sm uppercase placeholder:text-primary text-primary;
+  .input-field {
+    @apply bg-beauty-light border border-beauty-lightest rounded-xl px-4 py-3 text-beauty-black focus:outline-none focus:ring-2 focus:ring-beauty-button transition-all duration-200 font-body;
+  }
+
+  /* Monochrome gradient effects */
+  .text-gradient {
+    @apply bg-gradient-to-r from-beauty-button via-beauty-dark to-beauty-button bg-clip-text text-transparent;
+  }
+
+  .hero-gradient {
+    @apply bg-gradient-to-br from-beauty-light/50 via-beauty-lightest/30 to-beauty-medium/20;
+  }
+
+  /* Updated beauty-specific utility classes */
+  .beauty-card {
+    @apply bg-beauty-light border border-beauty-lightest/50 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-500 backdrop-blur-sm;
+  }
+
+  .service-badge {
+    @apply bg-beauty-darker/30 text-beauty-black px-4 py-2 rounded-full text-sm font-medium font-body;
+  }
+
+  .pastel-glow {
+    @apply shadow-lg shadow-beauty-medium/20 hover:shadow-xl hover:shadow-beauty-medium/30 transition-all duration-300;
+  }
 }

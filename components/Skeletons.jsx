@@ -12,8 +12,8 @@ const BlogCardSkeleton = () => {
         <div className="h-8 w-8 bg-gray-200 rounded-full" />
       </div>
     </div>
-  );
-};
+  )
+}
 
 const ServiceCardSkeleton = () => {
   return (
@@ -28,7 +28,94 @@ const ServiceCardSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export { BlogCardSkeleton, ServiceCardSkeleton };
+const DashboardCardSkeleton = () => {
+  return (
+    <div className="card animate-pulse">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-4 bg-muted rounded w-24 mb-2" />
+          <div className="h-8 bg-muted rounded w-16" />
+        </div>
+        <div className="w-8 h-8 bg-muted rounded" />
+      </div>
+    </div>
+  )
+}
+
+const TableRowSkeleton = () => {
+  return (
+    <tr className="border-b border-border animate-pulse">
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-8" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-32" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-20" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-16" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-20" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-12" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="flex space-x-2">
+          <div className="h-6 bg-muted rounded w-16" />
+          <div className="h-6 bg-muted rounded w-12" />
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+const CarouselTableRowSkeleton = () => {
+  return (
+    <tr className="border-b border-border animate-pulse">
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-8" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="w-16 h-10 bg-muted rounded-lg" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-32" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-24" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-4 bg-muted rounded w-40" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="h-5 bg-muted rounded-full w-12" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="flex space-x-2">
+          <div className="h-6 bg-muted rounded w-16" />
+          <div className="h-6 bg-muted rounded w-12" />
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+const ImageSkeleton = ({ className = "w-full h-48" }) => {
+  return <div className={`bg-muted rounded-xl animate-pulse ${className}`} />
+}
+
+export {
+  BlogCardSkeleton,
+  ServiceCardSkeleton,
+  DashboardCardSkeleton,
+  TableRowSkeleton,
+  CarouselTableRowSkeleton,
+  ImageSkeleton,
+}

@@ -2,48 +2,120 @@
 
 import { useState, useEffect } from "react"
 
-const heroSlides = [
-  {
-    id: 1,
-    image: "/slide/sld1.png",
-    title: "•CİLT BAKIMI•",
-    subtitle: "Yeni Bir Sen Hayali Değil",
-    description: "Yaşınızı sorduklarında sadece gülümseyini",
-  },
-  {
-    id: 2,
-    image: "/slide/sld2.jpg",
-    title: "•GÜZELLIK BAKIMI•",
-    subtitle: "Profesyonel Cilt Bakımı",
-    description: "En son teknoloji ile güzelliğinizi keşfedin",
-  },
-  {
-    id: 3,
-    image: "/slide/sld3.png",
-    title: "•ANTI-AGING•",
-    subtitle: "Zamanı Durdurun",
-    description: "Gençliğinizi koruyun ve yaşlanma karşıtı bakım alın",
-  },
-]
-
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [heroSlides, setHeroSlides] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!isAutoPlaying) return
+    const fetchCarouselData = async () => {
+      try {
+        const response = await fetch("/api/carousel")
+        const data = await response.json()
+
+        if (data.success) {
+          // Only show active slides, sorted by order
+          const activeSlides = data.data
+            .filter((slide) => slide.active !== false)
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+          setHeroSlides(activeSlides)
+        } else {
+          console.error("Carousel verileri yüklenemedi:", data.error)
+          // Fallback to static data if API fails
+          setHeroSlides([
+            {
+              id: 1,
+              image: "/slide/sld1.png",
+              title: "•CİLT BAKIMI•",
+              subtitle: "Yeni Bir Sen Hayali Değil",
+              description: "Yaşınızı sorduklarında sadece gülümseyini",
+            },
+            {
+              id: 2,
+              image: "/slide/sld2.jpg",
+              title: "•GÜZELLIK BAKIMI•",
+              subtitle: "Profesyonel Cilt Bakımı",
+              description: "En son teknoloji ile güzelliğinizi keşfedin",
+            },
+            {
+              id: 3,
+              image: "/slide/sld3.png",
+              title: "•ANTI-AGING•",
+              subtitle: "Zamanı Durdurun",
+              description: "Gençliğinizi koruyun ve yaşlanma karşıtı bakım alın",
+            },
+          ])
+        }
+      } catch (error) {
+        console.error("Carousel API hatası:", error)
+        // Fallback to static data
+        setHeroSlides([
+          {
+            id: 1,
+            image: "/slide/sld1.png",
+            title: "•CİLT BAKIMI•",
+            subtitle: "Yeni Bir Sen Hayali Değil",
+            description: "Yaşınızı sorduklarında sadece gülümseyini",
+          },
+          {
+            id: 2,
+            image: "/slide/sld2.jpg",
+            title: "•GÜZELLIK BAKIMI•",
+            subtitle: "Profesyonel Cilt Bakımı",
+            description: "En son teknoloji ile güzelliğinizi keşfedin",
+          },
+          {
+            id: 3,
+            image: "/slide/sld3.png",
+            title: "•ANTI-AGING•",
+            subtitle: "Zamanı Durdurun",
+            description: "Gençliğinizi koruyun ve yaşlanma karşıtı bakım alın",
+          },
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCarouselData()
+  }, [])
+
+  useEffect(() => {
+    if (!isAutoPlaying || heroSlides.length === 0) return
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [isAutoPlaying])
+  }, [isAutoPlaying, heroSlides.length])
 
   const goToSlide = (index) => {
     setCurrentSlide(index)
     setIsAutoPlaying(false)
     setTimeout(() => setIsAutoPlaying(true), 10000) // Resume auto-play after 10 seconds
+  }
+
+  if (loading) {
+    return (
+      <div className="relative z-20 flex flex-col items-center justify-center text-center h-screen px-6 md:px-20 lg:px-32">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-300 rounded w-64 mb-4"></div>
+          <div className="h-4 bg-gray-300 rounded w-48"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (heroSlides.length === 0) {
+    return (
+      <section className="relative h-[60vh] md:h-[70vh] overflow-hidden bg-muted">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-muted-foreground">Carousel verisi bulunamadı</div>
+        </div>
+      </section>
+    )
   }
 
   return (
