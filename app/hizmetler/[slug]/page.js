@@ -315,9 +315,9 @@ const ServiceDetails = () => {
         title={service.title}
         description={service.description}
         canonical={`https://sultanbeyliguzellikmerkezi.com.tr/hizmetler/${service.slug}`}
-        ogImage={serviceData.image || "/og-default.png"}
+        ogImage={service.image || "/og-default.png"}
         ogType="service"
-        tags={serviceData.keywords}
+        tags={service.keywords}
       />
       <JsonLd data={serviceSchema} />
       <JsonLd data={breadcrumbSchema} />
