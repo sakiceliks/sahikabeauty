@@ -1,7 +1,17 @@
+// hizmetler/[slug]/page.js
+
+
+
+
+
+
+
+
 "use client"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { SEOHead } from "@/components/seo-head"
 import { 
   Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, Sparkles 
 } from "lucide-react"
@@ -301,6 +311,14 @@ const ServiceDetails = () => {
 
   return (
     <>
+     <SEOHead
+        title={service.title}
+        description={service.description}
+        canonical={`https://sultanbeyliguzellikmerkezi.com.tr/hizmetler/${service.slug}`}
+        ogImage={serviceData.image || "/og-default.png"}
+        ogType="service"
+        tags={serviceData.keywords}
+      />
       <JsonLd data={serviceSchema} />
       <JsonLd data={breadcrumbSchema} />
       <div className="min-h-screen bg-background">

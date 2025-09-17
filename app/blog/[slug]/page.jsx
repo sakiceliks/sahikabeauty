@@ -161,7 +161,7 @@ const BlogDetail = () => {
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                   <Image
-                    src={post.authorImage || "/assets/default-avatar.jpg"}
+                    src={post.authorImage || "/logo.png"}
                     alt={post.author}
                     width={40}
                     height={40}
@@ -288,7 +288,7 @@ const BlogDetail = () => {
                 <div className="flex items-start gap-4">
                   <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
                     <Image
-                      src={post.authorImage || "/assets/default-avatar.jpg"}
+                      src={post.authorImage || "/logo.png"}
                       alt={post.author}
                       width={64}
                       height={64}
