@@ -15,7 +15,7 @@ export const metadata = {
     siteName: "Şahika Beauty",
     images: [
       {
-        url: "https://sultanbeyliguzellikmerkezi.com.tr/assets/og-image.jpg",
+        url: "https://sultanbeyliguzellikmerkezi.com.tr/og-default.png",
         width: 1200,
         height: 630,
         alt: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
@@ -26,7 +26,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
     description: "Sultanbeyli'nin en güvenilir güzellik merkezi. Uzman kadromuz ile güzelliğinizi keşfedin.",
-    images: ["https://sultanbeyliguzellikmerkezi.com.tr/assets/og-image.jpg"],
+    images: ["https://sultanbeyliguzellikmerkezi.com.tr/og-default.png"],
   },
   alternates: {
     canonical: "https://sultanbeyliguzellikmerkezi.com.tr",
