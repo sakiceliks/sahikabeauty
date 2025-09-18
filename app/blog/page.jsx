@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import BlogClientPage from "./BlogClientPage";
 import { generateBreadcrumbSchema, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo-schemas";
 import JsonLd from "@/components/JsonLd";
