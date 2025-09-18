@@ -5,7 +5,9 @@ import Image from "next/image";
 import { CursorContext } from "@/components/CursorContext";
 import JsonLd from "@/components/JsonLd";
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas";
+
 import Link from "next/link";
+import { ServiceCardSkeleton } from "@/components/Skeletons";
 
 // Blog kategorileri
 const blogCategories = [
