@@ -161,7 +161,7 @@ export default function HeroCarousel() {
                 <div className="flex justify-center">
                   <a
                     href="/rezervasyon"
-                    className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
+                    className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
                   >
                     📅 Randevu Al
                   </a>

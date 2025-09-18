@@ -197,7 +197,7 @@ const ContactClient = () => {
                   y: 0,
                   transition: { delay: 0.8, duration: 0.6 },
                 }}
-                className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-6 text-white text-center"
+                className="bg-primary rounded-2xl p-6 text-white text-center"
               >
                 <h3 className="text-xl font-semibold mb-4">Sosyal Medyada Takip Edin</h3>
                 <div className="flex justify-center gap-4">

@@ -44,7 +44,7 @@ const Nav = () => {
         {/* Randevu Al Butonu */}
         <Link
           href="/rezervasyon"
-          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-bold text-sm uppercase transition-all duration-300 transform hover:scale-105 hover:shadow-lg ml-auto"
+          className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-bold text-sm uppercase transition-all duration-300 transform hover:scale-105 hover:shadow-lg ml-auto"
         >
           📅 Randevu Al
         </Link>
