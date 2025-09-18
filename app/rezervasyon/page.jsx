@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { 
   Calendar, 
   Clock, 
@@ -30,6 +31,7 @@ import {
   X
 } from 'lucide-react';
 import { MessageCircle } from 'lucide-react';
+import ServicesSkeleton from '@/components/ServicesSkeleton';
 
 
 const ReservationPage = () => {
@@ -37,6 +39,10 @@ const ReservationPage = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [services, setServices] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
+  const [existingReservations, setExistingReservations] = useState([]);
+  const [reservationsLoading, setReservationsLoading] = useState(true);
   const [healthInfo, setHealthInfo] = useState({
     hasHealthProblem: '',
     healthDetails: '',
@@ -47,7 +53,6 @@ const ReservationPage = () => {
   const [personalInfo, setPersonalInfo] = useState({
     firstName: '',
     lastName: '',
-    email: '',
     phone: '',
     birthDate: '',
     notes: ''
@@ -86,76 +91,85 @@ const ReservationPage = () => {
     }
   ];
 
-  const services = [
-    {
-      id: 1,
-      name: 'Lazer Epilasyon',
-      category: 'Epilasyon',
-      price: '₺200-400',
-      duration: '30-90 dk',
-      description: 'Falcon 4 Pro ile kalıcı epilasyon çözümü',
-      icon: Zap,
-      color: 'from-purple-500 to-pink-500',
-      popular: true,
-      areas: ['Yüz', 'Kol', 'Bacak', 'Bikini', 'Koltukaltı', 'Sırt']
-    },
-    {
-      id: 2,
-      name: 'HydraFacial',
-      category: 'Cilt Bakımı',
-      price: '₺300-500',
-      duration: '60-75 dk',
-      description: 'Derin temizlik ve nemlendirme tedavisi',
-      icon: Droplets,
-      color: 'from-blue-500 to-cyan-500',
-      popular: true,
-      areas: ['Yüz', 'Boyun', 'Dekolte']
-    },
-    {
-      id: 3,
-      name: 'Botox',
-      category: 'Anti-Age',
-      price: '₺800-1500',
-      duration: '20-30 dk',
-      description: 'Doğal görünümlü gençleşme',
-      icon: Heart,
-      color: 'from-rose-500 to-pink-500',
-      areas: ['Alın', 'Göz çevresi', 'Kaş arası']
-    },
-    {
-      id: 4,
-      name: 'Kalıcı Makyaj',
-      category: 'Kalıcı Makyaj',
-      price: '₺1200-2000',
-      duration: '90-120 dk',
-      description: 'Kaş, göz ve dudak kalıcı makyajı',
-      icon: Palette,
-      color: 'from-amber-500 to-orange-500',
-      areas: ['Kaş', 'Göz', 'Dudak']
-    },
-    {
-      id: 5,
-      name: 'Kriyolipoliz',
-      category: 'Bölgesel İncelme',
-      price: '₺1000-1500',
-      duration: '45-60 dk',
-      description: 'Dondurucu yağ yakma teknolojisi',
-      icon: Scissors,
-      color: 'from-green-500 to-teal-500',
-      areas: ['Karın', 'Bel', 'Basen', 'Kol', 'Çene altı']
-    },
-    {
-      id: 6,
-      name: 'İpek Kirpik',
-      category: 'Tırnak & Kirpik',
-      price: '₺400-600',
-      duration: '90-120 dk',
-      description: 'Doğal ve hacimli kirpik uygulaması',
-      icon: Camera,
-      color: 'from-indigo-500 to-purple-500',
-      areas: ['Üst kirpik', 'Alt kirpik', 'Karma']
-    }
-  ];
+  // Icon mapping for dynamic icons
+  const iconMap = {
+    'Zap': Zap,
+    'Droplets': Droplets,
+    'Heart': Heart,
+    'Palette': Palette,
+    'Scissors': Scissors,
+    'Camera': Camera,
+    'Sparkles': Sparkles,
+    'Shield': Shield,
+    'Award': Award,
+    'Brush': Brush,
+    'Star': Star
+  };
+
+  // Services'leri API'den çek
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setServicesLoading(true);
+        const response = await fetch('/api/services');
+        const data = await response.json();
+        
+        if (data.success) {
+          // API'den gelen verileri rezervasyon formuna uygun formata çevir
+          const formattedServices = data.data.map(service => ({
+            id: service.id,
+            name: service.title,
+            category: service.category,
+            price: service.price || 'Fiyat Belirtilmemiş',
+            duration: service.duration || 'Süre Belirtilmemiş',
+            description: service.description,
+            icon: iconMap[service.icon] || Sparkles, // Varsayılan ikon
+            color: service.color || 'from-gray-500 to-gray-600',
+            popular: service.popular || false,
+            areas: service.areas || []
+          }));
+          setServices(formattedServices);
+        } else {
+          console.error('Services yüklenirken hata:', data.error);
+          toast.error('Hizmetler yüklenirken bir hata oluştu');
+        }
+      } catch (error) {
+        console.error('Services fetch error:', error);
+        toast.error('Hizmetler yüklenirken bir hata oluştu');
+      } finally {
+        setServicesLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // Mevcut randevuları çek
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        setReservationsLoading(true);
+        const response = await fetch('/api/talepler');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Randevu tarihi ve saati olan talepleri filtrele
+          const reservations = data.data.filter(talep => 
+            talep.adres && talep.adres.includes('Randevu Tarihi:')
+          );
+          setExistingReservations(reservations);
+        } else {
+          console.error('Reservations yüklenirken hata:', data.error);
+        }
+      } catch (error) {
+        console.error('Reservations fetch error:', error);
+      } finally {
+        setReservationsLoading(false);
+      }
+    };
+
+    fetchReservations();
+  }, []);
 
   // Tarih oluşturucu (sonraki 14 gün)
   const generateDates = () => {
@@ -190,6 +204,31 @@ const ReservationPage = () => {
     '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'
   ];
 
+  // Mevcut randevuları parse et ve tarih-saat çiftlerini çıkar
+  const getBookedSlots = () => {
+    const bookedSlots = new Set();
+    
+    existingReservations.forEach(reservation => {
+      if (reservation.adres && reservation.adres.includes('Randevu Tarihi:')) {
+        // "Randevu Tarihi: 2024-01-15 14:00" formatından tarih ve saati çıkar
+        const match = reservation.adres.match(/Randevu Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/);
+        if (match) {
+          const [, date, time] = match;
+          bookedSlots.add(`${date}-${time}`);
+        }
+      }
+    });
+    
+    return bookedSlots;
+  };
+
+  const bookedSlots = getBookedSlots();
+
+  // Belirli bir tarih ve saatin dolu olup olmadığını kontrol et
+  const isSlotBooked = (date, time) => {
+    return bookedSlots.has(`${date}-${time}`);
+  };
+
   const nextStep = () => {
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
@@ -209,9 +248,9 @@ const ReservationPage = () => {
       case 2:
         return healthInfo.hasHealthProblem !== '';
       case 3:
-        return selectedDate && selectedTime;
+        return selectedDate && selectedTime && !isSlotBooked(selectedDate, selectedTime);
       case 4:
-        return personalInfo.firstName && personalInfo.lastName && personalInfo.email && personalInfo.phone;
+        return personalInfo.firstName && personalInfo.lastName && personalInfo.phone;
       default:
         return true;
     }
@@ -222,14 +261,18 @@ const ReservationPage = () => {
       case 1:
         return (
           <div className="space-y-6">
-            <div className="text-center mb-8">
-              <Sparkles className="w-16 h-16 text-primary mx-auto mb-4" />
-              <h2 className="text-3xl font-bold mb-2">Hangi Hizmeti İstiyorsunuz?</h2>
-              <p className="text-gray-600">Size en uygun hizmeti seçin ve güzellik yolculuğunuza başlayın</p>
-            </div>
+            {servicesLoading ? (
+              <ServicesSkeleton />
+            ) : (
+              <>
+                <div className="text-center mb-8">
+                  <Sparkles className="w-16 h-16 text-primary mx-auto mb-4" />
+                  <h2 className="text-3xl font-bold mb-2">Hangi Hizmeti İstiyorsunuz?</h2>
+                  <p className="text-gray-600">Size en uygun hizmeti seçin ve güzellik yolculuğunuza başlayın</p>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {services.map((service) => {
                 const IconComponent = service.icon;
                 return (
                   <div
@@ -288,8 +331,10 @@ const ReservationPage = () => {
                     )}
                   </div>
                 );
-              })}
-            </div>
+                  })}
+                </div>
+              </>
+            )}
           </div>
         );
 
@@ -438,27 +483,29 @@ const ReservationPage = () => {
                   Tarih Seçin
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
-                  {availableDates.map((date) => (
-                    <button
-                      key={date.value}
-                      onClick={() => setSelectedDate(date.value)}
-                      className={`p-4 rounded-xl border-2 text-center transition-all hover:shadow-md ${
-                        selectedDate === date.value
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-sm font-medium">
-                        {date.display.split(' ')[0]}
-                      </div>
-                      <div className="text-lg font-bold">
-                        {date.display.split(' ')[1]}
-                      </div>
-                      <div className="text-xs opacity-70">
-                        {date.display.split(' ')[2]}
-                      </div>
-                    </button>
-                  ))}
+                  {availableDates.map((date) => {
+                    return (
+                      <button
+                        key={date.value}
+                        onClick={() => setSelectedDate(date.value)}
+                        className={`p-4 rounded-xl border-2 text-center transition-all hover:shadow-md ${
+                          selectedDate === date.value
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="text-sm font-medium">
+                          {date.display.split(' ')[0]}
+                        </div>
+                        <div className="text-lg font-bold">
+                          {date.display.split(' ')[1]}
+                        </div>
+                        <div className="text-xs opacity-70">
+                          {date.display.split(' ')[2]}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -470,19 +517,31 @@ const ReservationPage = () => {
                     Saat Seçin
                   </h3>
                   <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-                    {timeSlots.map((time) => (
-                      <button
-                        key={time}
-                        onClick={() => setSelectedTime(time)}
-                        className={`p-3 rounded-xl border-2 text-center font-medium transition-all hover:shadow-md ${
-                          selectedTime === time
-                            ? 'border-primary bg-primary text-white'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {timeSlots.map((time) => {
+                      const isBooked = isSlotBooked(selectedDate, time);
+                      
+                      return (
+                        <button
+                          key={time}
+                          onClick={() => !isBooked && setSelectedTime(time)}
+                          disabled={isBooked}
+                          className={`p-3 rounded-xl border-2 text-center font-medium transition-all ${
+                            isBooked
+                              ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60'
+                              : selectedTime === time
+                              ? 'border-primary bg-primary text-white hover:shadow-md'
+                              : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                          }`}
+                        >
+                          <div className="flex flex-col items-center">
+                            <span>{time}</span>
+                            {isBooked && (
+                              <span className="text-xs text-red-500 mt-1">Dolu</span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -504,6 +563,13 @@ const ReservationPage = () => {
                       year: 'numeric' 
                     })} - <span className="font-medium">{selectedTime}</span>
                   </p>
+                  {isSlotBooked(selectedDate, selectedTime) && (
+                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-red-700 text-sm">
+                        ⚠️ Bu saat dolu görünüyor. Lütfen başka bir saat seçin.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -547,21 +613,6 @@ const ReservationPage = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  E-posta Adresi *
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    value={personalInfo.email}
-                    onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
-                    className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="ornek@email.com"
-                  />
-                </div>
-              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -687,7 +738,6 @@ const ReservationPage = () => {
                 </h3>
                 <div className="space-y-2">
                   <p><span className="font-medium">Ad Soyad:</span> {personalInfo.firstName} {personalInfo.lastName}</p>
-                  <p><span className="font-medium">E-posta:</span> {personalInfo.email}</p>
                   <p><span className="font-medium">Telefon:</span> {personalInfo.phone}</p>
                   {personalInfo.birthDate && (
                     <p><span className="font-medium">Doğum Tarihi:</span> {new Date(personalInfo.birthDate).toLocaleDateString('tr-TR')}</p>
@@ -747,9 +797,66 @@ const ReservationPage = () => {
               {/* Onay Butonu */}
               <div className="text-center pt-6">
                 <button 
-                  onClick={() => {
-                    // Burada API çağrısı yapılacak
-                    alert('Randevunuz başarıyla oluşturuldu! SMS ve e-posta ile onay gönderilecektir.');
+                  onClick={async () => {
+                    try {
+                      toast.loading('Randevunuz oluşturuluyor...', { id: 'reservation' });
+                      
+                      const reservationData = {
+                        isimSoyisim: `${personalInfo.firstName} ${personalInfo.lastName}`,
+                        markaModel: selectedService?.name || 'Rezervasyon',
+                        sorun: `Hizmet: ${selectedService?.name} - ${selectedService?.category}`,
+                        telefonNo: personalInfo.phone,
+                        ekranSifresi: '', // Rezervasyon için gerekli değil
+                        adres: `Randevu Tarihi: ${selectedDate} ${selectedTime}`,
+                        not: `
+Sağlık Sorunu: ${healthInfo.hasHealthProblem === 'hayir' ? 'Yok' : healthInfo.hasHealthProblem === 'evet' ? 'Var' : 'Emin Değil'}
+${healthInfo.healthDetails ? `Sağlık Detayı: ${healthInfo.healthDetails}` : ''}
+${healthInfo.medications ? `İlaçlar: ${healthInfo.medications}` : ''}
+${healthInfo.allergies ? `Alerjiler: ${healthInfo.allergies}` : ''}
+${personalInfo.birthDate ? `Doğum Tarihi: ${personalInfo.birthDate}` : ''}
+${personalInfo.notes ? `Özel Notlar: ${personalInfo.notes}` : ''}
+                        `.trim()
+                      };
+
+                      const response = await fetch('/api/talepler', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(reservationData),
+                      });
+
+                      const result = await response.json();
+
+                      if (result.success) {
+                        toast.success(`Randevunuz başarıyla oluşturuldu! Talep No: ${result.data.talepId}`, { id: 'reservation' });
+                        
+                        // Formu sıfırla
+                        setCurrentStep(1);
+                        setSelectedService(null);
+                        setSelectedDate('');
+                        setSelectedTime('');
+                        setHealthInfo({
+                          hasHealthProblem: '',
+                          healthDetails: '',
+                          medications: '',
+                          allergies: '',
+                          previousTreatments: ''
+                        });
+                        setPersonalInfo({
+                          firstName: '',
+                          lastName: '',
+                          phone: '',
+                          birthDate: '',
+                          notes: ''
+                        });
+                      } else {
+                        toast.error(`Hata: ${result.error}`, { id: 'reservation' });
+                      }
+                    } catch (error) {
+                      console.error('Rezervasyon hatası:', error);
+                      toast.error('Randevu oluşturulurken bir hata oluştu', { id: 'reservation' });
+                    }
                   }}
                   className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-12 py-4 rounded-2xl font-semibold text-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                 >

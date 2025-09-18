@@ -153,9 +153,19 @@ export default function HeroCarousel() {
                 <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
                   {slide.title}
                 </h1>
-                <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase">
+                <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase mb-8">
                   {slide.description}
                 </p>
+                
+                {/* Randevu Al Butonu */}
+                <div className="flex justify-center">
+                  <a
+                    href="/rezervasyon"
+                    className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
+                  >
+                    📅 Randevu Al
+                  </a>
+                </div>
               </div>
             </div>
           </div>

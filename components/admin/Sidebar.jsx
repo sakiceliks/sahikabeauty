@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { authService } from "@/lib/auth"
-import { useToast } from "../ui/use-toast"
+import toast from "react-hot-toast"
 import { Menu, X } from "lucide-react"
 
 const menuItems = [
@@ -13,19 +13,17 @@ const menuItems = [
   { id: "blog", label: "Blog", href: "/admin/blog", icon: "📝" },
   { id: "testimonials", label: "Müşteri Yorumları", href: "/admin/testimonials", icon: "💬" },
   { id: "carousel", label: "Ana Sayfa Carousel", href: "/admin/carousel", icon: "🎠" },
+  { id: "talepler", label: "Talep Yönetimi", href: "/admin/talepler", icon: "📋" },
+  { id: "telegram", label: "Telegram Ayarları", href: "/admin/telegram", icon: "🤖" },
 ]
 
 export default function Sidebar({ user, onLogout }) {
   const pathname = usePathname()
-  const { toast } = useToast()
   const [open, setOpen] = useState(false)
 
   const handleLogout = () => {
     authService.logout()
-    toast({
-      title: "Başarılı",
-      description: "Çıkış yapıldı.",
-    })
+    toast.success("Çıkış yapıldı.")
     onLogout()
   }
 

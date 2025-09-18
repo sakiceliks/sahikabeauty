@@ -23,6 +23,11 @@ export default function AdminPanel() {
     image: "",
     device: { name: "", imageUrl: "" }, // Yeni yapı: name ve imageUrl içeriyor
     duration: "",
+    price: "",
+    icon: "",
+    color: "",
+    popular: false,
+    areas: [""],
     benefits: [""],
     detailedDescription: "",
     faq: [{ question: "", answer: "" }],
@@ -181,6 +186,14 @@ export default function AdminPanel() {
     }))
   }
 
+  // Areas için özel yönetim
+  const handleAreasChange = (index, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      areas: prev.areas.map((area, i) => (i === index ? value : area)),
+    }))
+  }
+
   // Dizi öğesi ekle
   const addArrayItem = (field, defaultValue) => {
     setFormData((prev) => ({
@@ -215,6 +228,11 @@ export default function AdminPanel() {
       image: "",
       device: { name: "", imageUrl: "" },
       duration: "",
+      price: "",
+      icon: "",
+      color: "",
+      popular: false,
+      areas: [""],
       benefits: [""],
       detailedDescription: "",
       faq: [{ question: "", answer: "" }],
@@ -278,6 +296,11 @@ export default function AdminPanel() {
       image: service.image || "",
       device: service.device || { name: "", imageUrl: "" },
       duration: service.duration || "",
+      price: service.price || "",
+      icon: service.icon || "",
+      color: service.color || "",
+      popular: service.popular || false,
+      areas: service.areas || [""],
       benefits: service.benefits || [""],
       detailedDescription: service.detailedDescription || "",
       faq: service.faq || [{ question: "", answer: "" }],
@@ -385,6 +408,8 @@ export default function AdminPanel() {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Slug</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Cihaz</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Süre</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Fiyat</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Popüler</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Yayınlandı</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Öne Çıkan</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Eylemler</th>
@@ -420,6 +445,16 @@ export default function AdminPanel() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-foreground">{service.duration}</td>
+                  <td className="px-6 py-4 text-foreground">{service.price || '-'}</td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        service.popular ? "bg-yellow-500/20 text-yellow-600" : "bg-neutral-500/20 text-neutral-400"
+                      }`}
+                    >
+                      {service.popular ? "Evet" : "Hayır"}
+                    </span>
+                  </td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -550,6 +585,43 @@ export default function AdminPanel() {
                     name="duration"
                     value={formData.duration}
                     onChange={handleInputChange}
+                    placeholder="60-75 dk"
+                    className="input-field w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Fiyat</label>
+                  <input
+                    type="text"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    placeholder="₺300-500"
+                    className="input-field w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">İkon</label>
+                  <input
+                    type="text"
+                    name="icon"
+                    value={formData.icon}
+                    onChange={handleInputChange}
+                    placeholder="Droplets"
+                    className="input-field w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Renk</label>
+                  <input
+                    type="text"
+                    name="color"
+                    value={formData.color}
+                    onChange={handleInputChange}
+                    placeholder="from-blue-500 to-cyan-500"
                     className="input-field w-full"
                   />
                 </div>
@@ -653,6 +725,21 @@ export default function AdminPanel() {
                   </label>
                 </div>
 
+                {/* Popular Checkbox */}
+                <div className="col-span-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="popular"
+                    name="popular"
+                    checked={formData.popular}
+                    onChange={handleInputChange}
+                    className="w-4 h-4 text-primary bg-input border-border rounded focus:ring-ring"
+                  />
+                  <label htmlFor="popular" className="text-sm font-medium text-card-foreground">
+                    Popüler Hizmet
+                  </label>
+                </div>
+
                 {/* Featured Checkbox */}
                 <div className="col-span-2 flex items-center gap-2">
                   <input
@@ -716,6 +803,32 @@ export default function AdminPanel() {
                 ))}
                 <button type="button" onClick={() => addArrayItem("benefits", "")} className="btn-primary text-sm">
                   Fayda Ekle
+                </button>
+              </div>
+
+              {/* Areas */}
+              <div>
+                <label className="block text-sm font-medium text-card-foreground mb-2">Uygulama Alanları</label>
+                {formData.areas.map((area, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={area}
+                      onChange={(e) => handleAreasChange(index, e.target.value)}
+                      placeholder="Yüz, Boyun, Dekolte"
+                      className="flex-1 input-field"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeArrayItem("areas", index)}
+                      className="btn-destructive"
+                    >
+                      Kaldır
+                    </button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => addArrayItem("areas", "")} className="btn-primary text-sm">
+                  Alan Ekle
                 </button>
               </div>
 
