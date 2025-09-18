@@ -2,6 +2,7 @@
 import { GetServerSideProps } from "next";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
+import Head from "next/head";
 import { useState } from "react";
 import JsonLd from "@/components/JsonLd";
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas";
@@ -149,7 +150,11 @@ const BlogClientPage = ({ blogPosts }) => {
       {/* SEO structured data */}
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={blogListSchema} />
-
+<Head>
+  <title>{post.title}</title>
+  <meta name="description" content={post.excerpt} />
+  <meta name="keywords" content={post.tags} />
+</Head>
       <div className="min-h-screen pt-32 pb-12">
         <div className="container mx-auto px-6">
           {/* SEO-optimized header */}
