@@ -58,9 +58,27 @@ export class BlogModel {
     return result.value
   }
 
+  async updateBySlug(slug, data) {
+    const col = await this.getCollection()
+    const result = await col.findOneAndUpdate(
+      { slug },
+      { $set: { ...data, updatedAt: new Date() } },
+      { returnDocument: "after" }
+    )
+    if (!result.value) throw new Error("Blog not found")
+    return result.value
+  }
+
   async delete(id) {
     const col = await this.getCollection()
     const result = await col.deleteOne({ _id: new ObjectId(id) })
+    if (result.deletedCount === 0) throw new Error("Blog not found")
+    return { message: "Blog deleted successfully" }
+  }
+
+  async deleteBySlug(slug) {
+    const col = await this.getCollection()
+    const result = await col.deleteOne({ slug })
     if (result.deletedCount === 0) throw new Error("Blog not found")
     return { message: "Blog deleted successfully" }
   }
