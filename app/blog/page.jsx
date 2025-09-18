@@ -1,3 +1,4 @@
+
 import BlogClientPage from "./BlogClientPage";
 
 // Server-side data fetching

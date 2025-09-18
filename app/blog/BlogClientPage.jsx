@@ -93,32 +93,36 @@ const BlogClientPage = ({ blogPosts }) => {
         url: "https://sultanbeyliguzellikmerkezi.com.tr/assets/logo.png",
       },
     },
-    blogPost: blogPosts.map((post) => ({
-      "@type": "BlogPosting",
-      headline: post.title,
-      description: post.excerpt,
-      image: `https://sultanbeyliguzellikmerkezi.com.tr${post.image}`,
-      author: {
-        "@type": "Person",
-        name: post.author,
-      },
-      datePublished: post.date,
-      url: `https://sultanbeyliguzellikmerkezi.com.tr/blog/${post.slug}`,
-    })),
+    blogPost: Array.isArray(blogPosts)
+      ? blogPosts.map((post) => ({
+          "@type": "BlogPosting",
+          headline: post.title || "",
+          description: post.excerpt || "",
+          image: post.image ? `https://sultanbeyliguzellikmerkezi.com.tr${post.image}` : "",
+          author: {
+            "@type": "Person",
+            name: post.author || "",
+          },
+          datePublished: post.date || "",
+          url: `https://sultanbeyliguzellikmerkezi.com.tr/blog/${post.slug || ""}`,
+        }))
+      : [],
   };
 
   // Filtering function
-  const filteredPosts = blogPosts.filter((post) => {
-    const categoryMatch = selectedCategory === "all" || post.category === selectedCategory;
-    const searchMatch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    return categoryMatch && searchMatch;
-  });
+  const filteredPosts = Array.isArray(blogPosts)
+    ? blogPosts.filter((post) => {
+        const categoryMatch = selectedCategory === "all" || post.category === selectedCategory;
+        const searchMatch =
+          (post.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+          (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+          (Array.isArray(post.tags) && post.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase())));
+        return categoryMatch && searchMatch;
+      })
+    : [];
 
   // Featured and regular posts
-  const featuredPosts = blogPosts.filter((post) => post.featured);
+  const featuredPosts = Array.isArray(blogPosts) ? blogPosts.filter((post) => post.featured) : [];
   const regularPosts = filteredPosts.filter((post) => !post.featured);
 
   return (
@@ -211,7 +215,7 @@ const BlogClientPage = ({ blogPosts }) => {
                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden">
                       <img
                         src={post.image || "/placeholder.svg"}
-                        alt={post.title}
+                        alt={post.title || ""}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute top-4 left-4">
@@ -222,25 +226,25 @@ const BlogClientPage = ({ blogPosts }) => {
                     </div>
                     <div className="p-6">
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                        <span>{post.date}</span>
+                        <span>{post.date || ""}</span>
                         <span>•</span>
-                        <span>{post.readTime}</span>
+                        <span>{post.readTime || ""}</span>
                         <span>•</span>
-                        <span>{post.views} görüntülenme</span>
+                        <span>{post.views || 0} görüntülenme</span>
                       </div>
-                      <h3 className="h3 mb-3 group-hover:text-primary transition-colors">{post.title}</h3>
-                      <p className="text-muted-foreground mb-4 line-clamp-3">{post.excerpt}</p>
+                      <h3 className="h3 mb-3 group-hover:text-primary transition-colors">{post.title || ""}</h3>
+                      <p className="text-muted-foreground mb-4 line-clamp-3">{post.excerpt || ""}</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <img
                             src={post.authorImage || "/placeholder.svg"}
-                            alt={post.author}
+                            alt={post.author || ""}
                             className="w-8 h-8 rounded-full object-cover"
                           />
-                          <span className="text-sm font-medium">{post.author}</span>
+                          <span className="text-sm font-medium">{post.author || ""}</span>
                         </div>
                         <a
-                          href={`/blog/${post.slug}`}
+                          href={`/blog/${post.slug || ""}`}
                           className="text-primary hover:text-primary/80 font-medium text-sm transition-colors"
                         >
                           Devamını Oku →
@@ -275,34 +279,36 @@ const BlogClientPage = ({ blogPosts }) => {
                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden">
                       <img
                         src={post.image || "/placeholder.svg"}
-                        alt={post.title}
+                        alt={post.title || ""}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="bg-background/80 backdrop-blur-sm text-foreground px-3 py-1 rounded-full text-sm font-medium">
-                          {blogCategories.find((cat) => cat.id === post.category)?.name}
+                          {blogCategories.find((cat) => cat.id === post.category)?.name || ""}
                         </span>
                       </div>
                     </div>
                     <div className="p-6">
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                        <span>{post.date}</span>
+                        <span>{post.date || ""}</span>
                         <span>•</span>
-                        <span>{post.readTime}</span>
+                        <span>{post.readTime || ""}</span>
                       </div>
-                      <h3 className="h3 mb-3 group-hover:text-primary transition-colors line-clamp-2">{post.title}</h3>
-                      <p className="text-muted-foreground mb-4 line-clamp-3">{post.excerpt}</p>
+                      <h3 className="h3 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title || ""}
+                      </h3>
+                      <p className="text-muted-foreground mb-4 line-clamp-3">{post.excerpt || ""}</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <img
                             src={post.authorImage || "/placeholder.svg"}
-                            alt={post.author}
+                            alt={post.author || ""}
                             className="w-8 h-8 rounded-full object-cover"
                           />
-                          <span className="text-sm font-medium">{post.author}</span>
+                          <span className="text-sm font-medium">{post.author || ""}</span>
                         </div>
                         <a
-                          href={`/blog/${post.slug}`}
+                          href={`/blog/${post.slug || ""}`}
                           className="text-primary hover:text-primary/80 font-medium text-sm transition-colors"
                         >
                           Devamını Oku →
