@@ -143,7 +143,7 @@ const BlogPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch("/api/blog", {
+        const res = await fetch("/api/blog?published=true", {
           cache: "force-cache", // İstemci tarafında önbellekleme
         });
         const data = await res.json();

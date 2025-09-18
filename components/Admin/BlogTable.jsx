@@ -11,6 +11,7 @@ export default function BlogTable({ posts, onEdit, onDelete }) {
               <th className="px-6 py-4 text-left">Kategori</th>
               <th className="px-6 py-4 text-left">Yazar</th>
               <th className="px-6 py-4 text-left">Tarih</th>
+              <th className="px-6 py-4 text-left">Durum</th>
               <th className="px-6 py-4 text-left">Görüntülenme</th>
               <th className="px-6 py-4 text-left">İşlemler</th>
             </tr>
@@ -27,6 +28,13 @@ export default function BlogTable({ posts, onEdit, onDelete }) {
                 </td>
                 <td className="px-6 py-4">{post.author}</td>
                 <td className="px-6 py-4">{post.date}</td>
+                <td className="px-6 py-4">
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    post.published ? 'bg-green-600 text-white' : 'bg-yellow-600 text-black'
+                  }`}>
+                    {post.published ? 'Yayında' : 'Taslak'}
+                  </span>
+                </td>
                 <td className="px-6 py-4">{post.views}</td>
                 <td className="px-6 py-4">
                   <div className="flex space-x-2">

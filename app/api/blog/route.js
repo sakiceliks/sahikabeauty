@@ -9,6 +9,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get("category")
     const search = searchParams.get("search")
+    const published = searchParams.get("published")
 
     let blogs
 
@@ -16,6 +17,9 @@ export async function GET(request) {
       blogs = await blogModel.search(search)
     } else if (category) {
       blogs = (await blogModel.findAll()).filter((p) => p.category === category)
+    } else if (published === "true") {
+      // Frontend için sadece published blogları getir
+      blogs = await blogModel.findPublished()
     } else {
       blogs = await blogModel.findAll()
     }

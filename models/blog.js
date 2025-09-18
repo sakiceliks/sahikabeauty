@@ -17,6 +17,11 @@ export class BlogModel {
     return col.find({}).sort({ date: -1 }).toArray()
   }
 
+  async findPublished() {
+    const col = await this.getCollection()
+    return col.find({ published: true }).sort({ date: -1 }).toArray()
+  }
+
   async findById(id) {
     const col = await this.getCollection()
     return col.findOne({ _id: new ObjectId(id) })
@@ -43,6 +48,7 @@ export class BlogModel {
       ...data,
       date: data.date || new Date().toISOString(),
       views: data.views || 0,
+      published: data.published !== undefined ? data.published : true,
     })
     return { _id: result.insertedId, ...data }
   }

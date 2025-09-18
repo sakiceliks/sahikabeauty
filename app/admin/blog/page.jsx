@@ -26,6 +26,7 @@ export default function BlogYonetim() {
     views: 0,
     tags: [],
     featured: false,
+    published: true,
   })
 
   const fetchPosts = async () => {
@@ -112,6 +113,7 @@ export default function BlogYonetim() {
       views: 0,
       tags: [],
       featured: false,
+      published: true,
     })
     setEditingPost(null)
     setShowForm(false)
@@ -170,6 +172,7 @@ export default function BlogYonetim() {
       views: post.views,
       tags: Array.isArray(post.tags) ? post.tags : [],
       featured: post.featured,
+      published: post.published !== undefined ? post.published : true,
     })
     setShowForm(true)
   }
@@ -281,6 +284,7 @@ export default function BlogYonetim() {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Kategori</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Yazar</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Tarih</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Durum</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Görüntülenme</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">İşlemler</th>
               </tr>
@@ -297,6 +301,13 @@ export default function BlogYonetim() {
                   </td>
                   <td className="px-6 py-4 text-foreground">{post.author}</td>
                   <td className="px-6 py-4 text-foreground">{post.date}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      post.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {post.published ? 'Yayında' : 'Taslak'}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-foreground">{post.views}</td>
                   <td className="px-6 py-4">
                     <div className="flex space-x-2">
@@ -430,6 +441,19 @@ export default function BlogYonetim() {
                       Bu yazıyı öne çıkar
                     </label>
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Yayın Durumu</label>
+                  <select
+                    name="published"
+                    value={formData.published}
+                    onChange={handleInputChange}
+                    className="input-field w-full"
+                  >
+                    <option value={true}>Yayında</option>
+                    <option value={false}>Taslak</option>
+                  </select>
                 </div>
 
                 <div className="md:col-span-2">

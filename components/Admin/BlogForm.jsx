@@ -130,6 +130,19 @@ export default function BlogForm({
               </select>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium mb-2">Yayın Durumu</label>
+              <select
+                name="published"
+                value={formData.published}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={true}>Yayında</option>
+                <option value={false}>Taslak</option>
+              </select>
+            </div>
+
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-2">Etiketler (virgülle ayırın)</label>
               <input
