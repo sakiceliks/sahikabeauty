@@ -3,10 +3,11 @@ import { useState, useContext, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { CursorContext } from "@/components/CursorContext"
-import Link from "next/link"
+
 import JsonLd from "@/components/JsonLd"
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { ServiceCardSkeleton } from "@/components/Skeletons"
+import Link from "next/link"
 
 const skeletonCount = 6
 
