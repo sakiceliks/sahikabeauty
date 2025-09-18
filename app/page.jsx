@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import HomeClient from "./HomeClient"
 import { generateBreadcrumbSchema, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo-schemas"
+import JsonLd from "@/components/JsonLd"
 
 export async function generateMetadata() {
   // Dinamik metadata için API fetch optional
