@@ -4,15 +4,10 @@ import { ObjectId } from "mongodb"
 
 const blogModel = new BlogModel()
 
-// GET - blog yazısını ID veya slug ile getir
+// GET - blog yazısını slug ile getir
 export async function GET(request, { params }) {
   try {
-    let blog
-    if (ObjectId.isValid(params.id)) {
-      blog = await blogModel.findById(params.id)
-    } else {
-      blog = await blogModel.findBySlug(params.id)
-    }
+    const blog = await blogModel.findBySlug(params.id)
     if (!blog) {
       return NextResponse.json({ success: false, error: "Blog not found" }, { status: 404 })
     }
@@ -22,10 +17,9 @@ export async function GET(request, { params }) {
   }
 }
 
-// PUT - blog yazısını güncelle
+// PUT - blog yazısını slug ile güncelle
 export async function PUT(request, { params }) {
   try {
-    // İstek gövdesini al
     let body
     try {
       body = await request.json()
@@ -36,10 +30,10 @@ export async function PUT(request, { params }) {
       )
     }
 
-    // Slug çakışmasını kontrol et
+    // Slug çakışmasını kontrol et (farklı blog için aynı slug kullanılmasın)
     if (body.slug) {
       const existing = await blogModel.findBySlug(body.slug)
-      if (existing && existing.id !== parseInt(params.id)) {
+      if (existing && existing.slug !== params.id) {
         return NextResponse.json(
           { success: false, error: "Bu slug zaten başka bir blog yazısında kullanılıyor" },
           { status: 400 }
@@ -47,8 +41,8 @@ export async function PUT(request, { params }) {
       }
     }
 
-    // Numerik id ile blog yazısını güncelle
-    const updated = await blogModel.updateByNumericId(params.id, body)
+    // Slug ile blog yazısını güncelle
+    const updated = await blogModel.updateBySlug(params.id, body)
     if (!updated) {
       return NextResponse.json(
         { success: false, error: "Blog yazısı bulunamadı" },
@@ -66,10 +60,10 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE - blog yazısını sil
+// DELETE - blog yazısını slug ile sil
 export async function DELETE(request, { params }) {
   try {
-    const result = await blogModel.delete(params.id)
+    const result = await blogModel.deleteBySlug(params.id)
     return NextResponse.json({ success: true, message: result.message })
   } catch (error) {
     if (error.message === "Blog not found") {

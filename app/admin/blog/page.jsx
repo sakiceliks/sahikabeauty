@@ -140,7 +140,7 @@ export default function BlogYonetim() {
     setUploading(true)
 
     try {
-      const url = editingPost ? `/api/blog/${editingPost._id}` : "/api/blog"
+      const url = editingPost ? `/api/blog/${editingPost.slug}` : "/api/blog"
       const method = editingPost ? "PUT" : "POST"
 
       const submitData = editingPost ? formData : formData
@@ -191,11 +191,11 @@ export default function BlogYonetim() {
     setShowForm(true)
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (slug) => {
     if (!confirm("Bu blog yazısı silinsin mi?")) return
 
     try {
-      const response = await fetch(`/api/blog/${id}`, {
+      const response = await fetch(`/api/blog/${slug}`, {
         method: "DELETE",
       })
 
@@ -302,7 +302,7 @@ export default function BlogYonetim() {
           <table className="w-full">
             <thead className="bg-muted/20 border-b border-border">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">ID</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Slug</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Başlık</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Kategori</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Yazar</th>
@@ -314,7 +314,7 @@ export default function BlogYonetim() {
             <tbody>
               {posts.map((post, index) => (
                 <tr key={post._id} className="border-b border-border hover:bg-muted/10 transition-colors">
-                  <td className="px-6 py-4 text-foreground">{post._id}</td>
+                  <td className="px-6 py-4 text-foreground">{post.slug}</td>
                   <td className="px-6 py-4 font-semibold text-foreground">{post.title}</td>
                   <td className="px-6 py-4">
                     <span className="bg-primary/20 text-primary px-2 py-1 rounded text-xs font-medium">
@@ -332,7 +332,7 @@ export default function BlogYonetim() {
                       >
                         Düzenle
                       </button>
-                      <button onClick={() => handleDelete(post._id)} className="btn-destructive text-sm px-3 py-1">
+                      <button onClick={() => handleDelete(post.slug)} className="btn-destructive text-sm px-3 py-1">
                         Sil
                       </button>
                     </div>
