@@ -30,10 +30,19 @@ export async function PUT(request, { params }) {
       )
     }
 
+    // Önce mevcut blog yazısını bul
+    const existingBlog = await blogModel.findBySlug(params.id)
+    if (!existingBlog) {
+      return NextResponse.json(
+        { success: false, error: "Blog yazısı bulunamadı" },
+        { status: 404 }
+      )
+    }
+
     // Slug çakışmasını kontrol et (farklı blog için aynı slug kullanılmasın)
-    if (body.slug) {
+    if (body.slug && body.slug !== params.id) {
       const existing = await blogModel.findBySlug(body.slug)
-      if (existing && existing.slug !== params.id) {
+      if (existing) {
         return NextResponse.json(
           { success: false, error: "Bu slug zaten başka bir blog yazısında kullanılıyor" },
           { status: 400 }
@@ -45,8 +54,8 @@ export async function PUT(request, { params }) {
     const updated = await blogModel.updateBySlug(params.id, body)
     if (!updated) {
       return NextResponse.json(
-        { success: false, error: "Blog yazısı bulunamadı" },
-        { status: 404 }
+        { success: false, error: "Blog yazısı güncellenemedi" },
+        { status: 500 }
       )
     }
 
