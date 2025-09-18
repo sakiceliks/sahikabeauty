@@ -1,4 +1,18 @@
-import BlogClientPage from "./BlogClientPage"
+import BlogClientPage from "./BlogClientPage";
+
+// Server-side data fetching
+async function fetchBlogPosts() {
+  try {
+    const res = await fetch("https://sultanbeyliguzellikmerkezi.com.tr/api/blog", {
+      cache: "no-store", // Ensure fresh data for SSR
+    });
+    if (!res.ok) throw new Error("Failed to fetch blog posts");
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return [];
+  }
+}
 
 export const metadata = {
   title: "Blog - Sultanbeyli Güzellik Merkezi | Güzellik İpuçları ve Rehberler",
@@ -13,9 +27,8 @@ export const metadata = {
     locale: "tr_TR",
   },
 }
+export default async function BlogPage() {
+  const blogPosts = await fetchBlogPosts();
 
-const BlogPage = () => {
-  return <BlogClientPage />
+  return <BlogClientPage blogPosts={blogPosts} />;
 }
-
-export default BlogPage

@@ -1,5 +1,5 @@
-// pages/blog.tsx
-import { GetServerSideProps } from "next";
+"use client"; // Mark as Client Component
+
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import Head from "next/head";
@@ -65,30 +65,6 @@ export const blogCategories = [
   },
 ];
 
-// Interface for blog posts
-// Server-Side Props to fetch only blog posts
-export const getServerSideProps = async () => {
-  try {
-    // Fetch blog posts from the API
-    const postsRes = await fetch("https://sultanbeyliguzellikmerkezi.com.tr/api/blog");
-    const blogPosts = await postsRes.json();
-
-    return {
-      props: {
-        blogPosts,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching blog posts:", error);
-    return {
-      props: {
-        blogPosts: [],
-      },
-    };
-  }
-};
-
-// BlogClientPage component
 const BlogClientPage = ({ blogPosts }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -150,11 +126,14 @@ const BlogClientPage = ({ blogPosts }) => {
       {/* SEO structured data */}
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={blogListSchema} />
-<Head>
-  <title>{post.title}</title>
-  <meta name="description" content={post.excerpt} />
-  <meta name="keywords" content={post.tags} />
-</Head>
+      <Head>
+        <title>{currentCategory.seoTitle}</title>
+        <meta name="description" content={currentCategory.description} />
+        <meta
+          name="keywords"
+          content="sultanbeyli güzellik merkezi, güzellik ipuçları, cilt bakımı, lazer epilasyon, kalıcı makyaj, bölgesel incelme"
+        />
+      </Head>
       <div className="min-h-screen pt-32 pb-12">
         <div className="container mx-auto px-6">
           {/* SEO-optimized header */}
