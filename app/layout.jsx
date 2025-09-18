@@ -1,4 +1,4 @@
-import  React from "react"
+import React from "react"
 import { Marcellus } from "next/font/google"
 import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
@@ -24,8 +24,11 @@ const poppins = Poppins({
   display: "swap",
 })
 
-export const Metadata = {
-  title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon, Cilt Bakımı, Kalıcı Makyaj",
+export const metadata = {
+  title: {
+    default: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon, Cilt Bakımı, Kalıcı Makyaj",
+    template: "%s | Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+  },
   description:
     "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve estetik hizmetler. Uzman kadromuz ve son teknoloji cihazlarımızla hizmetinizdeyiz.",
   keywords: [
@@ -58,7 +61,22 @@ export const Metadata = {
   authors: [{ name: "Şahika Beauty" }],
   creator: "Şahika Beauty",
   publisher: "Şahika Beauty",
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  geo: {
+    position: "40.9607;29.2675", // Sultanbeyli koordinatları
+    placename: "Sultanbeyli, İstanbul",
+    region: "TR-34",
+  },
   openGraph: {
     type: "website",
     locale: "tr_TR",
@@ -69,10 +87,10 @@ export const Metadata = {
       "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
     images: [
       {
-        url: "/assets/about/img.jpg",
+        url: "https://sultanbeyliguzellikmerkezi.com.tr/assets/about/img.jpg", // Absolute URL
         width: 1200,
         height: 630,
-        alt: "Şahika Beauty Güzellik Merkezi",
+        alt: "Şahika Beauty Sultanbeyli Güzellik Merkezi - Lazer Epilasyon ve Cilt Bakımı",
       },
     ],
   },
@@ -81,17 +99,18 @@ export const Metadata = {
     title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
     description:
       "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
-    images: ["/assets/about/img.jpg"],
+    images: ["https://sultanbeyliguzellikmerkezi.com.tr/assets/about/img.jpg"],
   },
   alternates: {
     canonical: "https://sultanbeyliguzellikmerkezi.com.tr",
+    languages: {
+      "tr-TR": "https://sultanbeyliguzellikmerkezi.com.tr", // Hreflang for Turkish
+    },
   },
-  generator: "sakicelik",
+  generator: "Şahika Beauty",
 }
 
-export default function RootLayout({
-  children,
-}) {
+export default function RootLayout({ children }) {
   const organizationSchema = generateOrganizationSchema()
   const localBusinessSchema = generateLocalBusinessSchema()
 
@@ -100,24 +119,25 @@ export default function RootLayout({
       <head>
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
-
-
+        {/* Preload for performance */}
+        <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <style>{`
-html {
-  font-family: ${poppins.style.fontFamily};
-  --font-heading: ${marcellus.variable};
-  --font-body: ${poppins.variable};
-}
+          html {
+            font-family: ${poppins.style.fontFamily};
+            --font-heading: ${marcellus.variable};
+            --font-body: ${poppins.variable};
+          }
         `}</style>
       </head>
       <body className="font-body">
         <CursorProvider>
           <Suspense fallback={null}>
-
-<Header/>
+            <Header />
             {children}
-
             <Toaster />
           </Suspense>
           <Analytics />
