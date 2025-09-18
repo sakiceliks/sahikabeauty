@@ -1,7 +1,17 @@
 import { Metadata } from "next"
 import BlogDetail from "./BlogDetail" // Client component
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
+import JsonLd from "@/components/JsonLd"
 
+const blogCategories = [
+  { id: "epilasyon", name: "Epilasyon" },
+  { id: "cilt-bakimi", name: "Cilt Bakımı" },
+  { id: "bolgesel-incelme", name: "Bölgesel İncelme" },
+  { id: "kalici-makyaj", name: "Kalıcı Makyaj" },
+  { id: "tirnak-kirpik", name: "Tırnak & Kirpik" },
+  { id: "sac-bakimi", name: "Saç Bakımı" },
+  { id: "anti-age", name: "Anti-Age & Özel Bakımlar" },
+]
 const BlogDetailSkeleton = ({ className = "" }) => (
   <div className={`animate-pulse bg-muted rounded-md ${className}`} />
 )
@@ -84,15 +94,7 @@ const Page = async ({ params }) => {
     loading = false
   }
 
-const blogCategories = [
-  { id: "epilasyon", name: "Epilasyon" },
-  { id: "cilt-bakimi", name: "Cilt Bakımı" },
-  { id: "bolgesel-incelme", name: "Bölgesel İncelme" },
-  { id: "kalici-makyaj", name: "Kalıcı Makyaj" },
-  { id: "tirnak-kirpik", name: "Tırnak & Kirpik" },
-  { id: "sac-bakimi", name: "Saç Bakımı" },
-  { id: "anti-age", name: "Anti-Age & Özel Bakımlar" },
-]
+
   const articleSchema = post ? generateArticleSchema(post) : null
   const breadcrumbSchema = post
     ? generateBreadcrumbSchema([
