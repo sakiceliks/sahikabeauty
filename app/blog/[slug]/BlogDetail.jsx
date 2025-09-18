@@ -24,8 +24,10 @@ import {
 import { useState, useEffect } from "react"
 import JsonLd from "@/components/JsonLd"
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
-import { BlogDetailSkeleton } from "@/components/Skeletons"
 
+const BlogDetailSkeleton = ({ className = "" }) => (
+  <div className={`animate-pulse bg-muted rounded-md ${className}`} />
+)
 const blogCategories = [
   { id: "epilasyon", name: "Epilasyon" },
   { id: "cilt-bakimi", name: "Cilt Bakımı" },
