@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useToast } from "../../../hooks/use-toast"
 import { TableRowSkeleton } from "@/components/Skeletons"
+import Link from "next/link"
 
 export default function BlogYonetim() {
   const [posts, setPosts] = useState([])
@@ -11,6 +12,8 @@ export default function BlogYonetim() {
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
+
+  // Form verilerini yalnızca gerekli alanlarla başlat
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -115,7 +118,6 @@ export default function BlogYonetim() {
     }
   }
 
-  // Formu sıfırla
   const resetForm = () => {
     setFormData({
       title: "",
@@ -143,7 +145,9 @@ export default function BlogYonetim() {
       const url = editingPost ? `/api/blog/${editingPost.slug}` : "/api/blog"
       const method = editingPost ? "PUT" : "POST"
 
-      const submitData = editingPost ? formData : formData
+      // _id alanını hariç tut
+      const { _id, ...submitData } = formData
+      console.log("Gönderilen veri ( _id hariç):", submitData)
 
       const response = await fetch(url, {
         method,
@@ -181,12 +185,22 @@ export default function BlogYonetim() {
     }
   }
 
-  // Düzenleme başlat
   const handleEdit = (post) => {
     setEditingPost(post)
+    // _id hariç tutularak yalnızca gerekli alanlar alınır
     setFormData({
-      ...post,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      image: post.image,
+      category: post.category,
+      author: post.author,
+      date: post.date,
+      readTime: post.readTime,
+      views: post.views,
       tags: Array.isArray(post.tags) ? post.tags : [],
+      featured: post.featured,
     })
     setShowForm(true)
   }
@@ -224,13 +238,11 @@ export default function BlogYonetim() {
     }
   }
 
-  // Yeni ekle butonu
   const handleAddNew = () => {
     resetForm()
     setShowForm(true)
   }
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
@@ -239,7 +251,6 @@ export default function BlogYonetim() {
     }))
   }
 
-  // Handle tags
   const handleTagsChange = (e) => {
     const tags = e.target.value
       .split(",")
@@ -312,7 +323,7 @@ export default function BlogYonetim() {
               </tr>
             </thead>
             <tbody>
-              {posts.map((post, index) => (
+              {posts.map((post) => (
                 <tr key={post._id} className="border-b border-border hover:bg-muted/10 transition-colors">
                   <td className="px-6 py-4 text-foreground">{post.slug}</td>
                   <td className="px-6 py-4 font-semibold text-foreground">{post.title}</td>
@@ -343,7 +354,9 @@ export default function BlogYonetim() {
           </table>
         </div>
 
-        {posts.length === 0 && <div className="text-center py-8 text-muted-foreground">Hiç blog yazısı bulunamadı</div>}
+        {posts.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">Hiç blog yazısı bulunamadı</div>
+        )}
       </div>
 
       {showForm && (
@@ -529,7 +542,6 @@ export default function BlogYonetim() {
                 />
               </div>
 
-              {/* Form Actions */}
               <div className="flex justify-end space-x-4 pt-6">
                 <button type="button" onClick={resetForm} className="btn-secondary">
                   İptal
