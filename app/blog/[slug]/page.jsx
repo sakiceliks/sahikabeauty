@@ -2,13 +2,6 @@ import { Metadata } from "next"
 import BlogDetail from "./BlogDetail" // Client component
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 
-
-
-
-
-
-
-
 const BlogDetailSkeleton = ({ className = "" }) => (
   <div className={`animate-pulse bg-muted rounded-md ${className}`} />
 )
@@ -78,7 +71,7 @@ export async function generateMetadata({ params}) {
   }
 }
 
-const Page = async ({ params}) => {
+const Page = async ({ params }) => {
   let post = null
   let loading = true
   try {
