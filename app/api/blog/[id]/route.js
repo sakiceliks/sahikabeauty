@@ -25,25 +25,51 @@ export async function GET(request, { params }) {
 // PUT - blog yazısını güncelle
 export async function PUT(request, { params }) {
   try {
-    const body = await request.json()
+    // ID formatını kontrol et
+    if (!ObjectId.isValid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: "Geçersiz blog ID formatı" },
+        { status: 400 }
+      )
+    }
 
+    // İstek gövdesini al
+    let body
+    try {
+      body = await request.json()
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, error: "Geçersiz istek gövdesi" },
+        { status: 400 }
+      )
+    }
+
+    // Slug çakışmasını kontrol et
     if (body.slug) {
       const existing = await blogModel.findBySlug(body.slug)
       if (existing && existing._id.toString() !== params.id) {
         return NextResponse.json(
-          { success: false, error: "Slug already exists" },
+          { success: false, error: "Bu slug zaten başka bir blog yazısında kullanılıyor" },
           { status: 400 }
         )
       }
     }
 
+    // Blog yazısını güncelle
     const updated = await blogModel.update(params.id, body)
     return NextResponse.json({ success: true, data: updated })
   } catch (error) {
+    console.error("PUT hatası:", error) // Hata loglama
     if (error.message === "Blog not found") {
-      return NextResponse.json({ success: false, error: error.message }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: "Blog yazısı bulunamadı" },
+        { status: 404 }
+      )
     }
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: "Bir hata oluştu: " + error.message },
+      { status: 500 }
+    )
   }
 }
 
