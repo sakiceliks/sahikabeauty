@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useToast } from "../../../hooks/use-toast"
+import toast from "react-hot-toast"
 import { CarouselTableRowSkeleton } from "@/components/Skeletons"
 
 export default function CarouselYonetim() {
@@ -10,7 +10,6 @@ export default function CarouselYonetim() {
   const [editingSlide, setEditingSlide] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(true)
-  const { toast } = useToast()
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -29,19 +28,11 @@ export default function CarouselYonetim() {
       if (data.success) {
         setSlides(data.data)
       } else {
-        toast({
-          title: "Hata",
-          description: "Carousel verileri yüklenirken hata oluştu.",
-          variant: "destructive",
-        })
+        toast.error("Carousel verileri yüklenirken hata oluştu.")
       }
     } catch (error) {
       console.error("Carousel verileri getirirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Carousel verileri yüklenirken hata oluştu.",
-        variant: "destructive",
-      })
+      toast.error("Carousel verileri yüklenirken hata oluştu.")
     } finally {
       setLoading(false)
     }
@@ -56,11 +47,7 @@ export default function CarouselYonetim() {
     if (!file) return
 
     if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Hata",
-        description: "Lütfen geçerli bir resim dosyası seçin.",
-        variant: "destructive",
-      })
+      toast.error("Lütfen geçerli bir resim dosyası seçin.")
       return
     }
 
@@ -87,10 +74,7 @@ export default function CarouselYonetim() {
 
         if (imageUrl) {
           setFormData((prev) => ({ ...prev, image: imageUrl }))
-          toast({
-            title: "Başarılı",
-            description: "Carousel görseli başarıyla yüklendi!",
-          })
+          toast.success("Carousel görseli başarıyla yüklendi!")
         } else {
           throw new Error("Yüklenen dosyanın URL bilgisi alınamadı")
         }
@@ -99,11 +83,7 @@ export default function CarouselYonetim() {
       }
     } catch (error) {
       console.error("Yükleme hatası:", error)
-      toast({
-        title: "Hata",
-        description: `Resim yüklenirken hata oluştu: ${error.message}`,
-        variant: "destructive",
-      })
+      toast.error(`Resim yüklenirken hata oluştu: ${error.message}`)
     } finally {
       setUploading(false)
     }
@@ -145,24 +125,13 @@ export default function CarouselYonetim() {
       if (data.success) {
         await fetchSlides()
         resetForm()
-        toast({
-          title: "Başarılı",
-          description: editingSlide ? "Slide başarıyla güncellendi!" : "Slide başarıyla oluşturuldu!",
-        })
+        toast.success(editingSlide ? "Slide başarıyla güncellendi!" : "Slide başarıyla oluşturuldu!")
       } else {
-        toast({
-          title: "Hata",
-          description: `Hata: ${data.error}`,
-          variant: "destructive",
-        })
+        toast.error(`Hata: ${data.error}`)
       }
     } catch (error) {
       console.error("Form gönderilirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Form gönderilirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Form gönderilirken hata oluştu")
     }
   }
 
@@ -192,24 +161,13 @@ export default function CarouselYonetim() {
 
       if (data.success) {
         await fetchSlides()
-        toast({
-          title: "Başarılı",
-          description: "Slide başarıyla silindi!",
-        })
+        toast.success("Slide başarıyla silindi!")
       } else {
-        toast({
-          title: "Hata",
-          description: `Hata: ${data.error}`,
-          variant: "destructive",
-        })
+        toast.error(`Hata: ${data.error}`)
       }
     } catch (error) {
       console.error("Slide silinirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Slide silinirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Slide silinirken hata oluştu")
     }
   }
 
@@ -228,18 +186,11 @@ export default function CarouselYonetim() {
 
       if (data.success) {
         await fetchSlides()
-        toast({
-          title: "Başarılı",
-          description: "Sıralama güncellendi!",
-        })
+        toast.success("Sıralama güncellendi!")
       }
     } catch (error) {
       console.error("Sıralama güncellenirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Sıralama güncellenirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Sıralama güncellenirken hata oluştu")
     }
   }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useToast } from "../../../hooks/use-toast"
+import toast from "react-hot-toast"
 import { TableRowSkeleton } from "@/components/Skeletons"
 import Link from "next/link"
 
@@ -11,7 +11,6 @@ export default function BlogYonetim() {
   const [editingPost, setEditingPost] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(true)
-  const { toast } = useToast()
 
   // Form verilerini yalnızca gerekli alanlarla başlat
   const [formData, setFormData] = useState({
@@ -38,19 +37,11 @@ export default function BlogYonetim() {
       if (data.success) {
         setPosts(data.data)
       } else {
-        toast({
-          title: "Hata",
-          description: "Blog yazıları yüklenirken hata oluştu.",
-          variant: "destructive",
-        })
+        toast.error("Blog yazıları yüklenirken hata oluştu.")
       }
     } catch (error) {
       console.error("Blog yazıları getirirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Blog yazıları yüklenirken hata oluştu.",
-        variant: "destructive",
-      })
+      toast.error("Blog yazıları yüklenirken hata oluştu.")
     } finally {
       setLoading(false)
     }
@@ -65,11 +56,7 @@ export default function BlogYonetim() {
     if (!file) return
 
     if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Hata",
-        description: "Lütfen geçerli bir resim dosyası seçin.",
-        variant: "destructive",
-      })
+      toast.error("Lütfen geçerli bir resim dosyası seçin.")
       return
     }
 
@@ -96,10 +83,7 @@ export default function BlogYonetim() {
 
         if (imageUrl) {
           setFormData((prev) => ({ ...prev, image: imageUrl }))
-          toast({
-            title: "Başarılı",
-            description: "Blog görseli başarıyla yüklendi!",
-          })
+          toast.success("Blog görseli başarıyla yüklendi!")
         } else {
           throw new Error("Yüklenen dosyanın URL bilgisi alınamadı")
         }
@@ -108,11 +92,7 @@ export default function BlogYonetim() {
       }
     } catch (error) {
       console.error("Yükleme hatası:", error)
-      toast({
-        title: "Hata",
-        description: `Resim yüklenirken hata oluştu: ${error.message}`,
-        variant: "destructive",
-      })
+      toast.error(`Resim yüklenirken hata oluştu: ${error.message}`)
     } finally {
       setUploading(false)
     }
@@ -162,24 +142,13 @@ export default function BlogYonetim() {
       if (data.success) {
         await fetchPosts()
         resetForm()
-        toast({
-          title: "Başarılı",
-          description: editingPost ? "Blog yazısı başarıyla güncellendi!" : "Blog yazısı başarıyla oluşturuldu!",
-        })
+        toast.success(editingPost ? "Blog yazısı başarıyla güncellendi!" : "Blog yazısı başarıyla oluşturuldu!")
       } else {
-        toast({
-          title: "Hata",
-          description: `Hata: ${data.error}`,
-          variant: "destructive",
-        })
+        toast.error(`Hata: ${data.error}`)
       }
     } catch (error) {
       console.error("Form gönderilirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Form gönderilirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Form gönderilirken hata oluştu")
     } finally {
       setUploading(false)
     }
@@ -217,24 +186,13 @@ export default function BlogYonetim() {
 
       if (data.success) {
         await fetchPosts()
-        toast({
-          title: "Başarılı",
-          description: "Blog yazısı başarıyla silindi!",
-        })
+        toast.success("Blog yazısı başarıyla silindi!")
       } else {
-        toast({
-          title: "Hata",
-          description: `Hata: ${data.error}`,
-          variant: "destructive",
-        })
+        toast.error(`Hata: ${data.error}`)
       }
     } catch (error) {
       console.error("Blog yazısı silinirken hata:", error)
-      toast({
-        title: "Hata",
-        description: "Blog yazısı silinirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Blog yazısı silinirken hata oluştu")
     }
   }
 

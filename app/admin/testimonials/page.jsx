@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/components/ui/use-toast"
+import toast from "react-hot-toast"
 import { Star, Check, X, Trash2 } from "lucide-react"
 import Image from "next/image"
 import { services } from "@/data/services"
@@ -24,7 +24,6 @@ export default function TestimonialsAdmin() {
     afterImage: "",
     isApproved: false,
   })
-  const { toast } = useToast()
 
   useEffect(() => {
     fetchTestimonials()
@@ -43,11 +42,7 @@ export default function TestimonialsAdmin() {
       }
     } catch (error) {
       console.error("Error fetching testimonials:", error)
-      toast({
-        title: "Hata",
-        description: "Yorumlar yüklenirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Yorumlar yüklenirken hata oluştu")
     } finally {
       setLoading(false)
     }
@@ -76,10 +71,7 @@ export default function TestimonialsAdmin() {
       const data = await response.json()
 
       if (data.success) {
-        toast({
-          title: "Başarılı",
-          description: "Yorum başarıyla eklendi",
-        })
+        toast.success("Yorum başarıyla eklendi")
         setShowForm(false)
         setFormData({
           name: "",
@@ -97,11 +89,7 @@ export default function TestimonialsAdmin() {
       }
     } catch (error) {
       console.error("Error adding testimonial:", error)
-      toast({
-        title: "Hata",
-        description: "Yorum eklenirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Yorum eklenirken hata oluştu")
     }
   }
 
@@ -118,19 +106,12 @@ export default function TestimonialsAdmin() {
       const data = await response.json()
 
       if (data.success) {
-        toast({
-          title: "Başarılı",
-          description: `Yorum ${isApproved ? "onaylandı" : "onayı kaldırıldı"}`,
-        })
+        toast.success(`Yorum ${isApproved ? "onaylandı" : "onayı kaldırıldı"}`)
         fetchTestimonials()
       }
     } catch (error) {
       console.error("Error updating testimonial:", error)
-      toast({
-        title: "Hata",
-        description: "Yorum güncellenirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Yorum güncellenirken hata oluştu")
     }
   }
 
@@ -145,19 +126,12 @@ export default function TestimonialsAdmin() {
       const data = await response.json()
 
       if (data.success) {
-        toast({
-          title: "Başarılı",
-          description: "Yorum silindi",
-        })
+        toast.success("Yorum silindi")
         fetchTestimonials()
       }
     } catch (error) {
       console.error("Error deleting testimonial:", error)
-      toast({
-        title: "Hata",
-        description: "Yorum silinirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Yorum silinirken hata oluştu")
     }
   }
 
@@ -180,18 +154,11 @@ export default function TestimonialsAdmin() {
           ...prev,
           [type]: data.url,
         }))
-        toast({
-          title: "Başarılı",
-          description: "Fotoğraf yüklendi",
-        })
+        toast.success("Fotoğraf yüklendi")
       }
     } catch (error) {
       console.error("Error uploading image:", error)
-      toast({
-        title: "Hata",
-        description: "Fotoğraf yüklenirken hata oluştu",
-        variant: "destructive",
-      })
+      toast.error("Fotoğraf yüklenirken hata oluştu")
     }
   }
 

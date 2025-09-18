@@ -65,6 +65,7 @@
     "react-day-picker": "latest",
     "react-dom": "^18",
     "react-hook-form": "latest",
+    "react-hot-toast": "^2.6.0",
     "react-icons": "latest",
     "react-player": "latest",
     "react-resizable-panels": "latest",

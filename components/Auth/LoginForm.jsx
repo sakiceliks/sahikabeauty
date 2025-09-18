@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { authService } from "@/lib/auth"
-import { useToast } from "../../hooks/use-toast"
+import toast from "react-hot-toast"
 
 export default function LoginForm({ onLoginSuccess }) {
   const [formData, setFormData] = useState({
@@ -10,7 +10,6 @@ export default function LoginForm({ onLoginSuccess }) {
     password: "",
   })
   const [loading, setLoading] = useState(false)
-  const { toast } = useToast()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -25,24 +24,13 @@ export default function LoginForm({ onLoginSuccess }) {
       const result = await authService.login(formData.username, formData.password)
 
       if (result.success) {
-        toast({
-          title: "Başarılı",
-          description: "Giriş yapıldı! Yönlendiriliyorsunuz...",
-        })
+        toast.success("Giriş yapıldı! Yönlendiriliyorsunuz...")
         onLoginSuccess(result.user)
       } else {
-        toast({
-          title: "Hata",
-          description: result.error,
-          variant: "destructive",
-        })
+        toast.error(result.error)
       }
     } catch (error) {
-      toast({
-        title: "Hata",
-        description: "Giriş yapılırken bir hata oluştu.",
-        variant: "destructive",
-      })
+      toast.error("Giriş yapılırken bir hata oluştu.")
     } finally {
       setLoading(false)
     }
