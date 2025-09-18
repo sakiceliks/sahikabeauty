@@ -96,8 +96,8 @@ export async function POST(request) {
     │ 👤 Ad Soyad       : ${body.isimSoyisim}
     │ 🛠️ Hizmet         : ${body.markaModel}
     │ 📞 Telefon        : ${body.telefonNo}
-    │ 📅 Randevu Tarihi : ${body.adres}
-    │ 🛑: ${body.sorun}
+    │ 📅                  ${body.adres}
+    │ 🛑                  ${body.sorun}
     │ 🕒 Oluşturma      : ${now.toLocaleString('tr-TR')}
     │ 📝 Not            : ${body.not || "Yok"}
     └─────────────────────────────┘
