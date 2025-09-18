@@ -60,12 +60,14 @@ export class BlogModel {
 
   async updateBySlug(slug, data) {
     const col = await this.getCollection()
+    console.log("updateBySlug - slug:", slug, "data:", data)
     const result = await col.findOneAndUpdate(
       { slug },
       { $set: { ...data, updatedAt: new Date() } },
       { returnDocument: "after" }
     )
-    if (!result.value) throw new Error("Blog not found")
+    console.log("updateBySlug - result:", result)
+    if (!result || !result.value) throw new Error("Blog not found")
     return result.value
   }
 

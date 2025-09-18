@@ -252,10 +252,15 @@ export default function BlogYonetim() {
   }
 
   const handleTagsChange = (e) => {
-    const tags = e.target.value
+    const inputValue = e.target.value
+    console.log("handleTagsChange - input value:", inputValue)
+    
+    const tags = inputValue
       .split(",")
       .map((tag) => tag.trim())
       .filter((tag) => tag)
+    
+    console.log("handleTagsChange - processed tags:", tags)
     setFormData((prev) => ({ ...prev, tags }))
   }
 
@@ -480,6 +485,9 @@ export default function BlogYonetim() {
                     placeholder="teknoloji, sağlık, güzellik"
                     className="input-field w-full"
                   />
+                  <div className="text-xs text-muted-foreground mt-1">
+                    Mevcut etiketler: {JSON.stringify(formData.tags)} ({formData.tags.length} adet)
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">
