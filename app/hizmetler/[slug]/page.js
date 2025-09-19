@@ -18,6 +18,7 @@ import {
 import JsonLd from "@/components/JsonLd"
 import { generateServiceSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { useState, useEffect } from "react"
+import RelatedBlogs from "@/components/RelatedBlogs"
 
 
 const Skeleton = ({ className = "" }) => (
@@ -629,6 +630,14 @@ const ServiceDetails = () => {
                 </div>
               )}
             </motion.section>
+
+            {/* Related Blogs Section */}
+            <RelatedBlogs 
+              serviceCategory={service.category} 
+              serviceTitle={service.title}
+              limit={3}
+            />
+
             <motion.section
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}

@@ -9,18 +9,27 @@ const links = [
   {
     href: "/",
     name: "Anasayfa",
+    icon: "🏠",
   },
   {
     href: "/hakkimizda",
     name: "Hakkımızda",
+    icon: "👥",
   },
   {
     href: "/hizmetler",
     name: "Hizmetler",
+    icon: "✨",
+  },
+  {
+    href: "/blog",
+    name: "Blog",
+    icon: "📝",
   },
   {
     href: "/iletisim",
     name: "İletişim",
+    icon: "📞",
   },
 ]
 
@@ -63,10 +72,12 @@ const MobileNav = ({ setMobileNav }) => {
                 href={link.href}
                 className={`${
                   pathname === link.href && "border-b-2 border-accent"
-                } uppercase max-w-max mx-auto block text-center hover:text-accent transition`}
+                } uppercase max-w-max mx-auto block text-center hover:text-accent transition flex items-center gap-3 justify-center`}
                 onClick={() => setMobileNav(false)}
                 aria-current={pathname === link.href ? "page" : undefined}
+                title={`${link.name} sayfasına git`}
               >
+                <span className="text-2xl" aria-hidden="true">{link.icon}</span>
                 {link.name}
               </Link>
             </li>

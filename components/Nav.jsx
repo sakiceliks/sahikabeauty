@@ -7,18 +7,27 @@ const links = [
   {
     href: "/",
     name: "Anasayfa",
+    icon: "🏠",
   },
   {
     href: "/hakkimizda",
     name: "Hakkımızda",
+    icon: "👥",
   },
   {
     href: "/hizmetler",
     name: "Hizmetler",
+    icon: "✨",
+  },
+  {
+    href: "/blog",
+    name: "Blog",
+    icon: "📝",
   },
   {
     href: "/iletisim",
     name: "İletişim",
+    icon: "📞",
   },
 ];
 
@@ -34,8 +43,10 @@ const Nav = () => {
               key={index}
               className={`${
                 pathname === link.href && "border-b-2 text-title border-accent"
-              } uppercase text-black font-bold`}
+              } uppercase text-black font-bold flex items-center gap-2 hover:text-accent transition-colors duration-300`}
+              title={`${link.name} sayfasına git`}
             >
+              <span className="text-lg" aria-hidden="true">{link.icon}</span>
               {link.name}
             </Link>
           );

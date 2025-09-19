@@ -68,13 +68,30 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
             viewport={{ once: true }}
             className="text-center mt-12"
           >
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-3 rounded-xl hover:bg-primary-700 transition-all duration-300 font-medium shadow-beauty"
-            >
-              Tüm Yazıları Gör
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-3 rounded-xl hover:bg-primary-700 transition-all duration-300 font-medium shadow-beauty"
+              >
+                📝 Tüm Blog Yazıları
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              
+              <Link
+                href="/hizmetler"
+                className="inline-flex items-center gap-2 border-2 border-primary-600 text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-600 hover:text-white transition-all duration-300 font-medium"
+              >
+                ✨ Hizmetlerimizi Keşfedin
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+            
+            <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+              <span className="bg-primary/10 px-3 py-1 rounded-full">💡 Uzman Tavsiyeleri</span>
+              <span className="bg-primary/10 px-3 py-1 rounded-full">📚 Güzellik Rehberleri</span>
+              <span className="bg-primary/10 px-3 py-1 rounded-full">🔬 Son Teknolojiler</span>
+              <span className="bg-primary/10 px-3 py-1 rounded-full">⭐ Müşteri Deneyimleri</span>
+            </div>
           </motion.div>
         )}
       </div>

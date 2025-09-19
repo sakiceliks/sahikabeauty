@@ -8,6 +8,7 @@ import { generateBreadcrumbSchema } from "@/lib/seo-schemas";
 
 import Link from "next/link";
 import { ServiceCardSkeleton } from "@/components/Skeletons";
+import { ArrowRight } from "lucide-react";
 
 // Blog kategorileri
 const blogCategories = [
@@ -315,13 +316,43 @@ const BlogPage = () => {
                 blogumuzu takip edin!
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <a href="https://wa.me/905304348349" target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  WhatsApp ile İletişime Geç
+                  📱 WhatsApp ile İletişime Geç
                 </a>
                 <a href="tel:+905304348349" className="btn-secondary">
-                  Hemen Ara
+                  📞 Hemen Ara
                 </a>
+              </div>
+
+              {/* Hizmetler Linkleri */}
+              <div className="border-t border-border pt-8">
+                <h3 className="text-xl font-semibold mb-6 text-primary">Hizmetlerimizi Keşfedin</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Link href="/hizmetler?category=epilasyon" className="group p-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                    <div className="text-2xl mb-2">⚡</div>
+                    <div className="text-sm font-medium group-hover:text-primary">Lazer Epilasyon</div>
+                  </Link>
+                  <Link href="/hizmetler?category=cilt-bakimi" className="group p-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                    <div className="text-2xl mb-2">✨</div>
+                    <div className="text-sm font-medium group-hover:text-primary">Cilt Bakımı</div>
+                  </Link>
+                  <Link href="/hizmetler?category=kalici-makyaj" className="group p-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                    <div className="text-2xl mb-2">💄</div>
+                    <div className="text-sm font-medium group-hover:text-primary">Kalıcı Makyaj</div>
+                  </Link>
+                  <Link href="/hizmetler?category=bolgesel-incelme" className="group p-4 rounded-xl border border-border hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                    <div className="text-2xl mb-2">🏃‍♀️</div>
+                    <div className="text-sm font-medium group-hover:text-primary">Bölgesel İncelme</div>
+                  </Link>
+                </div>
+                
+                <div className="mt-6">
+                  <Link href="/hizmetler" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors">
+                    Tüm Hizmetleri Gör
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.section>

@@ -8,6 +8,7 @@ import JsonLd from "@/components/JsonLd"
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { ServiceCardSkeleton } from "@/components/Skeletons"
 import Link from "next/link"
+import RelatedBlogs from "@/components/RelatedBlogs"
 
 const skeletonCount = 6
 
@@ -255,6 +256,13 @@ const Services = () => {
                   </motion.article>
                 ))}
           </div>
+
+          {/* Related Blogs Section */}
+          <RelatedBlogs 
+            serviceCategory="all" 
+            serviceTitle="Güzellik Hizmetleri"
+            limit={6}
+          />
 
           <motion.section
             initial={{ opacity: 0, y: 40 }}
