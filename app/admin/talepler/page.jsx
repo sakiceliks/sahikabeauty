@@ -154,7 +154,7 @@ export default function TaleplerPage() {
   const parseReservationDate = (adres) => {
     if (!adres || !adres.includes('Randevu Tarihi:')) return null
     
-    const match = adres.match(/Randevu Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/)
+    const match = adres.match(/rezervasyon Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/)
     if (match) {
       const [, date, time] = match
       return { date, time }

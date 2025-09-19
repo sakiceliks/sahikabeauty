@@ -154,13 +154,13 @@ const LocalCitations = () => (
         <h4 className="font-semibold text-lg text-primary">Şahika Beauty Sultanbeyli Şubesi</h4>
         <p className="text-gray-700">
           <strong className="block mb-1">Adres:</strong>
-          Abdurrahmangazi Mah. Eyyüp Cad. No:123/A<br />
-          Sultanbeyli / İstanbul
+          Abdurrahmangazi, Fatih Blv. No:73/1<br />
+          34920 Sultanbeyli/İstanbul
         </p>
         <p className="text-gray-700">
           <strong className="block mb-1">Telefon:</strong>
-          <a href="tel:+90XXX XXX XX XX" className="text-blue-600 hover:underline">
-            0XXX XXX XX XX
+          <a href="tel:+905304348349" className="text-blue-600 hover:underline">
+            0530 434 83 49
           </a>
         </p>
         <p className="text-gray-700">
@@ -464,13 +464,13 @@ const EnhancedBlogDetail = ({ post, loading }) => {
     "image": "https://sahikabeauty.com/images/sahika-beauty-sultanbeyli-sube.jpg",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Abdurrahmangazi Mah. Eyyüp Cad. No:123/A",
+      "streetAddress": "Abdurrahmangazi, Fatih Blv. No:73/1",
       "addressLocality": "Sultanbeyli",
       "addressRegion": "İstanbul",
-      "postalCode": "34930",
+      "postalCode": "34920",
       "addressCountry": "TR"
     },
-    "telephone": "+90XXX XXX XX XX",
+    "telephone": "+90 530 434 83 49",
     "url": "https://sahikabeauty.com/sultanbeyli",
     "priceRange": "$$",
     "openingHours": "Mo-Sa 09:00-20:00",
@@ -701,7 +701,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
 
                     <div className="text-center mt-8">
                       <Link
-                        href="/randevu"
+                        href="/rezervasyon"
                         className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
                       >
                         <Calendar className="w-5 h-5" />
@@ -836,7 +836,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                         {
                           title: "Cilt Tipi Belirleme ve Bakım",
                           excerpt: "Cilt tipinizi doğru belirleyin ve ona göre bakım yapın...",
-                          image: "/blog-thumb2.jpg",
+                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/cilt-tipi-belirleme.png",
                           href: "/blog/cilt-tipi-belirleme-sultanbeyli",
                           category: "Cilt Bakımı",
                           readTime: "7 dk"
@@ -844,7 +844,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                         {
                           title: "Kalıcı Makyaj Sonrası Bakım",
                           excerpt: "Kalıcı makyaj sonrası dikkat edilecek önemli noktalar...",
-                          image: "/blog-thumb3.jpg",
+                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/kalici-makyaj-bakim.png",
                           href: "/blog/kalici-makyaj-bakim-sultanbeyli",
                           category: "Kalıcı Makyaj",
                           readTime: "4 dk"
@@ -917,7 +917,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Link
-                        href="/randevu"
+                        href="/rezervasyon"
                         className="inline-flex items-center gap-2 bg-white text-primary px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors font-semibold"
                       >
                         <Calendar className="w-5 h-5" />
@@ -960,7 +960,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   <h3 className="font-bold mb-4 text-gray-800">Popüler Yazılar</h3>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-4">
-                      <Image src="/popular1.jpg" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
+                      <Image src="https://styirqnih357hnts.public.blob.vercel-storage.com/istenmeyen-tuyler.png" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
                       <div>
                         <Link href="#" className="font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2">
                           İstenmeyen Tüylerden Kurtulmanın En Etkili Yolları
@@ -969,7 +969,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                       </div>
                     </li>
                     <li className="flex items-start gap-4">
-                      <Image src="/popular2.jpg" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
+                      <Image src="https://styirqnih357hnts.public.blob.vercel-storage.com/4-adimda-puruzsuz-cilt.png" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
                       <div>
                         <Link href="#" className="font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2">
                           4 Adımda Pürüzsüz ve Işıltılı Bir Cilt

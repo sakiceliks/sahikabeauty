@@ -236,7 +236,7 @@ const LocalSEOCard = () => (
           {servicePageSEOData.businessInfo.hours}
         </p>
         <Link 
-          href="/randevu"
+          href="/rezervasyon"
           className="text-primary hover:text-secondary transition-colors text-sm font-medium"
         >
           Randevu Al →

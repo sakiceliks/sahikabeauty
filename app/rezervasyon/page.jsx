@@ -211,7 +211,7 @@ const ReservationPage = () => {
     existingReservations.forEach(reservation => {
       if (reservation.adres && reservation.adres.includes('Randevu Tarihi:')) {
         // "Randevu Tarihi: 2024-01-15 14:00" formatından tarih ve saati çıkar
-        const match = reservation.adres.match(/Randevu Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/);
+        const match = reservation.adres.match(/rezervasyon Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/);
         if (match) {
           const [, date, time] = match;
           bookedSlots.add(`${date}-${time}`);
