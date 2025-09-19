@@ -828,8 +828,8 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                         {
                           title: "Lazer Epilasyon Hazırlık Rehberi",
                           excerpt: "Seansa gelmeden önce bilmeniz gerekenler...",
-                          image: "/blog-thumb1.jpg",
-                          href: "/blog/lazer-epilasyon-hazirlik-sultanbeyli",
+                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/epilasyon-hazirlik.png",
+                          href: "/blog/sultanbeyli-guzellik-merkezi",
                           category: "Hazırlık",
                           readTime: "5 dk"
                         },
@@ -837,7 +837,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                           title: "Cilt Tipi Belirleme ve Bakım",
                           excerpt: "Cilt tipinizi doğru belirleyin ve ona göre bakım yapın...",
                           image: "https://styirqnih357hnts.public.blob.vercel-storage.com/cilt-tipi-belirleme.png",
-                          href: "/blog/cilt-tipi-belirleme-sultanbeyli",
+                          href: "/blog/sultanbeyli-guzellik-merkezi",
                           category: "Cilt Bakımı",
                           readTime: "7 dk"
                         },
@@ -845,7 +845,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                           title: "Kalıcı Makyaj Sonrası Bakım",
                           excerpt: "Kalıcı makyaj sonrası dikkat edilecek önemli noktalar...",
                           image: "https://styirqnih357hnts.public.blob.vercel-storage.com/kalici-makyaj-bakim.png",
-                          href: "/blog/kalici-makyaj-bakim-sultanbeyli",
+                          href: "/blog/sultanbeyli-guzellik-merkezi",
                           category: "Kalıcı Makyaj",
                           readTime: "4 dk"
                         }
