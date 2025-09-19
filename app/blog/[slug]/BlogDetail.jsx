@@ -5,7 +5,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion'; // Temporarily disabled for Next.js 14 compatibility
 
 // Dummy imports for non-existent components to make the code runnable.
 // In a real project, these would be your actual component files.
@@ -522,10 +522,11 @@ const EnhancedBlogDetail = ({ post, loading }) => {
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            <motion.main
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
-              className="lg:col-span-3"
+            <main
+              className="lg:col-span-3 animate-fade-in"
+              style={{
+                animation: 'fadeInUp 0.6s ease-out 0.4s both'
+              }}
             >
               {/* Featured Image */}
               <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-lg mb-12">
@@ -934,7 +935,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   </div>
                 </div>
               </article>
-            </motion.main>
+            </main>
 
             <motion.aside
               initial={{ opacity: 0, x: 20 }}
