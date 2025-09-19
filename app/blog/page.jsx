@@ -227,6 +227,41 @@ const BlogPage = () => {
             </p>
           </div>
 
+          {/* Featured Blog Section */}
+          {!loading && filteredBlogs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.3, duration: 0.8 } }}
+              className="mb-12"
+            >
+              <div className="bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20 rounded-2xl p-8 text-center">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
+                  ⭐ Öne Çıkan Blog Yazısı
+                </div>
+                <h2 className="text-3xl font-bold mb-4 text-primary">
+                  Sultanbeyli Güzellik Merkezi: Aradığınız Tüm Hizmetler Bir Arada
+                </h2>
+                <p className="text-muted-foreground mb-6 max-w-3xl mx-auto text-lg">
+                  Sultanbeyli güzellik merkezi arayışınızda doğru adresi bulmak, kendinize yaptığınız en iyi yatırımlardan biridir. 
+                  Kaliteli bir merkez, yalnızca estetik hizmetler sunmakla kalmaz, aynı zamanda hijyen, uzman kadro ve son teknoloji cihazlarla da güven verir.
+                </p>
+                <div className="flex flex-wrap justify-center gap-4 mb-6">
+                  <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">✨ Uzman Kadro</span>
+                  <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">🔬 Son Teknoloji</span>
+                  <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">🛡️ Güvenli Uygulama</span>
+                  <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">⭐ 1000+ Memnun Müşteri</span>
+                </div>
+                <Link 
+                  href="/blog/sultanbeyli-guzellik-merkezi"
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-lg text-lg"
+                >
+                  📖 Detaylı Rehberi Oku
+                  <ArrowRight className="w-6 h-6" />
+                </Link>
+              </div>
+            </motion.div>
+          )}
+
           {/* Blog Kartları */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {loading
@@ -236,7 +271,10 @@ const BlogPage = () => {
                     Bu kategoride henüz yazı bulunmuyor.
                   </div>
                 ) : (
-                  filteredBlogs.map((blog, index) => (
+                  filteredBlogs.map((blog, index) => {
+                    // Sultanbeyli güzellik merkezi yazısını atla (zaten öne çıkan bölümde gösterildi)
+                    if (blog.slug === 'sultanbeyli-guzellik-merkezi') return null;
+                    return (
                     <motion.article
                       key={blog._id}
                       initial={{ opacity: 0, y: 40 }}
@@ -300,7 +338,8 @@ const BlogPage = () => {
                         <span itemProp="datePublished">{blog.date}</span>
                       </div>
                     </motion.article>
-                  ))
+                    );
+                  })
                 )}
           </div>
 

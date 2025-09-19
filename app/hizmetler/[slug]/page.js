@@ -13,7 +13,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { SEOHead } from "@/components/seo-head"
 import { 
-  Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, Sparkles 
+  Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, Sparkles, ArrowRight 
 } from "lucide-react"
 import JsonLd from "@/components/JsonLd"
 import { generateServiceSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
@@ -629,6 +629,64 @@ const ServiceDetails = () => {
                   <button className="btn-primary">Yorum Yap</button>
                 </div>
               )}
+            </motion.section>
+
+            {/* Featured Blog Section */}
+            <motion.section
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="mb-16"
+            >
+              <div className="card-professional bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
+                    ⭐ Öne Çıkan Blog Yazısı
+                  </div>
+                  <h2 className="h2 text-gradient mb-4">
+                    Sultanbeyli Güzellik Merkezi Rehberi
+                  </h2>
+                  <p className="text-muted-foreground max-w-2xl mx-auto">
+                    {service.title} hizmetimiz hakkında detaylı bilgi almak için uzman rehberimizi inceleyin
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-primary">
+                      Aradığınız Tüm Hizmetler Bir Arada
+                    </h3>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                      Sultanbeyli güzellik merkezi arayışınızda doğru adresi bulmak, kendinize yaptığınız en iyi yatırımlardan biridir. 
+                      Kaliteli bir merkez, yalnızca estetik hizmetler sunmakla kalmaz, aynı zamanda hijyen, uzman kadro ve son teknoloji cihazlarla da güven verir.
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">✨ Uzman Kadro</span>
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">🔬 Son Teknoloji</span>
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">🛡️ Güvenli Uygulama</span>
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">⭐ 1000+ Memnun Müşteri</span>
+                    </div>
+                    <Link 
+                      href="/blog/sultanbeyli-guzellik-merkezi"
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-lg"
+                    >
+                      📖 Detaylı Rehberi Oku
+                      <ArrowRight className="w-5 h-5" />
+                    </Link>
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 text-center">
+                      <div className="text-6xl mb-4">🏥</div>
+                      <h4 className="text-xl font-semibold mb-2">Sultanbeyli'nin En Kaliteli Merkezi</h4>
+                      <p className="text-muted-foreground text-sm">
+                        Lazer epilasyon, cilt bakımı, kalıcı makyaj ve daha fazlası için güvenilir adresiniz
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.section>
 
             {/* Related Blogs Section */}

@@ -50,9 +50,22 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
             ))
           ) : blogs.length > 0 ? (
             // Veriler yüklendiğinde blogları göster
-            blogs.map((blog, index) => (
-              <BlogCard key={blog.id || index} blog={blog} index={index} />
-            ))
+            blogs.map((blog, index) => {
+              // Sultanbeyli güzellik merkezi yazısını öne çıkar
+              const isFeatured = blog.slug === 'sultanbeyli-guzellik-merkezi';
+              return (
+                <div key={blog.id || index} className={isFeatured ? 'md:col-span-2 lg:col-span-1' : ''}>
+                  {isFeatured && (
+                    <div className="mb-4 text-center">
+                      <span className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                        ⭐ Öne Çıkan Yazı
+                      </span>
+                    </div>
+                  )}
+                  <BlogCard blog={blog} index={index} isFeatured={isFeatured} />
+                </div>
+              );
+            })
           ) : (
             // Veri yoksa boş durum
             <div className="col-span-full text-center py-12">
@@ -60,6 +73,33 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
             </div>
           )}
         </div>
+
+        {/* Featured Blog CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0, transition: { delay: 0.4, duration: 0.8 } }}
+          viewport={{ once: true }}
+          className="mt-12 mb-8"
+        >
+          <div className="bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20 rounded-2xl p-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
+              ⭐ Öne Çıkan Rehber
+            </div>
+            <h3 className="text-2xl font-semibold mb-4 text-primary">
+              Sultanbeyli Güzellik Merkezi Rehberi
+            </h3>
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Aradığınız tüm hizmetler bir arada! Uzman kadromuz ve son teknoloji cihazlarımızla güvenilir hizmet sunuyoruz.
+            </p>
+            <Link 
+              href="/blog/sultanbeyli-guzellik-merkezi"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-lg"
+            >
+              📖 Detaylı Rehberi Oku
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </motion.div>
 
         {blogs.length > 0 && (
           <motion.div
@@ -99,7 +139,7 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
   );
 };
 
-const BlogCard = ({ blog, index }) => {
+const BlogCard = ({ blog, index, isFeatured = false }) => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     
@@ -120,7 +160,9 @@ const BlogCard = ({ blog, index }) => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0, transition: { delay: index * 0.2, duration: 0.8 } }}
       viewport={{ once: true }}
-      className="bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-beauty transition-all duration-300 group"
+      className={`bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-beauty transition-all duration-300 group ${
+        isFeatured ? 'ring-2 ring-primary/20 shadow-lg' : ''
+      }`}
     >
       <div className="relative h-48 overflow-hidden">
         <Image

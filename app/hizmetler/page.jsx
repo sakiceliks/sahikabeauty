@@ -9,6 +9,7 @@ import { generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { ServiceCardSkeleton } from "@/components/Skeletons"
 import Link from "next/link"
 import RelatedBlogs from "@/components/RelatedBlogs"
+import { ArrowRight } from "lucide-react"
 
 const skeletonCount = 6
 
@@ -256,6 +257,80 @@ const Services = () => {
                   </motion.article>
                 ))}
           </div>
+
+          {/* Featured Blog Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.6 } }}
+            className="mb-16"
+          >
+            <div className="beauty-card bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20 max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
+                  ⭐ Öne Çıkan Blog Yazısı
+                </div>
+                <h2 className="h2 text-gradient mb-4">
+                  Sultanbeyli Güzellik Merkezi Rehberi
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Tüm hizmetlerimiz hakkında detaylı bilgi almak için uzman rehberimizi inceleyin
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 text-primary">
+                    Aradığınız Tüm Hizmetler Bir Arada
+                  </h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Sultanbeyli güzellik merkezi arayışınızda doğru adresi bulmak, kendinize yaptığınız en iyi yatırımlardan biridir. 
+                    Kaliteli bir merkez, yalnızca estetik hizmetler sunmakla kalmaz, aynı zamanda hijyen, uzman kadro ve son teknoloji cihazlarla da güven verir.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="flex items-center gap-2 bg-white/50 rounded-lg p-3">
+                      <span className="text-2xl">✨</span>
+                      <span className="text-sm font-medium">Uzman Kadro</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/50 rounded-lg p-3">
+                      <span className="text-2xl">🔬</span>
+                      <span className="text-sm font-medium">Son Teknoloji</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/50 rounded-lg p-3">
+                      <span className="text-2xl">🛡️</span>
+                      <span className="text-sm font-medium">Güvenli Uygulama</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white/50 rounded-lg p-3">
+                      <span className="text-2xl">⭐</span>
+                      <span className="text-sm font-medium">1000+ Memnun Müşteri</span>
+                    </div>
+                  </div>
+                  <Link 
+                    href="/blog/sultanbeyli-guzellik-merkezi"
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-lg"
+                  >
+                    📖 Detaylı Rehberi Oku
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
+                </div>
+                
+                <div className="relative">
+                  <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 text-center">
+                    <div className="text-6xl mb-4">🏥</div>
+                    <h4 className="text-xl font-semibold mb-2">Sultanbeyli'nin En Kaliteli Merkezi</h4>
+                    <p className="text-muted-foreground text-sm mb-4">
+                      Lazer epilasyon, cilt bakımı, kalıcı makyaj ve daha fazlası için güvenilir adresiniz
+                    </p>
+                    <div className="flex justify-center gap-4 text-2xl">
+                      <span>⚡</span>
+                      <span>✨</span>
+                      <span>💄</span>
+                      <span>🏃‍♀️</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.section>
 
           {/* Related Blogs Section */}
           <RelatedBlogs 

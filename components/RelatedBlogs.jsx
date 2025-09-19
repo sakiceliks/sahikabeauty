@@ -28,8 +28,15 @@ const RelatedBlogs = ({ serviceCategory, serviceTitle, limit = 3 }) => {
             relatedBlogs = generalData.data || [];
           }
           
+          // Sultanbeyli güzellik merkezi yazısını öne çıkar
+          const featuredBlog = relatedBlogs.find(blog => blog.slug === 'sultanbeyli-guzellik-merkezi');
+          const otherBlogs = relatedBlogs.filter(blog => blog.slug !== 'sultanbeyli-guzellik-merkezi');
+          
+          // Önce öne çıkan yazıyı, sonra diğerlerini ekle
+          const sortedBlogs = featuredBlog ? [featuredBlog, ...otherBlogs] : otherBlogs;
+          
           // Limit kadar blog al
-          setBlogs(relatedBlogs.slice(0, limit));
+          setBlogs(sortedBlogs.slice(0, limit));
         }
       } catch (error) {
         console.error("Blog yazıları yüklenirken hata:", error);
@@ -94,15 +101,19 @@ const RelatedBlogs = ({ serviceCategory, serviceTitle, limit = 3 }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog, index) => (
-          <motion.article
-            key={blog._id || blog.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="card-professional group hover:shadow-lg transition-all duration-300"
-          >
+        {blogs.map((blog, index) => {
+          const isFeatured = blog.slug === 'sultanbeyli-guzellik-merkezi';
+          return (
+            <motion.article
+              key={blog._id || blog.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`card-professional group hover:shadow-lg transition-all duration-300 ${
+                isFeatured ? 'ring-2 ring-primary/20 shadow-lg' : ''
+              }`}
+            >
             <div className="relative h-48 overflow-hidden rounded-xl mb-4">
               <Image
                 src={blog.image || '/placeholder.svg'}
@@ -116,6 +127,13 @@ const RelatedBlogs = ({ serviceCategory, serviceTitle, limit = 3 }) => {
               {blog.category && (
                 <div className="absolute top-4 left-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
                   {blog.category}
+                </div>
+              )}
+              
+              {/* Featured Badge */}
+              {isFeatured && (
+                <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  ⭐ Öne Çıkan
                 </div>
               )}
             </div>
@@ -174,7 +192,8 @@ const RelatedBlogs = ({ serviceCategory, serviceTitle, limit = 3 }) => {
               </div>
             </div>
           </motion.article>
-        ))}
+          );
+        })}
       </div>
 
       <div className="text-center mt-8">

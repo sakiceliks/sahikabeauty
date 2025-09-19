@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import BlogDetail from "./BlogDetail" // Client component
+import EnhancedBlogDetail from "./BlogDetail" // Client component
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import JsonLd from "@/components/JsonLd"
 
@@ -127,7 +127,7 @@ const Page = async ({ params }) => {
     <>
       {articleSchema && <JsonLd data={articleSchema} />}
       {breadcrumbSchema && <JsonLd data={breadcrumbSchema} />}
-      <BlogDetail post={post} loading={false} />
+      <EnhancedBlogDetail post={post} loading={false} />
     </>
   )
 }
