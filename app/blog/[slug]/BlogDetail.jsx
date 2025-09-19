@@ -553,7 +553,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                       </h3>
                       <div className="relative bg-gray-800 rounded-xl overflow-hidden aspect-video mb-4">
                       <div
-  className="absolute inset-0 flex items-center justify-center bg-cover bg-center before:absolute before:inset-0 before:bg-black/50"
+  className="absolute inset-0 flex items-center justify-center bg-cover bg-top before:absolute before:inset-0 before:bg-black/50"
   style={{
     backgroundImage:
       "url('https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqyWqlNiWVNb-Z2g-tR98GpKZfLLRDQ5Vt9Y6LfOyEQGsyJ1Bax_W38LNQftEbZbjDJ9Uk4WF_RDFfUeXPgmwv1dU9QtuGNDa-LkTMtcMrq0msR2_LdDVWmmc-jpGwaN_E7V-vjoQ=s680-w680-h510-rw')",
@@ -940,7 +940,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                         className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-3 rounded-xl hover:bg-white hover:text-primary transition-all duration-300 font-semibold"
                       >
                         <Phone className="w-5 h-5" />
-                        Hemen Ara: 0XXX XXX XX XX
+                        Hemen Ara: 0530 434 83 49
                       </Link>
                     </div>
                   </div>
