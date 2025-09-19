@@ -443,7 +443,7 @@ const ServiceDetails = () => {
 
   const localBusinessSchema = generateLocalBusinessSchema(servicePageSEOData.businessInfo);
 
-  const faqSchema = service.faq?.length > 0 ? generateFAQSchema(service.faq) : null;
+  const faqSchema = service?.faq?.length > 0 ? generateFAQSchema(service.faq) : null;
 
   const allTestimonials = [
     ...(service.reviews || []),
