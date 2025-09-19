@@ -60,19 +60,28 @@ export async function PUT(request, { params }) {
 
     // Slug ile blog yazısını güncelle
     console.log("API - params.id:", params.id, "body:", body)
-    const updated = await blogModel.updateBySlug(params.id, body)
-    console.log("API - updated result:", updated)
     
-    if (!updated) {
-      console.log("API - update failed, returning error")
+    try {
+      const updated = await blogModel.updateBySlug(params.id, body)
+      console.log("API - updated result:", updated)
+      
+      if (!updated) {
+        console.log("API - update failed, returning error")
+        return NextResponse.json(
+          { success: false, error: "Blog yazısı güncellenemedi" },
+          { status: 500 }
+        )
+      }
+
+      console.log("API - update successful, returning success")
+      return NextResponse.json({ success: true, data: updated })
+    } catch (updateError) {
+      console.error("API - updateBySlug error:", updateError)
       return NextResponse.json(
-        { success: false, error: "Blog yazısı güncellenemedi" },
+        { success: false, error: "Güncelleme hatası: " + updateError.message },
         { status: 500 }
       )
     }
-
-    console.log("API - update successful, returning success")
-    return NextResponse.json({ success: true, data: updated })
   } catch (error) {
     console.error("PUT hatası:", error)
     return NextResponse.json(

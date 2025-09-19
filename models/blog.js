@@ -73,23 +73,59 @@ export class BlogModel {
   }
 
   async updateBySlug(slug, data) {
-    const col = await this.getCollection()
-    console.log("updateBySlug - slug:", slug, "data:", data)
-    
-    // Published değerini boolean'a çevir
-    const updateData = { ...data }
-    if (typeof updateData.published === 'string') {
-      updateData.published = updateData.published === 'true'
+    try {
+      const col = await this.getCollection()
+      console.log("updateBySlug - slug:", slug, "data:", data)
+      
+      // Published değerini boolean'a çevir
+      const updateData = { ...data }
+      if (typeof updateData.published === 'string') {
+        updateData.published = updateData.published === 'true'
+      }
+      
+      console.log("updateBySlug - updateData:", updateData)
+      
+      // Önce blog'un var olup olmadığını kontrol et
+      const existingBlog = await col.findOne({ slug })
+      if (!existingBlog) {
+        console.error("updateBySlug - blog not found for slug:", slug)
+        throw new Error("Blog not found")
+      }
+      
+      console.log("updateBySlug - existing blog found:", existingBlog._id)
+      
+      // Update işlemini yap
+      const updateResult = await col.updateOne(
+        { slug },
+        { $set: { ...updateData, updatedAt: new Date() } }
+      )
+      
+      console.log("updateBySlug - updateResult:", updateResult)
+      
+      if (updateResult.matchedCount === 0) {
+        console.error("updateBySlug - no document matched")
+        throw new Error("Blog not found")
+      }
+      
+      if (updateResult.modifiedCount === 0) {
+        console.log("updateBySlug - no changes made, but document exists")
+      }
+      
+      // Güncellenmiş blog'u getir
+      const updatedBlog = await col.findOne({ slug })
+      console.log("updateBySlug - updated blog:", updatedBlog)
+      
+      if (!updatedBlog) {
+        console.error("updateBySlug - updated blog not found")
+        throw new Error("Blog not found")
+      }
+      
+      console.log("updateBySlug - success, returning:", updatedBlog)
+      return updatedBlog
+    } catch (error) {
+      console.error("updateBySlug - error:", error)
+      throw error
     }
-    
-    const result = await col.findOneAndUpdate(
-      { slug },
-      { $set: { ...updateData, updatedAt: new Date() } },
-      { returnDocument: "after" }
-    )
-    console.log("updateBySlug - result:", result)
-    if (!result || !result.value) throw new Error("Blog not found")
-    return result.value
   }
 
   async delete(id) {
