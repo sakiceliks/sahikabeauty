@@ -1,3 +1,5 @@
+'use client';
+
 // Blog sayfasına entegre edilmiş tam SEO optimizasyonu
 
 import React from 'react';
