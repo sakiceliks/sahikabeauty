@@ -67,9 +67,16 @@ export class BlogModel {
   async updateBySlug(slug, data) {
     const col = await this.getCollection()
     console.log("updateBySlug - slug:", slug, "data:", data)
+    
+    // Published değerini boolean'a çevir
+    const updateData = { ...data }
+    if (typeof updateData.published === 'string') {
+      updateData.published = updateData.published === 'true'
+    }
+    
     const result = await col.findOneAndUpdate(
       { slug },
-      { $set: { ...data, updatedAt: new Date() } },
+      { $set: { ...updateData, updatedAt: new Date() } },
       { returnDocument: "after" }
     )
     console.log("updateBySlug - result:", result)

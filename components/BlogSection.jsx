@@ -107,7 +107,7 @@ const BlogCard = ({ blog, index }) => {
     >
       <div className="relative h-48 overflow-hidden">
         <Image
-          src={blog.image || '/images/default-blog.jpg'}
+          src={blog.image || '/placeholder.svg'}
           alt={blog.title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"

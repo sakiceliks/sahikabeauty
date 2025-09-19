@@ -127,8 +127,14 @@ export default function BlogYonetim() {
       const url = editingPost ? `/api/blog/${editingPost.slug}` : "/api/blog"
       const method = editingPost ? "PUT" : "POST"
 
-      // _id alanını hariç tut
+      // _id alanını hariç tut ve published değerini boolean'a çevir
       const { _id, ...submitData } = formData
+      
+      // Published değerini boolean'a çevir
+      if (typeof submitData.published === 'string') {
+        submitData.published = submitData.published === 'true'
+      }
+      
       console.log("Gönderilen veri ( _id hariç):", submitData)
 
       const response = await fetch(url, {
@@ -140,12 +146,14 @@ export default function BlogYonetim() {
       })
 
       const data = await response.json()
+      console.log("API Response:", data)
 
       if (data.success) {
         await fetchPosts()
         resetForm()
         toast.success(editingPost ? "Blog yazısı başarıyla güncellendi!" : "Blog yazısı başarıyla oluşturuldu!")
       } else {
+        console.error("API Error:", data.error)
         toast.error(`Hata: ${data.error}`)
       }
     } catch (error) {
@@ -208,7 +216,7 @@ export default function BlogYonetim() {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : type === "select-one" && (value === "true" || value === "false") ? value === "true" : value,
     }))
   }
 

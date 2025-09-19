@@ -59,7 +59,7 @@ const Home = async () => {
 
   try {
     const [blogsRes, servicesRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog`, { cache: "force-cache" }), // SSG için cache
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog?published=true`, { cache: "force-cache" }), // SSG için cache - sadece yayında olan bloglar
       fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/services`, { cache: "force-cache" }), // SSG için cache
     ])
 
