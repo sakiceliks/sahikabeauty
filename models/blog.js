@@ -28,8 +28,16 @@ export class BlogModel {
   }
 
   async findBySlug(slug) {
+    if (!slug) {
+      console.error("findBySlug - slug is empty or undefined")
+      return null
+    }
+    
     const col = await this.getCollection()
-    return col.findOne({ slug })
+    console.log("findBySlug - searching for slug:", slug)
+    const result = await col.findOne({ slug })
+    console.log("findBySlug - result:", result)
+    return result
   }
 
   async search(keyword) {

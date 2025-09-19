@@ -20,10 +20,14 @@ export async function GET(request, { params }) {
 // PUT - blog yazısını slug ile güncelle
 export async function PUT(request, { params }) {
   try {
+    console.log("PUT API - params.id:", params.id)
+    
     let body
     try {
       body = await request.json()
+      console.log("PUT API - body:", body)
     } catch (error) {
+      console.error("PUT API - JSON parse error:", error)
       return NextResponse.json(
         { success: false, error: "Geçersiz istek gövdesi" },
         { status: 400 }
@@ -31,10 +35,14 @@ export async function PUT(request, { params }) {
     }
 
     // Önce mevcut blog yazısını bul
+    console.log("PUT API - searching for blog with slug:", params.id)
     const existingBlog = await blogModel.findBySlug(params.id)
+    console.log("PUT API - existingBlog:", existingBlog)
+    
     if (!existingBlog) {
+      console.log("PUT API - blog not found for slug:", params.id)
       return NextResponse.json(
-        { success: false, error: "Blog yazısı bulunamadı" },
+        { success: false, error: `Blog yazısı bulunamadı (slug: ${params.id})` },
         { status: 404 }
       )
     }

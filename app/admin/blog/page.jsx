@@ -34,10 +34,15 @@ export default function BlogYonetim() {
       setLoading(true)
       const response = await fetch("/api/blog")
       const data = await response.json()
+      
+      console.log("fetchPosts - response:", response)
+      console.log("fetchPosts - data:", data)
 
       if (data.success) {
+        console.log("fetchPosts - posts:", data.data)
         setPosts(data.data)
       } else {
+        console.error("fetchPosts - API error:", data.error)
         toast.error("Blog yazıları yüklenirken hata oluştu.")
       }
     } catch (error) {
@@ -124,8 +129,21 @@ export default function BlogYonetim() {
     setUploading(true)
 
     try {
+      console.log("handleSubmit - editingPost:", editingPost)
+      console.log("handleSubmit - editingPost.slug:", editingPost?.slug)
+      
+      // Slug kontrolü
+      if (editingPost && !editingPost.slug) {
+        console.error("handleSubmit - editingPost.slug is missing!")
+        toast.error("Düzenlenen blog yazısında slug bilgisi bulunamadı!")
+        return
+      }
+      
       const url = editingPost ? `/api/blog/${editingPost.slug}` : "/api/blog"
       const method = editingPost ? "PUT" : "POST"
+      
+      console.log("handleSubmit - url:", url)
+      console.log("handleSubmit - method:", method)
 
       // _id alanını hariç tut ve published değerini boolean'a çevir
       const { _id, ...submitData } = formData
@@ -165,6 +183,16 @@ export default function BlogYonetim() {
   }
 
   const handleEdit = (post) => {
+    console.log("handleEdit - post:", post)
+    console.log("handleEdit - post.slug:", post.slug)
+    
+    // Slug kontrolü
+    if (!post.slug) {
+      console.error("handleEdit - post.slug is missing!")
+      toast.error("Blog yazısında slug bilgisi bulunamadı!")
+      return
+    }
+    
     setEditingPost(post)
     // _id hariç tutularak yalnızca gerekli alanlar alınır
     setFormData({
