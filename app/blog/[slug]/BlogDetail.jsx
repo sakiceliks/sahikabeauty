@@ -58,6 +58,7 @@ const BeforeAfterGallery = ({ images, service }) => {
                 <span className="absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">Sonra</span>
               </div>
             </div>
+
             <div className="p-4 text-center">
               <p className="text-sm text-gray-700">
                 <strong>{img.process}</strong> ({img.duration})
@@ -551,17 +552,28 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                         🎥 Sultanbeyli Güzellik Merkezi Tanıtım
                       </h3>
                       <div className="relative bg-gray-800 rounded-xl overflow-hidden aspect-video mb-4">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                              <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                              </svg>
-                            </div>
-                            <p className="text-white text-lg">Merkezimizi Tanıyın</p>
-                            <p className="text-gray-400 text-sm">3:45 dakika</p>
-                          </div>
-                        </div>
+                      <div
+  className="absolute inset-0 flex items-center justify-center bg-cover bg-center before:absolute before:inset-0 before:bg-black/50"
+  style={{
+    backgroundImage:
+      "url('https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqyWqlNiWVNb-Z2g-tR98GpKZfLLRDQ5Vt9Y6LfOyEQGsyJ1Bax_W38LNQftEbZbjDJ9Uk4WF_RDFfUeXPgmwv1dU9QtuGNDa-LkTMtcMrq0msR2_LdDVWmmc-jpGwaN_E7V-vjoQ=s680-w680-h510-rw')",
+  }}
+>
+  <div className="relative text-center">
+    <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mb-4 mx-auto">
+      <svg
+        className="w-8 h-8 text-white ml-1"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+      </svg>
+    </div>
+    <p className="text-white text-lg">Merkezimizi Tanıyın</p>
+    <p className="text-gray-400 text-sm">3:45 dakika</p>
+  </div>
+</div>
+
                       </div>
                       <p className="text-gray-300 text-sm">
                         Sultanbeyli şubemizin içini görün, uzmanlarımızla tanışın ve hizmetlerimiz hakkında bilgi alın.
