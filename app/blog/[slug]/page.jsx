@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import Link from "next/link"
 import EnhancedBlogDetail from "./BlogDetail" // Client component
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import JsonLd from "@/components/JsonLd"

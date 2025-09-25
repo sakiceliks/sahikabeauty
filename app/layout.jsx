@@ -137,8 +137,7 @@ export default function RootLayout({ children }) {
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
         <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
-        {/* Preload for performance */}
-        <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
+        {/* Preload for performance - removed problematic preload */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <style>{`
