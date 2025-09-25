@@ -8,7 +8,6 @@ import ErrorBoundary from "@/components/ErrorBoundary"
 import GlobalErrorHandler from "@/components/GlobalErrorHandler"
 import ErrorSuppressor from "@/components/ErrorSuppressor"
 import DevModeChecker from "@/components/DevModeChecker"
-import HydrationFix from "@/components/HydrationFix"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -213,16 +212,14 @@ export default function RootLayout({ children }) {
         <ErrorSuppressor />
         <GlobalErrorHandler />
         <ErrorBoundary>
-          <HydrationFix>
-            <CursorProvider>
-              <Suspense fallback={null}>
-                <Header />
-                {children}
-                <Toaster />
-              </Suspense>
-              <Analytics />
-            </CursorProvider>
-          </HydrationFix>
+          <CursorProvider>
+            <Suspense fallback={null}>
+              <Header />
+              {children}
+              <Toaster />
+            </Suspense>
+            <Analytics />
+          </CursorProvider>
         </ErrorBoundary>
       </body>
     </html>
