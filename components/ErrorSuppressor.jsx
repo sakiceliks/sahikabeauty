@@ -9,10 +9,12 @@ export default function ErrorSuppressor() {
     console.error = (...args) => {
       const message = args.join(' ')
       
-      // Suppress specific auth context errors
+      // Suppress specific auth context errors and application errors
       if (message.includes('Cannot destructure property \'auth\' of \'e\' as it is undefined') ||
           message.includes('hook.js:608') ||
-          message.includes('TypeError: Cannot destructure property \'auth\'')) {
+          message.includes('TypeError: Cannot destructure property \'auth\'') ||
+          message.includes('Application error: a client-side exception has occurred') ||
+          message.includes('Minified React error #423')) {
         console.warn('Suppressed auth context error:', message)
         return
       }

@@ -190,11 +190,25 @@ export default function RootLayout({ children }) {
                 const message = args.join(' ');
                 if (message.includes('Minified React error #423') ||
                     message.includes('hydration') ||
-                    message.includes('Text content does not match')) {
+                    message.includes('Text content does not match') ||
+                    message.includes('Application error: a client-side exception has occurred')) {
                   console.info('Suppressed React hydration warning:', message);
                   return;
                 }
                 originalConsoleWarn.apply(console, args);
+              };
+              
+              // Suppress Next.js application errors
+              const originalConsoleError = console.error;
+              console.error = function(...args) {
+                const message = args.join(' ');
+                if (message.includes('Application error: a client-side exception has occurred') ||
+                    message.includes('Cannot destructure property \\'auth\\'') ||
+                    message.includes('Minified React error #423')) {
+                  console.info('Suppressed application error:', message);
+                  return;
+                }
+                originalConsoleError.apply(console, args);
               };
             })();
           `

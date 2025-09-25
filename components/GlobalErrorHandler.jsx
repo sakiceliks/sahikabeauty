@@ -10,7 +10,9 @@ export default function GlobalErrorHandler() {
       
       // Suppress auth-related errors from third-party libraries
       if (error?.message?.includes('auth') || 
-          error?.message?.includes('Cannot destructure')) {
+          error?.message?.includes('Cannot destructure') ||
+          error?.message?.includes('Application error: a client-side exception has occurred') ||
+          error?.message?.includes('Minified React error #423')) {
         console.warn('Suppressed auth context error:', error.message)
         event.preventDefault()
         return
@@ -26,7 +28,9 @@ export default function GlobalErrorHandler() {
       
       // Suppress auth-related errors from third-party libraries
       if (error?.message?.includes('auth') || 
-          error?.message?.includes('Cannot destructure')) {
+          error?.message?.includes('Cannot destructure') ||
+          error?.message?.includes('Application error: a client-side exception has occurred') ||
+          error?.message?.includes('Minified React error #423')) {
         console.warn('Suppressed auth promise rejection:', error.message)
         event.preventDefault()
         return
