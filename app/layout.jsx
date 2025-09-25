@@ -6,7 +6,6 @@ import CursorProvider from "@/components/CursorContext"
 import Header from "@/components/Header"
 import ErrorBoundary from "@/components/ErrorBoundary"
 import GlobalErrorHandler from "@/components/GlobalErrorHandler"
-import ErrorSuppressor from "@/components/ErrorSuppressor"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -136,41 +135,13 @@ export default function RootLayout({ children }) {
   <link rel="manifest" href="/manifest.json" />
   <meta name="msapplication-TileColor" content="#ffffff" />
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
         <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
         {/* Preload for performance - removed problematic preload */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        {/* Error suppression script */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              // Suppress auth context errors
-              const originalError = console.error;
-              console.error = function(...args) {
-                const message = args.join(' ');
-                if (message.includes('Cannot destructure property \\'auth\\' of \\'e\\' as it is undefined') ||
-                    message.includes('hook.js:608') ||
-                    message.includes('TypeError: Cannot destructure property \\'auth\\'')) {
-                  console.warn('Suppressed auth context error:', message);
-                  return;
-                }
-                originalError.apply(console, args);
-              };
-              
-              // Suppress runtime errors
-              window.onerror = function(message, source, lineno, colno, error) {
-                if (error && error.message && error.message.includes('Cannot destructure property \\'auth\\'')) {
-                  console.warn('Suppressed runtime auth error:', message);
-                  return true;
-                }
-                return false;
-              };
-            })();
-          `
-        }} />
         <style>{`
           html {
             font-family: ${poppins.style.fontFamily};
@@ -180,7 +151,6 @@ export default function RootLayout({ children }) {
         `}</style>
       </head>
       <body className="font-body">
-        <ErrorSuppressor />
         <GlobalErrorHandler />
         <ErrorBoundary>
           <CursorProvider>
