@@ -367,6 +367,30 @@ const HomeClient = ({
       <JsonLd data={localBusinessSchema} />
       <HeroCarousel />
       <StatsSection />
+      
+      {/* Ana İçerik Bölümü */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">
+              Sultanbeyli'nin En Kaliteli Güzellik Merkezi
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              Şahika Beauty olarak Sultanbeyli'de 8 yılı aşkın deneyimimizle, lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler sunuyoruz. 
+              Uzman kadromuz ve son teknoloji cihazlarımızla güzelliğinizi keşfetmenize yardımcı oluyoruz.
+            </p>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              Falcon 4 Pro lazer epilasyon cihazımız, Primex RF teknolojimiz ve EmSlim Fit gibi profesyonel ekipmanlarımızla 
+              size en etkili ve güvenli tedavileri sunuyoruz. Hijyenik ortamımız ve deneyimli ekibimizle güvenle hizmet alabilirsiniz.
+            </p>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              Sultanbeyli'de güzellik merkezi arayışınızda doğru adresi bulmak, kendinize yaptığınız en iyi yatırımlardan biridir. 
+              Kaliteli bir merkez, yalnızca estetik hizmetler sunmakla kalmaz, aynı zamanda hijyen, uzman kadro ve son teknoloji cihazlarla da güven verir.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <article
         className="py-12 bg-secondary-50"
         itemScope

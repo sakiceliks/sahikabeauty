@@ -6,9 +6,9 @@ import JsonLd from "@/components/JsonLd"
 export async function generateMetadata() {
   // Dinamik metadata için API fetch optional
   return {
-    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı",
+    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
     description:
-      "Sultanbeyli'nin en güvenilir güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve daha fazlası. Uzman kadromuz ile güzelliğinizi keşfedin.",
+      "Sultanbeyli'nin en kaliteli güzellik merkezi. Falcon 4 Pro lazer epilasyon, Primex RF cilt bakımı, kalıcı makyaj ve estetik hizmetler. 8+ yıl deneyim, uzman kadro.",
     keywords:
       "sultanbeyli güzellik merkezi, lazer epilasyon sultanbeyli, cilt bakımı sultanbeyli, kalıcı makyaj sultanbeyli, bölgesel incelme sultanbeyli, şahika beauty",
     openGraph: {

@@ -136,7 +136,6 @@ export default function RootLayout({ children }) {
   <meta name="theme-color" content="#ffffff" />
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
         {/* Preload for performance */}
         <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
