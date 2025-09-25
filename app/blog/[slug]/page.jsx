@@ -18,9 +18,11 @@ const BlogDetailSkeleton = ({ className = "" }) => (
   <div className={`animate-pulse bg-muted rounded-md ${className}`} />
 )
 
-export const metadata: Metadata = {
-  title: "Blog Yazısı | Şahika Beauty",
-  description: "Sultanbeyli'nin en iyi güzellik merkezi Şahika Beauty'den uzman tavsiyeleri ve blog yazıları.",
+export async function generateMetadata({ params }) {
+  return {
+    title: "Blog Yazısı | Şahika Beauty",
+    description: "Sultanbeyli'nin en iyi güzellik merkezi Şahika Beauty'den uzman tavsiyeleri ve blog yazıları.",
+  }
 }
 
 const Page = async ({ params }) => {
