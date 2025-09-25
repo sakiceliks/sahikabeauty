@@ -4,6 +4,8 @@ import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import CursorProvider from "@/components/CursorContext"
 import Header from "@/components/Header"
+import ErrorBoundary from "@/components/ErrorBoundary"
+import GlobalErrorHandler from "@/components/GlobalErrorHandler"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -149,14 +151,17 @@ export default function RootLayout({ children }) {
         `}</style>
       </head>
       <body className="font-body">
-        <CursorProvider>
-          <Suspense fallback={null}>
-            <Header />
-            {children}
-            <Toaster />
-          </Suspense>
-          <Analytics />
-        </CursorProvider>
+        <GlobalErrorHandler />
+        <ErrorBoundary>
+          <CursorProvider>
+            <Suspense fallback={null}>
+              <Header />
+              {children}
+              <Toaster />
+            </Suspense>
+            <Analytics />
+          </CursorProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )
