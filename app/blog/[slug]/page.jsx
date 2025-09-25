@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import EnhancedBlogDetail from "./BlogDetail" // Client component
+import BlogErrorBoundary from "@/components/BlogErrorBoundary"
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import JsonLd from "@/components/JsonLd"
 
@@ -128,7 +129,9 @@ const Page = async ({ params }) => {
     <>
       {articleSchema && <JsonLd data={articleSchema} />}
       {breadcrumbSchema && <JsonLd data={breadcrumbSchema} />}
-      <EnhancedBlogDetail post={post} loading={false} />
+      <BlogErrorBoundary>
+        <EnhancedBlogDetail post={post} loading={false} />
+      </BlogErrorBoundary>
     </>
   )
 }
