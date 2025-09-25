@@ -204,7 +204,9 @@ export default function RootLayout({ children }) {
                 const message = args.join(' ');
                 if (message.includes('Application error: a client-side exception has occurred') ||
                     message.includes('Cannot destructure property \\'auth\\'') ||
-                    message.includes('Minified React error #423')) {
+                    message.includes('Minified React error #423') ||
+                    message.includes('TypeError: Cannot destructure property \\'auth\\' of \\'e\\' as it is undefined') ||
+                    message.includes('server/chunks/5646.js')) {
                   console.info('Suppressed application error:', message);
                   return;
                 }

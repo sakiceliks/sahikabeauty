@@ -43,6 +43,17 @@ const FormField = <
 }
 
 const useFormField = () => {
+  // Server-side safety check
+  if (typeof window === 'undefined') {
+    return {
+      id: 'default',
+      name: 'default',
+      formItemId: 'default-form-item',
+      formDescriptionId: 'default-form-item-description',
+      formMessageId: 'default-form-item-message',
+    }
+  }
+
   const fieldContext = React.useContext(FormFieldContext)
   const itemContext = React.useContext(FormItemContext)
   

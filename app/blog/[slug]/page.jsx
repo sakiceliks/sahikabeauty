@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { generateMetadata } from "next"
 import Link from "next/link"
 import EnhancedBlogDetail from "./BlogDetail" // Client component
 import BlogErrorBoundary from "@/components/BlogErrorBoundary"

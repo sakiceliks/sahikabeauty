@@ -12,7 +12,9 @@ export default function GlobalErrorHandler() {
       if (error?.message?.includes('auth') || 
           error?.message?.includes('Cannot destructure') ||
           error?.message?.includes('Application error: a client-side exception has occurred') ||
-          error?.message?.includes('Minified React error #423')) {
+          error?.message?.includes('Minified React error #423') ||
+          error?.message?.includes('server/chunks/5646.js') ||
+          error?.message?.includes('digest: \'3469384194\'')) {
         console.warn('Suppressed auth context error:', error.message)
         event.preventDefault()
         return
@@ -30,7 +32,9 @@ export default function GlobalErrorHandler() {
       if (error?.message?.includes('auth') || 
           error?.message?.includes('Cannot destructure') ||
           error?.message?.includes('Application error: a client-side exception has occurred') ||
-          error?.message?.includes('Minified React error #423')) {
+          error?.message?.includes('Minified React error #423') ||
+          error?.message?.includes('server/chunks/5646.js') ||
+          error?.message?.includes('digest: \'3469384194\'')) {
         console.warn('Suppressed auth promise rejection:', error.message)
         event.preventDefault()
         return

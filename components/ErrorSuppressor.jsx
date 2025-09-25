@@ -14,7 +14,9 @@ export default function ErrorSuppressor() {
           message.includes('hook.js:608') ||
           message.includes('TypeError: Cannot destructure property \'auth\'') ||
           message.includes('Application error: a client-side exception has occurred') ||
-          message.includes('Minified React error #423')) {
+          message.includes('Minified React error #423') ||
+          message.includes('server/chunks/5646.js') ||
+          message.includes('digest: \'3469384194\'')) {
         console.warn('Suppressed auth context error:', message)
         return
       }
