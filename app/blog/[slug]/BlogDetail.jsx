@@ -17,10 +17,22 @@ const JsonLd = ({ data }) => {
     />
   );
 };
-const FaqSchema = ({ faqs }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) }} />;
-const ReviewSchema = ({ reviews }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Review', itemReviewed: { '@type': 'LocalBusiness', name: 'Şahika Beauty Sultanbeyli' }, reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, author: { '@type': 'Person', name: reviews[0].author } }} />;
-const VideoSchema = ({ videoData }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'VideoObject', ...videoData }} />;
-const HowToSchema = ({ steps, title }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'HowTo', name: title, step: steps.instructions.map((s, i) => ({ '@type': 'HowToStep', url: `#step-${i}`, name: s.title, text: s.description })) }} />;
+const FaqSchema = ({ faqs }) => {
+  if (!faqs || faqs.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) }} />;
+};
+const ReviewSchema = ({ reviews }) => {
+  if (!reviews || reviews.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Review', itemReviewed: { '@type': 'LocalBusiness', name: 'Şahika Beauty Sultanbeyli' }, reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, author: { '@type': 'Person', name: reviews[0].author } }} />;
+};
+const VideoSchema = ({ videoData }) => {
+  if (!videoData) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'VideoObject', ...videoData }} />;
+};
+const HowToSchema = ({ steps, title }) => {
+  if (!steps || !steps.instructions || steps.instructions.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'HowTo', name: title, itemListElement: steps.instructions.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: s.description, url: `#step-${i}` })) }} />;
+};
 const TableOfContents = ({ headings }) => {
   if (!headings || headings.length === 0) return null;
   return (

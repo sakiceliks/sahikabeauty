@@ -94,6 +94,7 @@ const Services = () => {
     itemListElement: services.map((service, index) => ({
       "@type": "ListItem",
       position: index + 1,
+      name: service.title,
       item: {
         "@type": "Service",
         name: service.title,
