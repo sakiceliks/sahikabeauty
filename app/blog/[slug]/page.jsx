@@ -17,6 +17,7 @@ const blogCategories = [
 const BlogDetailSkeleton = ({ className = "" }) => (
   <div className={`animate-pulse bg-muted rounded-md ${className}`} />
 )
+
 export const metadata: Metadata = {
   title: "Blog Yazısı | Şahika Beauty",
   description: "Sultanbeyli'nin en iyi güzellik merkezi Şahika Beauty'den uzman tavsiyeleri ve blog yazıları.",
