@@ -96,7 +96,6 @@ const BlogPage = () => {
     itemListElement: blogs.map((blog, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: blog.title,
       item: {
         "@type": "BlogPosting",
         headline: blog.title,

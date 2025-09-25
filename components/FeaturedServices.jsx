@@ -14,11 +14,11 @@ import { ServiceCardSkeleton } from "@/components/Skeletons";
 const FeaturedServices = ({ services = [], loading = false, error = null }) => {
   if (error) {
     return (
-      <section className="py-20 bg-neutral-50 dark:bg-background">
+      <section className="py-20 bg-neutral-50">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <AlertCircle className="w-12 h-12 text-neutral-400 dark:text-muted-foreground mx-auto mb-4" />
-            <p className="text-neutral-600 dark:text-muted-foreground">
+            <AlertCircle className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <p className="text-neutral-600">
               Hizmetler yüklenirken bir hata oluştu.
             </p>
           </div>
@@ -32,7 +32,7 @@ const FeaturedServices = ({ services = [], loading = false, error = null }) => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, transition: { duration: 1 } }}
       viewport={{ once: true }}
-      className="py-20 bg-neutral-50 dark:bg-background"
+      className="py-20 bg-neutral-50"
     >
       <div className="container mx-auto px-6">
         {/* Başlık */}
@@ -42,10 +42,10 @@ const FeaturedServices = ({ services = [], loading = false, error = null }) => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl lg:text-4xl font-primary text-primary-900 dark:text-foreground mb-4">
+          <h2 className="text-3xl lg:text-4xl font-primary text-primary-900 mb-4">
             Öne Çıkan Hizmetlerimiz
           </h2>
-          <p className="text-neutral-600 dark:text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-neutral-600 max-w-2xl mx-auto">
             En popüler güzellik ve bakım hizmetlerimizi keşfedin
           </p>
         </motion.div>
@@ -64,7 +64,7 @@ const FeaturedServices = ({ services = [], loading = false, error = null }) => {
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-neutral-600 dark:text-muted-foreground">Henüz hizmet bulunmuyor.</p>
+              <p className="text-neutral-600">Henüz hizmet bulunmuyor.</p>
             </div>
           )}
         </div>
@@ -83,7 +83,7 @@ const FeaturedServices = ({ services = [], loading = false, error = null }) => {
           >
             <Link
               href="/hizmetler"
-              className="inline-flex items-center gap-2 bg-primary-600 dark:bg-primary text-white dark:text-primary-foreground px-8 py-3 rounded-xl hover:bg-primary-700 dark:hover:bg-primary/80 transition-all duration-300 font-medium shadow-beauty"
+              className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-3 rounded-xl hover:bg-primary-700 transition-all duration-300 font-medium shadow-beauty"
             >
               Tüm Hizmetleri Gör
               <ArrowRight className="w-5 h-5" />
@@ -114,7 +114,7 @@ const ServiceCard = ({ service, index }) => {
         transition: { delay: index * 0.2, duration: 0.8 },
       }}
       viewport={{ once: true }}
-      className="bg-white dark:bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-beauty transition-all duration-300 group"
+      className="bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-beauty transition-all duration-300 group"
     >
       {/* Resim */}
       <div className="relative h-48 overflow-hidden">
@@ -130,24 +130,24 @@ const ServiceCard = ({ service, index }) => {
       {/* İçerik */}
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-semibold text-primary-800 dark:text-card-foreground group-hover:text-primary-600 dark:group-hover:text-primary transition-colors">
+          <h3 className="text-xl font-semibold text-primary-800 group-hover:text-primary-600 transition-colors">
             {service.title}
           </h3>
           {avgRating && (
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-accent-500 text-accent-500" />
-              <span className="text-sm text-neutral-600 dark:text-muted-foreground">{avgRating}</span>
+              <span className="text-sm text-neutral-600">{avgRating}</span>
             </div>
           )}
         </div>
 
-        <p className="text-neutral-600 dark:text-muted-foreground mb-4 line-clamp-2">
+        <p className="text-neutral-600 mb-4 line-clamp-2">
           {service.description || "Açıklama yakında eklenecek."}
         </p>
 
         <div className="flex items-center justify-between">
           {service.duration && (
-            <div className="flex items-center gap-1 text-sm text-neutral-500 dark:text-muted-foreground">
+            <div className="flex items-center gap-1 text-sm text-neutral-500">
               <Clock className="w-4 h-4" />
               {service.duration}
             </div>
@@ -155,7 +155,7 @@ const ServiceCard = ({ service, index }) => {
 
           <Link
             href={`/hizmetler/${service.slug}`}
-            className="inline-flex items-center gap-2 text-primary-600 dark:text-primary hover:text-primary-700 dark:hover:text-primary/80 transition-colors font-medium group-hover:gap-3"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors font-medium group-hover:gap-3"
           >
             Detaylar
             <ArrowRight className="w-4 h-4 transition-all duration-300" />
