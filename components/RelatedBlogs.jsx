@@ -93,7 +93,7 @@ const RelatedBlogs = ({ serviceCategory, serviceTitle, limit = 3 }) => {
     >
       <div className="text-center mb-12">
         <h2 className="h2 text-gradient mb-4">
-          {serviceCategory} Hakkında Blog Yazıları
+           Blog Yazıları
         </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           {serviceTitle} hizmetimiz hakkında detaylı bilgiler ve uzman tavsiyeleri
