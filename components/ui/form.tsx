@@ -43,49 +43,17 @@ const FormField = <
 }
 
 const useFormField = () => {
-  // Server-side safety check
-  if (typeof window === 'undefined') {
-    return {
-      id: 'default',
-      name: 'default',
-      formItemId: 'default-form-item',
-      formDescriptionId: 'default-form-item-description',
-      formMessageId: 'default-form-item-message',
-    }
-  }
-
   const fieldContext = React.useContext(FormFieldContext)
   const itemContext = React.useContext(FormItemContext)
-  
-  // Defensive programming: check if form context exists
-  let getFieldState, formState, fieldState
-  try {
-    const formContext = useFormContext()
-    getFieldState = formContext?.getFieldState
-    formState = useFormState({ name: fieldContext?.name })
-    fieldState = getFieldState ? getFieldState(fieldContext?.name, formState) : {}
-  } catch (error) {
-    // If form context doesn't exist, provide default values
-    console.warn('Form context not available, using defaults:', error.message)
-    getFieldState = () => ({})
-    formState = {}
-    fieldState = {}
-  }
+  const { getFieldState } = useFormContext()
+  const formState = useFormState({ name: fieldContext.name })
+  const fieldState = getFieldState(fieldContext.name, formState)
 
   if (!fieldContext) {
-    // Return default values instead of throwing error
-    console.warn('useFormField used outside FormField, returning defaults')
-    return {
-      id: 'default',
-      name: 'default',
-      formItemId: 'default-form-item',
-      formDescriptionId: 'default-form-item-description',
-      formMessageId: 'default-form-item-message',
-      ...fieldState,
-    }
+    throw new Error('useFormField should be used within <FormField>')
   }
 
-  const { id } = itemContext || { id: 'default' }
+  const { id } = itemContext
 
   return {
     id,

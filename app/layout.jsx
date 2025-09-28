@@ -4,10 +4,6 @@ import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import CursorProvider from "@/components/CursorContext"
 import Header from "@/components/Header"
-import ErrorBoundary from "@/components/ErrorBoundary"
-import GlobalErrorHandler from "@/components/GlobalErrorHandler"
-import ErrorSuppressor from "@/components/ErrorSuppressor"
-import DevModeChecker from "@/components/DevModeChecker"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -137,84 +133,15 @@ export default function RootLayout({ children }) {
   <link rel="manifest" href="/manifest.json" />
   <meta name="msapplication-TileColor" content="#ffffff" />
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
-        {/* Preload for performance - removed problematic preload */}
+        {/* Preload for performance */}
+        <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        {/* Aggressive error suppression script */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              // Suppress ALL auth context errors
-              const originalError = console.error;
-              console.error = function(...args) {
-                const message = args.join(' ');
-                if (message.includes('Cannot destructure property \\'auth\\'') ||
-                    message.includes('hook.js:608') ||
-                    message.includes('TypeError: Cannot destructure') ||
-                    message.includes('204-90d1773887cef479.js') ||
-                    message.includes('8bc8d761-106196c73f6358c9.js')) {
-                  console.warn('Suppressed auth context error:', message);
-                  return;
-                }
-                originalError.apply(console, args);
-              };
-              
-              // Suppress runtime errors
-              window.onerror = function(message, source, lineno, colno, error) {
-                if (error && error.message && (
-                    error.message.includes('Cannot destructure property \\'auth\\'') ||
-                    error.message.includes('Minified React error #423')
-                )) {
-                  console.warn('Suppressed runtime error:', message);
-                  return true;
-                }
-                return false;
-              };
-              
-              // Suppress unhandled promise rejections
-              window.addEventListener('unhandledrejection', function(event) {
-                if (event.reason && event.reason.message && 
-                    event.reason.message.includes('Cannot destructure property \\'auth\\'')) {
-                  console.warn('Suppressed promise rejection:', event.reason.message);
-                  event.preventDefault();
-                }
-              });
-              
-              // Suppress React hydration errors
-              const originalConsoleWarn = console.warn;
-              console.warn = function(...args) {
-                const message = args.join(' ');
-                if (message.includes('Minified React error #423') ||
-                    message.includes('hydration') ||
-                    message.includes('Text content does not match') ||
-                    message.includes('Application error: a client-side exception has occurred')) {
-                  console.info('Suppressed React hydration warning:', message);
-                  return;
-                }
-                originalConsoleWarn.apply(console, args);
-              };
-              
-              // Suppress Next.js application errors
-              const originalConsoleError = console.error;
-              console.error = function(...args) {
-                const message = args.join(' ');
-                if (message.includes('Application error: a client-side exception has occurred') ||
-                    message.includes('Cannot destructure property \\'auth\\'') ||
-                    message.includes('Minified React error #423') ||
-                    message.includes('TypeError: Cannot destructure property \\'auth\\' of \\'e\\' as it is undefined') ||
-                    message.includes('server/chunks/5646.js')) {
-                  console.info('Suppressed application error:', message);
-                  return;
-                }
-                originalConsoleError.apply(console, args);
-              };
-            })();
-          `
-        }} />
         <style>{`
           html {
             font-family: ${poppins.style.fontFamily};
@@ -224,19 +151,14 @@ export default function RootLayout({ children }) {
         `}</style>
       </head>
       <body className="font-body">
-        <DevModeChecker />
-        <ErrorSuppressor />
-        <GlobalErrorHandler />
-        <ErrorBoundary>
-          <CursorProvider>
-            <Suspense fallback={null}>
-              <Header />
-              {children}
-              <Toaster />
-            </Suspense>
-            <Analytics />
-          </CursorProvider>
-        </ErrorBoundary>
+        <CursorProvider>
+          <Suspense fallback={null}>
+            <Header />
+            {children}
+            <Toaster />
+          </Suspense>
+          <Analytics />
+        </CursorProvider>
       </body>
     </html>
   )

@@ -3,13 +3,8 @@ import React, { useState, useEffect, createContext } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 
-// create context with default values
-const defaultContext = {
-  mouseEnterHandler: () => {},
-  mouseLeaveHandler: () => {},
-};
-
-export const CursorContext = createContext(defaultContext);
+// create context
+export const CursorContext = createContext();
 
 // provider
 const CursorProvider = ({ children }) => {

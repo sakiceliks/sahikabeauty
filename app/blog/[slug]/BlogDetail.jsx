@@ -17,10 +17,22 @@ const JsonLd = ({ data }) => {
     />
   );
 };
-const FaqSchema = ({ faqs }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) }} />;
-const ReviewSchema = ({ reviews }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Review', itemReviewed: { '@type': 'LocalBusiness', name: 'Şahika Beauty Sultanbeyli' }, reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, author: { '@type': 'Person', name: reviews[0].author } }} />;
-const VideoSchema = ({ videoData }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'VideoObject', ...videoData }} />;
-const HowToSchema = ({ steps, title }) => <JsonLd data={{ '@context': 'https://schema.org', '@type': 'HowTo', name: title, step: steps.instructions.map((s, i) => ({ '@type': 'HowToStep', url: `#step-${i}`, name: s.title, text: s.description })) }} />;
+const FaqSchema = ({ faqs }) => {
+  if (!faqs || faqs.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })) }} />;
+};
+const ReviewSchema = ({ reviews }) => {
+  if (!reviews || reviews.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Review', itemReviewed: { '@type': 'LocalBusiness', name: 'Şahika Beauty Sultanbeyli' }, reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, author: { '@type': 'Person', name: reviews[0].author } }} />;
+};
+const VideoSchema = ({ videoData }) => {
+  if (!videoData) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'VideoObject', ...videoData }} />;
+};
+const HowToSchema = ({ steps, title }) => {
+  if (!steps || !steps.instructions || steps.instructions.length === 0) return null;
+  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'HowTo', name: title, itemListElement: steps.instructions.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: s.description, url: `#step-${i}` })) }} />;
+};
 const TableOfContents = ({ headings }) => {
   if (!headings || headings.length === 0) return null;
   return (
@@ -349,7 +361,7 @@ const sultanbeyliBlogData = {
       description: "Seansdan 2 hafta önce ve sonra güneşe maruz kalmayın. Bu, tedavinin etkinliğini artırır ve yan etki riskini azaltır.",
       link: {
         text: "Detaylı hazırlık rehberi",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        url: "/blog/lazer-epilasyon-hazirlik"
       }
     },
     {
@@ -357,7 +369,7 @@ const sultanbeyliBlogData = {
       description: "Lazer epilasyon sonrası cildinizi düzenli olarak nemlendirin. Bu, iyileşme sürecini hızlandırır.",
       link: {
         text: "Bakım ürünleri önerileri",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        url: "/blog/epilasyon-sonrasi-bakim"
       }
     },
     {
@@ -365,7 +377,7 @@ const sultanbeyliBlogData = {
       description: "Lazer epilasyon seansları arasında tüyleri koparmamalı, sadece tıraş edebilirsiniz.",
       link: {
         text: "Seans arası bakım",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        url: "/blog/seans-arasi-bakim"
       }
     },
     {
@@ -373,7 +385,7 @@ const sultanbeyliBlogData = {
       description: "Lazer epilasyona kış aylarında başlamak, yaz için hazır olmak açısından idealdir.",
       link: {
         text: "En iyi başlama zamanı",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        url: "/blog/lazer-epilasyon-mevsim"
       }
     }
   ],
@@ -385,19 +397,19 @@ const sultanbeyliBlogData = {
         icon: "❄️",
         title: "Kış Cilt Bakımı",
         description: "Soğuk havaya karşı özel bakım programı",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        link: "/kampanyalar/kis-cilt-bakimi"
       },
       {
         icon: "✨",
         title: "Lazer Epilasyon İndirimi",
         description: "Kış aylarında %40'a varan indirimler",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        link: "/kampanyalar/lazer-epilasyon-kis"
       },
       {
         icon: "💄",
         title: "Kalıcı Makyaj Paketi",
         description: "Yeni yıla özel kalıcı makyaj fırsatları",
-        url: "/blog/sultanbeyli-guzellik-merkezi"
+        link: "/kampanyalar/kalici-makyaj"
       }
     ]
   }
@@ -1031,11 +1043,11 @@ const EnhancedBlogDetail = ({ post, loading }) => {
           <div className="mt-16 pt-8 border-t border-gray-200 text-sm text-gray-500 text-center">
             <h3 className="font-bold mb-4 text-lg">Diğer Sultanbeyli Hizmetlerimiz</h3>
             <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-              <li><Link href="/blog/sultanbeyli-guzellik-merkezi" className="hover:text-primary hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
-              <li><Link href="/blog/sultanbeyli-guzellik-merkezi" className="hover:text-primary hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
-              <li><Link href="/blog/sultanbeyli-guzellik-merkezi" className="hover:text-primary hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
-              <li><Link href="/blog/sultanbeyli-guzellik-merkezi" className="hover:text-primary hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
-              <li><Link href="/blog/sultanbeyli-guzellik-merkezi" className="hover:text-primary hover:underline">Sultanbeyli Tırnak Protez</Link></li>
+              <li><Link href="/sultanbeyli/lazer-epilasyon" className="hover:text-primary hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
+              <li><Link href="/sultanbeyli/cilt-bakimi" className="hover:text-primary hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
+              <li><Link href="/sultanbeyli/kalici-makyaj" className="hover:text-primary hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
+              <li><Link href="/sultanbeyli/bolgesel-incelme" className="hover:text-primary hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
+              <li><Link href="/sultanbeyli/tirnak-protez" className="hover:text-primary hover:underline">Sultanbeyli Tırnak Protez</Link></li>
             </ul>
           </div>
         </div>

@@ -151,11 +151,8 @@ export default function HeroCarousel() {
               >
                 <p className="text-base md:text-lg lg:text-xl font-light italic mb-4 tracking-wide">{slide.subtitle}</p>
                 <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
-                  Şahika Beauty - Sultanbeyli Güzellik Merkezi
-                </h1>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 font-heading">
                   {slide.title}
-                </h2>
+                </h1>
                 <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase mb-8">
                   {slide.description}
                 </p>
