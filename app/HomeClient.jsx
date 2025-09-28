@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { CursorContext } from "@/components/CursorContext"
 import HeroCarousel from "@/components/hero-carousel"
 import TestimonialsCarousel from "@/components/musteri"
@@ -20,13 +20,55 @@ import {
 } from "@/components/Skeletons" // Yeni skeleton'ları import et (oluşturman gerekebilir)
 
 const HomeClient = ({ 
-  blogs = [], 
-  services = [], 
-  featuredServices = [], 
-  error = null,
+  blogs: initialBlogs = [], 
+  services: initialServices = [], 
+  featuredServices: initialFeaturedServices = [], 
+  error: initialError = null,
   loading = false 
 }) => {
   const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
+  
+  // Client-side state for data
+  const [blogs, setBlogs] = useState(initialBlogs)
+  const [services, setServices] = useState(initialServices)
+  const [featuredServices, setFeaturedServices] = useState(initialFeaturedServices)
+  const [error, setError] = useState(initialError)
+  const [isLoading, setIsLoading] = useState(loading)
+
+  // Client-side data fetching
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const [blogsRes, servicesRes] = await Promise.all([
+          fetch('/api/blog?published=true'),
+          fetch('/api/services')
+        ])
+
+        if (blogsRes.ok) {
+          const blogsData = await blogsRes.json()
+          setBlogs(blogsData?.data?.slice(0, 3) || [])
+        }
+
+        if (servicesRes.ok) {
+          const servicesData = await servicesRes.json()
+          const servicesList = servicesData?.data?.slice(0, 3) || []
+          setServices(servicesList)
+          setFeaturedServices(servicesList.filter(service => service.featured === true))
+        }
+      } catch (err) {
+        console.error('Client-side fetch error:', err)
+        setError('Veriler yüklenirken bir hata oluştu')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    // Only fetch if we don't have initial data
+    if (initialBlogs.length === 0 && initialServices.length === 0) {
+      fetchData()
+    }
+  }, [initialBlogs.length, initialServices.length])
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
@@ -313,7 +355,7 @@ const HomeClient = ({
     return <div className="text-center py-12">Hata: {error}</div>
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="space-y-12">
         <HeroSkeleton />
@@ -384,7 +426,7 @@ const HomeClient = ({
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <ServiceCards services={services} loading={loading} />
+            <ServiceCards services={services} loading={isLoading} />
           </motion.div>
         </motion.section>
       </article>

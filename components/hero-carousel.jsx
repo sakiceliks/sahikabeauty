@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useEffect } from "react"
 
 export default function HeroCarousel() {
@@ -131,7 +132,7 @@ export default function HeroCarousel() {
           >
             {/* Background Image with Parallax and Zoom Effect */}
             <div
-              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[6000ms] ease-out ${
+              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-&lsqb;6000ms&rsqb; ease-out ${
                 index === currentSlide ? "scale-110" : "scale-105"
               }`}
               style={{
@@ -159,12 +160,12 @@ export default function HeroCarousel() {
                 
                 {/* Randevu Al Butonu */}
                 <div className="flex justify-center">
-                  <a
+                  <Link
                     href="/rezervasyon"
                     className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
                   >
                     📅 Randevu Al
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

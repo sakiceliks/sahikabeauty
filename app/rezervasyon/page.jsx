@@ -41,6 +41,7 @@ const ReservationPage = () => {
   const [selectedTime, setSelectedTime] = useState('');
   const [services, setServices] = useState([]);
   const [servicesLoading, setServicesLoading] = useState(true);
+  const [serviceSearchTerm, setServiceSearchTerm] = useState('');
   const [existingReservations, setExistingReservations] = useState([]);
   const [reservationsLoading, setReservationsLoading] = useState(true);
   const [healthInfo, setHealthInfo] = useState({
@@ -120,7 +121,7 @@ const ReservationPage = () => {
             id: service.id,
             name: service.title,
             category: service.category,
-            price: service.price || 'Fiyat Belirtilmemiş',
+            price: service.price || '',
             duration: service.duration || 'Süre Belirtilmemiş',
             description: service.description,
             icon: iconMap[service.icon] || Sparkles, // Varsayılan ikon
@@ -158,6 +159,7 @@ const ReservationPage = () => {
             talep.adres && talep.adres.includes('Randevu Tarihi:')
           );
           setExistingReservations(reservations);
+          console.log(`📅 ${reservations.length} mevcut rezervasyon yüklendi`);
         } else {
           console.error('Reservations yüklenirken hata:', data.error);
         }
@@ -169,6 +171,10 @@ const ReservationPage = () => {
     };
 
     fetchReservations();
+    
+    // Her 30 saniyede bir rezervasyonları yenile
+    const interval = setInterval(fetchReservations, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   // Tarih oluşturucu (sonraki 14 gün)
@@ -208,16 +214,33 @@ const ReservationPage = () => {
   const getBookedSlots = () => {
     const bookedSlots = new Set();
     
-    existingReservations.forEach(reservation => {
+    console.log('🔍 Rezervasyon analizi başlıyor...');
+    console.log('📊 Toplam rezervasyon sayısı:', existingReservations.length);
+    
+    existingReservations.forEach((reservation, index) => {
+      console.log(`📋 Rezervasyon ${index + 1}:`, {
+        adres: reservation.adres,
+        isimSoyisim: reservation.isimSoyisim
+      });
+      
       if (reservation.adres && reservation.adres.includes('Randevu Tarihi:')) {
         // "Randevu Tarihi: 2024-01-15 14:00" formatından tarih ve saati çıkar
-        const match = reservation.adres.match(/rezervasyon Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/);
+        const match = reservation.adres.match(/Randevu Tarihi:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})/);
         if (match) {
           const [, date, time] = match;
-          bookedSlots.add(`${date}-${time}`);
+          const slotKey = `${date}-${time}`;
+          bookedSlots.add(slotKey);
+          console.log(`✅ Dolu slot bulundu: ${slotKey}`);
+        } else {
+          console.log('❌ Regex eşleşmedi:', reservation.adres);
         }
+      } else {
+        console.log('❌ Randevu Tarihi içermiyor:', reservation.adres);
       }
     });
+    
+    console.log('🎯 Toplam dolu slot sayısı:', bookedSlots.size);
+    console.log('📅 Dolu slotlar:', Array.from(bookedSlots));
     
     return bookedSlots;
   };
@@ -226,7 +249,14 @@ const ReservationPage = () => {
 
   // Belirli bir tarih ve saatin dolu olup olmadığını kontrol et
   const isSlotBooked = (date, time) => {
-    return bookedSlots.has(`${date}-${time}`);
+    const slotKey = `${date}-${time}`;
+    const isBooked = bookedSlots.has(slotKey);
+    
+    if (isBooked) {
+      console.log(`🔴 DOLU SLOT: ${slotKey}`);
+    }
+    
+    return isBooked;
   };
 
   const nextStep = () => {
@@ -271,67 +301,138 @@ const ReservationPage = () => {
                   <p className="text-gray-600">Size en uygun hizmeti seçin ve güzellik yolculuğunuza başlayın</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {services.map((service) => {
-                const IconComponent = service.icon;
-                return (
-                  <div
-                    key={service.id}
-                    onClick={() => setSelectedService(service)}
-                    className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 hover:shadow-xl ${
-                      selectedService?.id === service.id
-                        ? 'border-primary shadow-lg transform scale-105'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    {service.popular && (
-                      <div className="absolute -top-3 left-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        Popüler
-                      </div>
-                    )}
-                    
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4`}>
-                      <IconComponent className="w-8 h-8 text-white" />
+                {/* Arama Kutusu */}
+                <div className="mb-6">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Hizmet ara... (örn: lazer, cilt bakımı, makyaj)"
+                      value={serviceSearchTerm}
+                      onChange={(e) => setServiceSearchTerm(e.target.value)}
+                      className="w-full px-4 py-3 pl-12 pr-4 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition-colors"
+                    />
+                    <Sparkles className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  </div>
+                  {serviceSearchTerm && (
+                    <div className="mt-2 text-sm text-gray-500">
+                      {services.filter(service => 
+                        service.name.toLowerCase().includes(serviceSearchTerm.toLowerCase()) ||
+                        service.category.toLowerCase().includes(serviceSearchTerm.toLowerCase()) ||
+                        service.description.toLowerCase().includes(serviceSearchTerm.toLowerCase())
+                      ).length} hizmet bulundu
                     </div>
-                    
-                    <h3 className="text-xl font-bold mb-2">{service.name}</h3>
-                    <p className="text-sm text-gray-500 mb-2">{service.category}</p>
-                    <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-                    
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-primary font-bold text-lg">{service.price}</span>
-                      <span className="text-gray-500 text-sm flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {service.duration}
-                      </span>
-                    </div>
+                  )}
+                </div>
 
-                    {service.areas && (
-                      <div className="space-y-2">
-                        <p className="text-sm font-medium text-gray-700">Uygulama Alanları:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {service.areas.slice(0, 3).map((area, index) => (
-                            <span key={index} className="px-2 py-1 bg-gray-100 rounded-md text-xs">
-                              {area}
-                            </span>
-                          ))}
-                          {service.areas.length > 3 && (
-                            <span className="px-2 py-1 bg-gray-100 rounded-md text-xs">
-                              +{service.areas.length - 3} daha
-                            </span>
+                {/* Mobil Dostu Hizmet Seçim Tasarımı */}
+                <div className="space-y-3">
+                  {(() => {
+                    const filteredServices = services.filter(service => 
+                      serviceSearchTerm === '' || 
+                      service.name.toLowerCase().includes(serviceSearchTerm.toLowerCase()) ||
+                      service.category.toLowerCase().includes(serviceSearchTerm.toLowerCase()) ||
+                      service.description.toLowerCase().includes(serviceSearchTerm.toLowerCase())
+                    );
+
+                    if (filteredServices.length === 0 && serviceSearchTerm !== '') {
+                      return (
+                        <div className="text-center py-12">
+                          <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                          <h3 className="text-xl font-semibold text-gray-600 mb-2">Hizmet Bulunamadı</h3>
+                          <p className="text-gray-500 mb-4">"{serviceSearchTerm}" için arama sonucu bulunamadı.</p>
+                          <button
+                            onClick={() => setServiceSearchTerm('')}
+                            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                          >
+                            Tüm Hizmetleri Göster
+                          </button>
+                        </div>
+                      );
+                    }
+
+                    return filteredServices.map((service) => {
+                      const IconComponent = service.icon;
+                      return (
+                        <div
+                          key={service.id}
+                          onClick={() => setSelectedService(service)}
+                          className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:shadow-md ${
+                            selectedService?.id === service.id
+                              ? 'border-primary bg-gradient-to-r from-purple-50 to-pink-50 shadow-lg'
+                              : 'border-gray-200 hover:border-gray-300 bg-white'
+                          }`}
+                        >
+                          <div className="flex items-start gap-4">
+                            {/* Sol taraf - İkon ve temel bilgi */}
+                            <div className="flex items-start gap-3 flex-1 min-w-0">
+                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center flex-shrink-0 mt-1`}>
+                                <IconComponent className="w-6 h-6 text-white" />
+                              </div>
+                              
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-col gap-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="font-bold text-gray-800 text-base leading-tight break-words">{service.name}</h3>
+                                    {service.popular && (
+                                      <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap flex-shrink-0">
+                                        Popüler
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-500">{service.category}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Sağ taraf - Fiyat ve süre */}
+                            <div className="text-right flex-shrink-0 mt-1">
+                              <div className="text-primary font-bold text-lg mb-1">{service.price}</div>
+                              <div className="text-gray-500 text-xs flex items-center gap-1 justify-end">
+                                <Clock className="w-3 h-3" />
+                                {service.duration}
+                              </div>
+                            </div>
+
+                            {/* Seçim işareti */}
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all mt-1 ${
+                              selectedService?.id === service.id
+                                ? 'border-primary bg-primary'
+                                : 'border-gray-300'
+                            }`}>
+                              {selectedService?.id === service.id && (
+                                <Check className="w-4 h-4 text-white" />
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Expandable content - Sadece seçili serviste göster */}
+                          {selectedService?.id === service.id && (
+                            <div className="mt-4 pt-4 border-t border-gray-200 animate-in slide-in-from-top duration-300">
+                              <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+                              
+                              {service.areas && service.areas.length > 0 && (
+                                <div>
+                                  <p className="text-sm font-medium text-gray-700 mb-2">Uygulama Alanları:</p>
+                                  <div className="flex flex-wrap gap-1">
+                                    {service.areas.slice(0, 6).map((area, index) => (
+                                      <span key={index} className="px-2 py-1 bg-white border border-gray-200 rounded-md text-xs">
+                                        {area}
+                                      </span>
+                                    ))}
+                                    {service.areas.length > 6 && (
+                                      <span className="px-2 py-1 bg-gray-100 rounded-md text-xs font-medium">
+                                        +{service.areas.length - 6} alan daha
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           )}
                         </div>
-                      </div>
-                    )}
-                    
-                    {selectedService?.id === service.id && (
-                      <div className="absolute top-4 right-4 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                        <Check className="w-4 h-4 text-white" />
-                      </div>
-                    )}
-                  </div>
-                );
-                  })}
+                      );
+                    });
+                  })()}
                 </div>
               </>
             )}
@@ -484,26 +585,63 @@ const ReservationPage = () => {
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
                   {availableDates.map((date) => {
+                    // Bu tarihte dolu saat sayısını hesapla
+                    const bookedSlotsForDate = timeSlots.filter(time => isSlotBooked(date.value, time)).length;
+                    const totalSlots = timeSlots.length;
+                    const isFullyBooked = bookedSlotsForDate === totalSlots;
+                    const hasSomeBookings = bookedSlotsForDate > 0;
+                    
                     return (
-                      <button
-                        key={date.value}
-                        onClick={() => setSelectedDate(date.value)}
-                        className={`p-4 rounded-xl border-2 text-center transition-all hover:shadow-md ${
-                          selectedDate === date.value
-                            ? 'border-primary bg-primary text-white'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        <div className="text-sm font-medium">
-                          {date.display.split(' ')[0]}
-                        </div>
-                        <div className="text-lg font-bold">
-                          {date.display.split(' ')[1]}
-                        </div>
-                        <div className="text-xs opacity-70">
-                          {date.display.split(' ')[2]}
-                        </div>
-                      </button>
+                      <div key={date.value} className="relative">
+                        <button
+                          onClick={() => setSelectedDate(date.value)}
+                          className={`w-full p-4 rounded-xl border-2 text-center transition-all hover:shadow-md ${
+                            selectedDate === date.value
+                              ? 'border-primary bg-primary text-white'
+                              : isFullyBooked
+                              ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60'
+                              : hasSomeBookings
+                              ? 'border-orange-200 bg-orange-50 text-orange-600'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="text-sm font-medium">
+                            {date.display.split(' ')[0]}
+                          </div>
+                          <div className="text-lg font-bold">
+                            {date.display.split(' ')[1]}
+                          </div>
+                          <div className="text-xs opacity-70">
+                            {date.display.split(' ')[2]}
+                          </div>
+                          {hasSomeBookings && (
+                            <div className="text-xs mt-1 font-semibold">
+                              {bookedSlotsForDate}/{totalSlots} dolu
+                            </div>
+                          )}
+                        </button>
+                        
+                        {/* Dolu Gün Badge */}
+                        {isFullyBooked && (
+                          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg animate-pulse z-10">
+                            DOLU
+                          </div>
+                        )}
+                        
+                        {/* Kısmen Dolu Badge */}
+                        {hasSomeBookings && !isFullyBooked && (
+                          <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg z-10">
+                            {bookedSlotsForDate} DOLU
+                          </div>
+                        )}
+                        
+                        {/* Seçili Badge */}
+                        {selectedDate === date.value && !isFullyBooked && (
+                          <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg z-10">
+                            SEÇİLİ
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>
@@ -512,34 +650,57 @@ const ReservationPage = () => {
               {/* Saat Seçimi */}
               {selectedDate && (
                 <div className="animate-in slide-in-from-top duration-500">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-primary" />
-                    Saat Seçin
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-semibold flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-primary" />
+                      Saat Seçin
+                    </h3>
+                    <div className="text-sm text-gray-600">
+                      {(() => {
+                        const bookedSlotsForDate = timeSlots.filter(time => isSlotBooked(selectedDate, time)).length;
+                        const totalSlots = timeSlots.length;
+                        const availableSlots = totalSlots - bookedSlotsForDate;
+                        return `${availableSlots}/${totalSlots} saat müsait`;
+                      })()}
+                    </div>
+                  </div>
                   <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                     {timeSlots.map((time) => {
                       const isBooked = isSlotBooked(selectedDate, time);
                       
                       return (
-                        <button
-                          key={time}
-                          onClick={() => !isBooked && setSelectedTime(time)}
-                          disabled={isBooked}
-                          className={`p-3 rounded-xl border-2 text-center font-medium transition-all ${
-                            isBooked
-                              ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60'
-                              : selectedTime === time
-                              ? 'border-primary bg-primary text-white hover:shadow-md'
-                              : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
-                          }`}
-                        >
-                          <div className="flex flex-col items-center">
-                            <span>{time}</span>
-                            {isBooked && (
-                              <span className="text-xs text-red-500 mt-1">Dolu</span>
-                            )}
-                          </div>
-                        </button>
+                        <div key={time} className="relative">
+                          <button
+                            onClick={() => !isBooked && setSelectedTime(time)}
+                            disabled={isBooked}
+                            className={`w-full p-3 rounded-xl border-2 text-center font-medium transition-all ${
+                              isBooked
+                                ? 'border-red-200 bg-red-50 text-red-400 cursor-not-allowed opacity-60'
+                                : selectedTime === time
+                                ? 'border-primary bg-primary text-white hover:shadow-md'
+                                : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                            }`}
+                          >
+                            <div className="flex flex-col items-center">
+                              <Clock className="w-4 h-4 mb-1" />
+                              <span className="text-sm font-semibold">{time}</span>
+                            </div>
+                          </button>
+                          
+                          {/* Dolu Badge */}
+                          {isBooked && (
+                            <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg animate-pulse z-10">
+                              DOLU
+                            </div>
+                          )}
+                          
+                          {/* Seçili Badge */}
+                          {selectedTime === time && !isBooked && (
+                            <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg z-10">
+                              SEÇİLİ
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
@@ -570,6 +731,30 @@ const ReservationPage = () => {
                       </p>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Rezervasyon Durumu Özeti */}
+              {selectedDate && (
+                <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    {availableDates.find(d => d.value === selectedDate)?.dayName} Rezervasyon Durumu
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-gray-600">
+                        Müsait: {timeSlots.filter(time => !isSlotBooked(selectedDate, time)).length} saat
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-gray-600">
+                        Dolu: {timeSlots.filter(time => isSlotBooked(selectedDate, time)).length} saat
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -831,6 +1016,55 @@ ${personalInfo.notes ? `Özel Notlar: ${personalInfo.notes}` : ''}
                       if (result.success) {
                         toast.success(`Randevunuz başarıyla oluşturuldu! Talep No: ${result.data.talepId}`, { id: 'reservation' });
                         
+                        // Rezervasyonları hemen yenile
+                        try {
+                          const refreshResponse = await fetch('/api/talepler');
+                          const refreshData = await refreshResponse.json();
+                          
+                          if (refreshData.success) {
+                            const reservations = refreshData.data.filter(talep => 
+                              talep.adres && talep.adres.includes('Randevu Tarihi:')
+                            );
+                            setExistingReservations(reservations);
+                            console.log(`🔄 Rezervasyonlar güncellendi: ${reservations.length} toplam rezervasyon`);
+                            
+                            // Debug: Yeni rezervasyonları kontrol et
+                            console.log('🔍 Yeni rezervasyonlar:');
+                            reservations.forEach((res, index) => {
+                              console.log(`📋 ${index + 1}:`, {
+                                adres: res.adres,
+                                isimSoyisim: res.isimSoyisim
+                              });
+                            });
+                            
+                            // Kullanıcıya rezervasyon güncellendiğini bildir
+                            toast.success('Rezervasyon sistemi güncellendi! Artık dolu saatler görünüyor.', { 
+                              id: 'refresh', 
+                              duration: 3000 
+                            });
+                            
+                            // Test: Manuel slot kontrolü
+                            console.log('🧪 Manuel slot kontrolü:');
+                            const testDate = selectedDate;
+                            const testTime = selectedTime;
+                            const testSlot = `${testDate}-${testTime}`;
+                            console.log(`🔍 Test slot: ${testSlot}`);
+                            console.log(`📅 Mevcut dolu slotlar:`, Array.from(bookedSlots));
+                            console.log(`✅ Bu slot dolu mu?`, bookedSlots.has(testSlot));
+                            
+                            // 1 saniye sonra sayfayı yenile (kesin güncelleme için)
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1000);
+                          }
+                        } catch (refreshError) {
+                          console.error('Rezervasyon yenileme hatası:', refreshError);
+                          toast.error('Rezervasyon sistemi güncellenemedi', { 
+                            id: 'refresh-error', 
+                            duration: 3000 
+                          });
+                        }
+                        
                         // Formu sıfırla
                         setCurrentStep(1);
                         setSelectedService(null);
@@ -849,6 +1083,12 @@ ${personalInfo.notes ? `Özel Notlar: ${personalInfo.notes}` : ''}
                           phone: '',
                           birthDate: '',
                           notes: ''
+                        });
+                        
+                        // Kullanıcıya bilgi ver
+                        toast.success('Rezervasyon sistemi güncelleniyor...', { 
+                          id: 'system-update', 
+                          duration: 3000 
                         });
                       } else {
                         toast.error(`Hata: ${result.error}`, { id: 'reservation' });

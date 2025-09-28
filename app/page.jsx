@@ -1,4 +1,3 @@
-import { Metadata } from "next"
 import HomeClient from "./HomeClient"
 import { generateBreadcrumbSchema, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo-schemas"
 import JsonLd from "@/components/JsonLd"
@@ -58,25 +57,9 @@ const Home = async () => {
   let error = null
 
   try {
-    const [blogsRes, servicesRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog?published=true`, { cache: "force-cache" }), // SSG için cache - sadece yayında olan bloglar
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/services`, { cache: "force-cache" }), // SSG için cache
-    ])
-
-    if (blogsRes.ok) {
-      const blogsJson = await blogsRes.json()
-      blogs = blogsJson?.data || []
-      blogs = Array.isArray(blogs) ? blogs.slice(0, 3) : []
-    }
-
-    if (servicesRes.ok) {
-      const servicesJson = await servicesRes.json()
-      services = servicesJson?.data || []
-      if (Array.isArray(services)) {
-        services = services.slice(0, 3)
-        featuredServices = services.filter((service) => service.featured === true)
-      }
-    }
+    // Skip server-side fetch for now to avoid connection issues
+    // The client-side component will handle data loading
+    console.log("Skipping server-side fetch to avoid connection issues")
   } catch (err) {
     console.error("Server-side veri hatası:", err)
     error = "Veriler yüklenirken bir hata oluştu"

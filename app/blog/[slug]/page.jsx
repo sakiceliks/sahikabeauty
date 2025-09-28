@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+// JavaScript projesinde Metadata tipi gerekli değil
 import EnhancedBlogDetail from "./BlogDetail" // Client component
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import JsonLd from "@/components/JsonLd"
@@ -18,7 +18,8 @@ const BlogDetailSkeleton = ({ className = "" }) => (
 export async function generateMetadata({ params}) {
   let post = null
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${params.slug}`, { next: { revalidate: 3600 } }) // ISR cache
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/blog/${params.slug}`, { next: { revalidate: 3600 } }) // ISR cache
     const data = await res.json()
     post = data.success ? data.data : null
   } catch (err) {
@@ -85,7 +86,8 @@ const Page = async ({ params }) => {
   let post = null
   let loading = true
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${params.slug}`, { cache: "force-cache" })
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/blog/${params.slug}`, { cache: "force-cache" })
     const data = await res.json()
     post = data.success ? data.data : null
     loading = false
