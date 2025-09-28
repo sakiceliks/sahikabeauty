@@ -10,6 +10,12 @@ export async function generateMetadata() {
       "Sultanbeyli'nin en güvenilir güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve daha fazlası. Uzman kadromuz ile güzelliğinizi keşfedin.",
     keywords:
       "sultanbeyli güzellik merkezi, lazer epilasyon sultanbeyli, cilt bakımı sultanbeyli, kalıcı makyaj sultanbeyli, bölgesel incelme sultanbeyli, şahika beauty",
+    authors: [{ name: "Şahika Beauty" }],
+    creator: "Şahika Beauty",
+    publisher: "Şahika Beauty",
+    applicationName: "Şahika Beauty",
+    generator: "Şahika Beauty",
+    referrer: "origin-when-cross-origin",
     openGraph: {
       title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
       description: "Sultanbeyli'nin en güvenilir güzellik merkezi. Uzman kadromuz ile güzelliğinizi keşfedin.",

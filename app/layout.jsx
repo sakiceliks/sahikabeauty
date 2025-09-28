@@ -26,8 +26,8 @@ const poppins = Poppins({
 
 export const metadata = {
   title: {
-    default: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon, Cilt Bakımı, Kalıcı Makyaj",
-    template: "%s | Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+    default: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı",
+    template: "%s | Şahika Beauty",
   },
   description:
     "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve estetik hizmetler. Uzman kadromuz ve son teknoloji cihazlarımızla hizmetinizdeyiz.",
@@ -117,27 +117,90 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr" className={`${marcellus.variable} ${poppins.variable}`}>
       <head>
-  <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
-  <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
-  <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
-  <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="msapplication-TileColor" content="#ffffff" />
-  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-  <meta name="theme-color" content="#ffffff" />
+        {/* Favicon - Google için optimize edilmiş */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
+        
+        {/* Google için ek favicon tag'leri */}
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" />
+        
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
+        
+        {/* Android Icons */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="144x144" href="/android-icon-144x144.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/android-icon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="72x72" href="/android-icon-72x72.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/android-icon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="36x36" href="/android-icon-36x36.png" />
+        
+        {/* Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Microsoft Tiles */}
+        <meta name="msapplication-TileColor" content="#3b82f6" />
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
+        {/* Theme Color */}
+        <meta name="theme-color" content="#3b82f6" />
+        
+        {/* Google Specific Meta Tags */}
+        <meta name="application-name" content="Şahika Beauty" />
+        <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        
+        {/* Google Search Console - Bu alanı Google Search Console'dan alacağınız verification code ile doldurun */}
+        {/* <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" /> */}
+        
+        {/* Additional SEO Meta Tags */}
+        <meta name="rating" content="general" />
+        <meta name="distribution" content="global" />
+        <meta name="language" content="tr" />
+        <meta name="geo.region" content="TR-34" />
+        <meta name="geo.placename" content="Sultanbeyli, İstanbul" />
+        <meta name="geo.position" content="40.9607;29.2675" />
+        <meta name="ICBM" content="40.9607, 29.2675" />
+        
+        {/* Google için ek meta tag'ler */}
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        
+        {/* Google için title ve description */}
+        <meta property="og:title" content="Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı" />
+        <meta property="og:description" content="Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve estetik hizmetler." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://sultanbeyliguzellikmerkezi.com.tr" />
+        <meta property="og:site_name" content="Şahika Beauty" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Şahika Beauty - Sultanbeyli Güzellik Merkezi" />
+        <meta name="twitter:description" content="Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler." />
+        
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="apple-mobile-web-app-title" content="Şahika Beauty" />
         {/* Preload for performance */}
         <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />

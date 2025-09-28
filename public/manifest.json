@@ -1,5 +1,11 @@
 {
- "name": "App",
+ "name": "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+ "short_name": "Şahika Beauty",
+ "description": "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
+ "start_url": "/",
+ "display": "standalone",
+ "background_color": "#ffffff",
+ "theme_color": "#3b82f6",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
