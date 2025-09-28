@@ -58,6 +58,7 @@ const HomeClient = ({
       itemListElement: [
         {
           "@type": "Offer",
+          name: "Sultanbeyli Güzellik Merkezi",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Güzellik Merkezi",
@@ -67,6 +68,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Lazer Epilasyon",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Lazer Epilasyon",
@@ -76,6 +78,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Cilt Bakımı",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Cilt Bakımı",
@@ -85,6 +88,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Kalıcı Makyaj",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Kalıcı Makyaj",
@@ -94,6 +98,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Estetik",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Estetik",
@@ -103,6 +108,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli İğneli Epilasyon",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli İğneli Epilasyon",
@@ -112,6 +118,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Leke Bakımı",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Leke Bakımı",
@@ -121,6 +128,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Akne Bakımı",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Akne Bakımı",
@@ -130,6 +138,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Yosun Peeling",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Yosun Peeling",
@@ -139,6 +148,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli G5 Masajı",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli G5 Masajı",
@@ -148,6 +158,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli EmSlim Fit",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli EmSlim Fit",
@@ -157,6 +168,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Primex",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Primex",
@@ -166,6 +178,7 @@ const HomeClient = ({
         },
         {
           "@type": "Offer",
+          name: "Sultanbeyli Sculpture",
           itemOffered: {
             "@type": "Service",
             name: "Sultanbeyli Sculpture",
