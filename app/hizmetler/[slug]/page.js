@@ -72,8 +72,8 @@ const servicePageSEOData = {
   // Local business info
   businessInfo: {
     name: "Şahika Beauty Sultanbeyli",
-    address: "Fatih Bulvarı, Sultanbeyli/İstanbul",
-    phone: "+90 XXX XXX XXXX",
+    address: "Abdurrahmangazi, Fatih Blv. No:73/1 34920 Sultanbeyli/İstanbul",
+    phone: "+90 530 434 83 49",
     hours: "Pazartesi-Cuma: 09:00-19:00, Cumartesi: 10:00-17:00",
     established: "2017",
     customerCount: "1000+",
