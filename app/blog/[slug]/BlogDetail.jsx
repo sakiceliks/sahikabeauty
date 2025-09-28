@@ -680,28 +680,28 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                           title: "Ücretsiz Konsültasyon",
                           description: "Uzmanımızla görüşün",
                           icon: "📋",
-                          link: "/konsultasyon"
+                          link: "/rezervasyon"
                         },
                         {
                           step: 2,
                           title: "Kişisel Plan",
                           description: "Size özel program hazırlayın",
                           icon: "📝",
-                          link: "/kisisel-plan"
+                          link: "/rezervasyon"
                         },
                         {
                           step: 3,
                           title: "Tedavi Süreci",
                           description: "Rahat ortamda hizmet alın",
                           icon: "✨",
-                          link: "/tedavi-sureci"
+                          link: "/rezervasyon"
                         },
                         {
                           step: 4,
                           title: "Sonuç & Takip",
                           description: "Kalıcı sonuçlar elde edin",
                           icon: "🎯",
-                          link: "/sonuc-takip"
+                          link: "/rezervasyon"
                         }
                       ].map((item, index) => (
                         <div key={index} className="relative">
