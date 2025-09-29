@@ -122,7 +122,7 @@ const Header = () => {
             initial={{ x: "100%" }}
             animate={{ x: mobileNav ? 0 : "100%" }}
             transition={{ type: "tween", duration: 0.4, ease: "easeInOut" }}
-            className="fixed top-0 bottom-0 right-0 w-[320px] sm:w-[380px] xl:hidden z-50 shadow-2xl rounded-l-2xl overflow-hidden"
+            className="fixed top-0 bottom-0 right-0 w-[320px] sm:w-[380px] xl:hidden z-50 shadow-2xl rounded-l-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100"
             id="mobile-navigation"
             style={{ display: mobileNav ? "block" : "none" }}
           >

@@ -148,11 +148,6 @@
   div {
     @apply font-body;
   }
-
-  /* Elegant font for beauty center */
-  .font-elegant {
-    font-family: var(--font-playfair), serif;
-  }
 }
 
 @layer components {
