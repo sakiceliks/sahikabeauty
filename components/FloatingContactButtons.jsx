@@ -58,7 +58,7 @@ const FloatingContactButtons = () => {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-[9999] pointer-events-auto">
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -66,7 +66,7 @@ const FloatingContactButtons = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="mb-4 space-y-3"
+            className="mb-4 space-y-3 pointer-events-auto"
           >
             {buttons.map((button, index) => (
               <motion.div
@@ -74,12 +74,22 @@ const FloatingContactButtons = () => {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-center"
+                className="flex items-center pointer-events-auto"
               >
                 <Link
                   href={button.href}
                   target={button.target}
-                  className={`${button.color} text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 min-w-[140px] group`}
+                  className={`${button.color} text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 min-w-[140px] group cursor-pointer pointer-events-auto`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (button.target === "_blank") {
+                      window.open(button.href, '_blank');
+                    } else if (button.href.startsWith('tel:')) {
+                      window.location.href = button.href;
+                    } else {
+                      window.location.href = button.href;
+                    }
+                  }}
                 >
                   <span className="text-xl">{button.icon}</span>
                   <span className="font-medium">{button.label}</span>
@@ -92,14 +102,19 @@ const FloatingContactButtons = () => {
 
       {/* Ana Toggle Butonu */}
       <motion.button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsExpanded(!isExpanded);
+        }}
         className={`${
           isExpanded 
             ? "bg-gray-600 hover:bg-gray-700" 
             : "bg-primary hover:bg-primary/90"
-        } text-white w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group`}
+        } text-white w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group cursor-pointer pointer-events-auto relative z-[10000]`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        style={{ pointerEvents: 'auto' }}
       >
         <motion.div
           animate={{ rotate: isExpanded ? 45 : 0 }}
@@ -121,9 +136,10 @@ const FloatingContactButtons = () => {
       {/* Pulse animasyonu */}
       {!isExpanded && (
         <motion.div
-          className="absolute inset-0 bg-primary rounded-full"
+          className="absolute inset-0 bg-primary rounded-full pointer-events-none"
           animate={{ scale: [1, 1.2, 1], opacity: [0.7, 0, 0.7] }}
           transition={{ duration: 2, repeat: Infinity }}
+          style={{ zIndex: -1 }}
         />
       )}
     </div>
