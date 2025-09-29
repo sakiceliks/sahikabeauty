@@ -102,6 +102,40 @@ export default function TelegramSettings() {
     }
   }
 
+  const handleSaveOnly = async () => {
+    if (!config.token || !config.chatId) {
+      toast.error('Token ve Chat ID gerekli')
+      return
+    }
+
+    try {
+      setSaving(true)
+      const response = await fetch('/api/telegram-config', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...config,
+          skipTest: true
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        toast.success('Telegram ayarları başarıyla kaydedildi!')
+      } else {
+        toast.error(`Hata: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Save error:', error)
+      toast.error('Ayarlar kaydedilirken hata oluştu')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="space-y-8">
@@ -213,9 +247,18 @@ export default function TelegramSettings() {
             </button>
             
             <button
+              onClick={handleSaveOnly}
+              disabled={saving || !config.token || !config.chatId}
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {saving ? 'Kaydediliyor...' : 'Sadece Kaydet'}
+            </button>
+            
+            <button
               onClick={handleTest}
               disabled={testing || !config.token || !config.chatId}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <TestTube className="w-4 h-4 mr-2" />
               {testing ? 'Test Ediliyor...' : 'Sadece Test Et'}
