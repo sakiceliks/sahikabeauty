@@ -1,8 +1,7 @@
 "use client";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { CursorContext } from "@/components/CursorContext";
 import JsonLd from "@/components/JsonLd";
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas";
 
@@ -73,7 +72,6 @@ const blogCategories = [
 const skeletonCount = 6;
 
 const BlogPage = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
   const [activeCategory, setActiveCategory] = useState("all");
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -284,8 +282,6 @@ const BlogPage = () => {
                         y: 0,
                         transition: { delay: 0.2 * index },
                       }}
-                      onMouseEnter={mouseEnterHandler}
-                      onMouseLeave={mouseLeaveHandler}
                       className="beauty-card group hover:pastel-glow flex flex-col items-center text-center"
                       itemScope
                       itemType="https://schema.org/BlogPosting"

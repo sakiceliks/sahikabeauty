@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useContext, useState, useEffect } from "react";
-import { CursorContext } from "@/components/CursorContext";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { 
@@ -22,7 +21,6 @@ import TestimonialsCarousel from "@/components/musteri";
 import { BlogCardSkeleton, ServiceCardSkeleton } from "@/components/Skeletons";
 
 const Home = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext);
   const [blogs, setBlogs] = useState([]);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,16 +87,12 @@ const Home = () => {
               </motion.div>
               
               <motion.h1
-                onMouseEnter={mouseEnterHandler}
-                onMouseLeave={mouseLeaveHandler}
                 className="h1 mb-6"
               >
                 Doğal Güzellik <br /> Burada Başlar
               </motion.h1>
               
               <motion.p
-                onMouseEnter={mouseEnterHandler}
-                onMouseLeave={mouseLeaveHandler}
                 className="lead max-w-xl mx-auto xl:mx-0 mb-8"
               >
                 Kişiye özel cilt bakımı çözümleri ve son teknoloji uygulamalar ile 
@@ -107,18 +101,13 @@ const Home = () => {
               
               <div className="flex flex-col xl:flex-row items-center gap-6 max-w-max mx-auto xl:mx-0">
                 <motion.button
-                  onMouseEnter={mouseEnterHandler}
-                  onMouseLeave={mouseLeaveHandler}
                   className="btn btn-lg font-bold bg-gradient-to-r !text-title from-accent to-secondary hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                 >
                  <Link className="flex" href="/rezervasyon">
                   <Calendar className="w-5 h-5 mr-2" />
                   Randevu Al</Link>
                 </motion.button>
-                <motion.div
-                  onMouseEnter={mouseEnterHandler}
-                  onMouseLeave={mouseLeaveHandler}
-                >
+                <motion.div>
                   <ModalVideo />
                 </motion.div>
               </div>
@@ -133,8 +122,6 @@ const Home = () => {
                   bottom: 0,
                   transition: { delay: 2.4, duration: 1.2, ease: "easeInOut" },
                 }}
-                onMouseEnter={mouseEnterHandler}
-                onMouseLeave={mouseLeaveHandler}
                 className="hidden xl:flex fixed bottom-0"
               >
                 <Image

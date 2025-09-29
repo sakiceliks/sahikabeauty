@@ -1,13 +1,10 @@
 "use client"
 import { motion } from "framer-motion"
-import { useContext } from "react"
 import Image from "next/image"
-import { CursorContext } from "@/components/CursorContext"
 import Form from "@/components/Form"
 import { Clock, MapPin, Phone, Mail, MessageCircle } from "lucide-react"
 
 const ContactClient = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
 
   // Contact information data
   const contactInfo = [
@@ -148,8 +145,6 @@ const ContactClient = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             {/* İletişim Bilgileri */}
             <motion.div
-              onMouseEnter={mouseEnterHandler}
-              onMouseLeave={mouseLeaveHandler}
               initial={{ opacity: 0, x: -60 }}
               animate={{
                 opacity: 1,
@@ -218,8 +213,6 @@ const ContactClient = () => {
 
             {/* İletişim Formu */}
             <motion.div
-              onMouseEnter={mouseEnterHandler}
-              onMouseLeave={mouseLeaveHandler}
               initial={{ opacity: 0, x: 60 }}
               animate={{
                 opacity: 1,

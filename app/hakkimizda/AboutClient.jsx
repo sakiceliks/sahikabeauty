@@ -1,12 +1,9 @@
 "use client"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { useContext } from "react"
-import { CursorContext } from "@/components/CursorContext"
 import StatsItem from "@/components/StatsItem"
 
 const AboutClient = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
 
   return (
     <>
@@ -50,8 +47,6 @@ const AboutClient = () => {
           <div className="w-full h-full flex flex-col xl:flex-row items-center justify-between">
             {/* Görsel */}
             <motion.div
-              onMouseEnter={mouseEnterHandler}
-              onMouseLeave={mouseLeaveHandler}
               initial={{ opacity: 0, x: -60 }}
               animate={{
                 opacity: 1,
@@ -72,8 +67,6 @@ const AboutClient = () => {
 
             {/* Metin */}
             <motion.div
-              onMouseEnter={mouseEnterHandler}
-              onMouseLeave={mouseLeaveHandler}
               initial={{ opacity: 0, x: 60 }}
               animate={{
                 opacity: 1,

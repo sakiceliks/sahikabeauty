@@ -1,8 +1,8 @@
 import React from "react"
 import { Marcellus } from "next/font/google"
 import { Poppins } from "next/font/google"
+import { Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import CursorProvider from "@/components/CursorContext"
 import Header from "@/components/Header"
 import FloatingContactButtons from "@/components/FloatingContactButtons"
 import { Toaster } from "react-hot-toast"
@@ -22,6 +22,13 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-poppins",
+  display: "swap",
+})
+
+const playfair = Playfair_Display({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-playfair",
   display: "swap",
 })
 
@@ -211,19 +218,18 @@ export default function RootLayout({ children }) {
             font-family: ${poppins.style.fontFamily};
             --font-heading: ${marcellus.variable};
             --font-body: ${poppins.variable};
+            --font-elegant: ${playfair.variable};
           }
         `}</style>
       </head>
       <body className="font-body">
-        <CursorProvider>
-          <Suspense fallback={null}>
-            <Header />
-            {children}
-            <FloatingContactButtons />
-            <Toaster />
-          </Suspense>
-          <Analytics />
-        </CursorProvider>
+        <Suspense fallback={null}>
+          <Header />
+          {children}
+          <FloatingContactButtons />
+          <Toaster />
+        </Suspense>
+        <Analytics />
       </body>
     </html>
   )

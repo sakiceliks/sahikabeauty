@@ -1,8 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useContext, useEffect, useState } from "react"
-import { CursorContext } from "@/components/CursorContext"
+import { useEffect, useState } from "react"
 import HeroCarousel from "@/components/hero-carousel"
 import TestimonialsCarousel from "@/components/musteri"
 import ServiceCards from "@/components/service-cards"
@@ -26,7 +25,6 @@ const HomeClient = ({
   error: initialError = null,
   loading = false 
 }) => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
   
   // Client-side state for data
   const [blogs, setBlogs] = useState(initialBlogs)

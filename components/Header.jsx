@@ -1,6 +1,5 @@
 "use client"
-import { useContext, useState, useEffect } from "react"
-import { CursorContext } from "./CursorContext"
+import { useState, useEffect } from "react"
 
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -16,7 +15,6 @@ import { Mail, Phone } from "lucide-react"
 
 
 const Header = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
   const [mobileNav, setMobileNav] = useState(false)
 
   // Prevent body scroll when mobile menu is open
@@ -85,19 +83,19 @@ const Header = () => {
         <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 py-4 xl:py-6 xl:min-h-[100px]">
           {/* Logo */}
           <motion.div 
-            onMouseEnter={mouseEnterHandler} 
-            onMouseLeave={mouseLeaveHandler}
             className="flex-shrink-0 flex items-center h-full"
           >
             <Link href="/" aria-label="Sahika Beauty anasayfaya git">
               <Image 
                 src="/assets/logo.svg" 
-                width={200} 
-                height={76} 
-                sizes="(max-width: 640px) 80px, (max-width: 768px) 100px, 120px"
-                className="w-20 h-auto sm:w-[100px] xl:w-[120px]"
+                width={400} 
+                height={152} 
+                sizes="(max-width: 640px) 160px, (max-width: 768px) 200px, 240px"
+                className="w-40 h-auto sm:w-[200px] xl:w-[240px]"
                 priority 
-                alt="Sahika Beauty Logo" 
+                alt="Sahika Beauty Logo"
+                quality={100}
+                style={{ imageRendering: 'crisp-edges' }}
               />
             </Link>
           </motion.div>
@@ -123,8 +121,8 @@ const Header = () => {
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: mobileNav ? 0 : "100%" }}
-            transition={{ type: "tween", duration: 0.3 }}
-            className="fixed bg-primary top-0 bottom-0 right-0 w-[280px] sm:w-[320px] xl:hidden z-50 shadow-2xl"
+            transition={{ type: "tween", duration: 0.4, ease: "easeInOut" }}
+            className="fixed top-0 bottom-0 right-0 w-[320px] sm:w-[380px] xl:hidden z-50 shadow-2xl rounded-l-2xl overflow-hidden"
             id="mobile-navigation"
             style={{ display: mobileNav ? "block" : "none" }}
           >
@@ -133,8 +131,6 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <motion.div 
-            onMouseEnter={mouseEnterHandler} 
-            onMouseLeave={mouseLeaveHandler} 
             className="hidden xl:flex items-center justify-center h-full"
           >
             <Nav />

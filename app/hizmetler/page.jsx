@@ -1,8 +1,7 @@
 "use client"
-import { useState, useContext, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { CursorContext } from "@/components/CursorContext"
 
 import JsonLd from "@/components/JsonLd"
 import { generateBreadcrumbSchema } from "@/lib/seo-schemas"
@@ -72,7 +71,6 @@ const serviceCategories = [
 ]
 
 const Services = () => {
-  const { mouseEnterHandler, mouseLeaveHandler } = useContext(CursorContext)
   const [activeCategory, setActiveCategory] = useState("all")
   const [categories, setCategories] = useState([])
   const [services, setServices] = useState([])
@@ -204,8 +202,6 @@ const Services = () => {
                       y: 0,
                       transition: { delay: 0.2 * index },
                     }}
-                    onMouseEnter={mouseEnterHandler}
-                    onMouseLeave={mouseLeaveHandler}
                     className="beauty-card group hover:pastel-glow flex flex-col items-center text-center"
                     itemScope
                     itemType="https://schema.org/Service"
