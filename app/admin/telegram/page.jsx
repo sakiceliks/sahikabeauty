@@ -22,6 +22,11 @@ export default function TelegramSettings() {
     try {
       setLoading(true)
       const response = await fetch('/api/telegram-config')
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
 
       if (data.success) {
@@ -35,6 +40,12 @@ export default function TelegramSettings() {
     } catch (error) {
       console.error('Config fetch error:', error)
       toast.error('Konfigürasyon yüklenirken hata oluştu')
+      
+      // Fallback: Boş konfigürasyon göster
+      setConfig({
+        token: '',
+        chatId: ''
+      })
     } finally {
       setLoading(false)
     }
@@ -55,6 +66,10 @@ export default function TelegramSettings() {
         },
         body: JSON.stringify(config),
       })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const data = await response.json()
 
@@ -86,6 +101,10 @@ export default function TelegramSettings() {
         },
         body: JSON.stringify(config),
       })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const data = await response.json()
 
@@ -120,6 +139,10 @@ export default function TelegramSettings() {
           skipTest: true
         }),
       })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const data = await response.json()
 
