@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import CursorProvider from "@/components/CursorContext"
 import Header from "@/components/Header"
+import FloatingContactButtons from "@/components/FloatingContactButtons"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -218,6 +219,7 @@ export default function RootLayout({ children }) {
           <Suspense fallback={null}>
             <Header />
             {children}
+            <FloatingContactButtons />
             <Toaster />
           </Suspense>
           <Analytics />
