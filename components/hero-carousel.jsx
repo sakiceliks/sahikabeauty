@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -123,13 +124,17 @@ export default function HeroCarousel() {
     <section className="relative h-[60vh] md:h-[70vh] overflow-hidden">
       {/* Carousel Container */}
       <div className="relative w-full h-full">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-              index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-110"
-            }`}
-          >
+        <AnimatePresence mode="wait">
+          {heroSlides.map((slide, index) => (
+            index === currentSlide && (
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+                className="absolute inset-0"
+              >
             {/* Background Image with Parallax and Zoom Effect */}
             <div
               className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-&lsqb;6000ms&rsqb; ease-out ${
@@ -145,10 +150,11 @@ export default function HeroCarousel() {
 
             {/* Content Overlay */}
             <div className="relative z-10 h-full flex items-center justify-center">
-              <div
-                className={`text-center text-white px-4 max-w-4xl mx-auto transition-all duration-1000 delay-300 ${
-                  index === currentSlide ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="text-center text-white px-4 max-w-4xl mx-auto"
               >
                 <p className="text-base md:text-lg lg:text-xl font-light italic mb-4 tracking-wide">{slide.subtitle}</p>
                 <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
@@ -167,10 +173,12 @@ export default function HeroCarousel() {
                     📅 Randevu Al
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </div>
-        ))}
+              </motion.div>
+            )
+          ))}
+        </AnimatePresence>
       </div>
 
       {/* Carousel Indicators */}

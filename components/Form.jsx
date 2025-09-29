@@ -1,4 +1,6 @@
+"use client"
 import { useState } from "react"
+import { motion } from "framer-motion"
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -100,10 +102,27 @@ const Form = () => {
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full max-w-lg mx-auto"
+    >
+      <motion.form 
+        onSubmit={handleSubmit} 
+        className="space-y-6" 
+        noValidate
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
         {/* Name Field */}
-        <div className="space-y-2">
+        <motion.div 
+          className="space-y-2"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <label 
             htmlFor="name" 
             className="block text-sm font-semibold text-gray-800 transition-colors duration-200"
@@ -152,7 +171,12 @@ const Form = () => {
         </div>
 
         {/* Email Field */}
-        <div className="space-y-2">
+        <motion.div 
+          className="space-y-2"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           <label 
             htmlFor="email" 
             className="block text-sm font-semibold text-gray-800"
@@ -201,7 +225,12 @@ const Form = () => {
         </div>
 
         {/* Phone Field */}
-        <div className="space-y-2">
+        <motion.div 
+          className="space-y-2"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
           <label 
             htmlFor="phone" 
             className="block text-sm font-semibold text-gray-800"
@@ -251,7 +280,12 @@ const Form = () => {
         </div>
 
         {/* Message Field */}
-        <div className="space-y-2">
+        <motion.div 
+          className="space-y-2"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
           <label 
             htmlFor="message" 
             className="block text-sm font-semibold text-gray-800"
@@ -281,10 +315,17 @@ const Form = () => {
         </div>
 
         {/* Submit Button */}
-        <div className="pt-4">
-          <button
+        <motion.div 
+          className="pt-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
+          <motion.button
             type="submit"
             disabled={isSubmitting}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             className="
               w-full sm:w-auto min-w-[200px] min-h-[52px] px-8 py-3
               bg-gradient-to-r from-blue-600 to-blue-700
@@ -317,9 +358,9 @@ const Form = () => {
               </>
             )}
           </button>
-        </div>
-      </form>
-    </div>
+        </motion.div>
+      </motion.form>
+    </motion.div>
   )
 }
 

@@ -1,4 +1,6 @@
+"use client"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -43,13 +45,28 @@ const services = [
 
 export default function ServiceCards() {
   return (
-    <section className="px-4 md:px-8 py-12 md:py-16" aria-label="Hizmet kartları">
+    <motion.section 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8 }}
+      className="px-4 md:px-8 py-12 md:py-16" 
+      aria-label="Hizmet kartları"
+    >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-        {services.map((service) => (
-          <Card
+        {services.map((service, index) => (
+          <motion.div
             key={service.id}
-            className={`${service.bgColor} dark:bg-card dark:border-border border-0 hover:shadow-lg transition-all duration-300 hover:scale-105`}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: index * 0.2 }}
+            whileHover={{ y: -10, scale: 1.02 }}
+            className="h-full"
           >
+            <Card
+              className={`${service.bgColor} dark:bg-card dark:border-border border-0 hover:shadow-lg transition-all duration-300 h-full`}
+            >
             <CardContent className="p-6 md:p-8 text-center">
               <p className={`text-xl md:text-2xl font-light italic ${service.scriptColor} dark:text-primary mb-2`}>
                 {service.scriptText}
@@ -77,9 +94,10 @@ export default function ServiceCards() {
                 </Button>
               </Link>
             </CardContent>
-          </Card>
+            </Card>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }
