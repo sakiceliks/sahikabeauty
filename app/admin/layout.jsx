@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { authService } from "@/lib/auth"
 import LoginForm from "../../components/Auth/LoginForm.jsx"
-import Sidebar from "../../components/Admin/Sidebar.jsx"
+import Sidebar from "@/components/Admin/Sidebar.jsx"
 import AdminHeader from "../../components/Admin/AdminHeader.jsx"
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as HotToaster } from "react-hot-toast"
