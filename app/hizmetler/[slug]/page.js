@@ -439,8 +439,8 @@ const ServiceDetails = () => {
     { name: "Ana Sayfa", url: "/" },
     { name: "Hizmetler", url: "/hizmetler" },
     { name: "Sultanbeyli", url: "/hizmetler?location=sultanbeyli" },
-    { name: service.category, url: `/hizmetler?category=${service.category}` },
-    { name: service.title },
+    { name: service.category || "Kategori", url: `/hizmetler?category=${service.category}` },
+    { name: service.title || "Hizmet" },
   ]);
 
   const localBusinessSchema = generateLocalBusinessSchema(servicePageSEOData.businessInfo);
@@ -479,6 +479,14 @@ const ServiceDetails = () => {
   const getDeviceImageUrl = () => {
     if (service.device && service.device.imageUrl) return service.device.imageUrl;
     return "https://styirqnih357hnts.public.blob.vercel-storage.com/devices%5Cfalcon-4pro-png-1757973572136.png";
+  };
+
+  // Check if device information exists
+  const hasDeviceInfo = () => {
+    if (!service.device) return false;
+    if (typeof service.device === "string" && service.device.trim() !== "") return true;
+    if (typeof service.device === "object" && service.device.name && service.device.name.trim() !== "") return true;
+    return false;
   };
 
   return (
@@ -621,41 +629,43 @@ const ServiceDetails = () => {
                 viewport={{ once: true }}
                 className="space-y-8"
               >
-                {/* Technology card - enhanced with location context */}
-                <div className="card-professional">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <Award className="w-5 h-5 text-primary" />
+                {/* Technology card - enhanced with location context - only show if device info exists */}
+                {hasDeviceInfo() && (
+                  <div className="card-professional">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                        <Award className="w-5 h-5 text-primary" />
+                      </div>
+                      <h2 className="text-2xl font-semibold">Sultanbeyli'de Kullanılan Teknoloji</h2>
                     </div>
-                    <h2 className="text-2xl font-semibold">Sultanbeyli'de Kullanılan Teknoloji</h2>
+                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                      <div className="relative w-32 h-32 bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl overflow-hidden shadow-lg">
+                        <Image
+                          src={getDeviceImageUrl() || "/placeholder.svg"}
+                          alt={`${getDeviceName()} - Sultanbeyli güzellik merkezi cihazı`}
+                          fill
+                          className="object-contain p-4"
+                          onError={(e) => {
+                            e.target.src = "/assets/devices/default.png";
+                          }}
+                        />
+                      </div>
+                      <div className="flex-1 text-center sm:text-left">
+                        <h3 className="text-xl font-semibold text-primary mb-2">{getDeviceName()}</h3>
+                        <p className="text-muted-foreground mb-3">
+                          Sultanbeyli şubemizde en son teknoloji cihazlarla güvenli ve etkili uygulama. 
+                          FDA onaylı ve klinik olarak test edilmiş.
+                        </p>
+                        <Link 
+                          href="/teknoloji" 
+                          className="text-primary hover:text-secondary transition-colors text-sm font-medium"
+                        >
+                          Teknoloji Detayları →
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-center gap-6">
-                    <div className="relative w-32 h-32 bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl overflow-hidden shadow-lg">
-                      <Image
-                        src={getDeviceImageUrl() || "/placeholder.svg"}
-                        alt={`${getDeviceName()} - Sultanbeyli güzellik merkezi cihazı`}
-                        fill
-                        className="object-contain p-4"
-                        onError={(e) => {
-                          e.target.src = "/assets/devices/default.png";
-                        }}
-                      />
-                    </div>
-                    <div className="flex-1 text-center sm:text-left">
-                      <h3 className="text-xl font-semibold text-primary mb-2">{getDeviceName()}</h3>
-                      <p className="text-muted-foreground mb-3">
-                        Sultanbeyli şubemizde en son teknoloji cihazlarla güvenli ve etkili uygulama. 
-                        FDA onaylı ve klinik olarak test edilmiş.
-                      </p>
-                      <Link 
-                        href="/teknoloji" 
-                        className="text-primary hover:text-secondary transition-colors text-sm font-medium"
-                      >
-                        Teknoloji Detayları →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 {/* Enhanced Benefits with location context */}
                 <div className="card-professional">

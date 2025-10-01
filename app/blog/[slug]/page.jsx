@@ -103,7 +103,10 @@ const Page = async ({ params }) => {
     ? generateBreadcrumbSchema([
         { name: "Ana Sayfa", url: "/" },
         { name: "Blog", url: "/blog" },
-        { name: blogCategories.find((cat) => cat.id === post.category)?.name, url: `/blog?category=${post.category}` },
+        { 
+          name: blogCategories.find((cat) => cat.id === post.category)?.name || post.category || "Kategori", 
+          url: `/blog?category=${post.category}` 
+        },
         { name: post.title },
       ])
     : null

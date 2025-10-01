@@ -135,44 +135,127 @@ export default function HeroCarousel() {
                 transition={{ duration: 1, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
-                {/* Background Image with Parallax and Zoom Effect */}
-                <div
-                  className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-&lsqb;6000ms&rsqb; ease-out ${
-                    index === currentSlide ? "scale-110" : "scale-105"
-                  }`}
+                {/* Background Image with Enhanced Parallax and Zoom Effect */}
+                <motion.div
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                   style={{
                     backgroundImage: `url(${slide.image})`,
-                    transform: index === currentSlide ? "scale(1.1)" : "scale(1.05)",
+                  }}
+                  initial={{ scale: 1.1, x: 0, y: 0 }}
+                  animate={{ 
+                    scale: 1.15,
+                    x: [0, -10, 10, 0],
+                    y: [0, -5, 5, 0]
+                  }}
+                  transition={{ 
+                    duration: 8,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatType: "reverse"
                   }}
                 >
-                  <div className="absolute inset-0 bg-black/30"></div>
-                </div>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/50"></div>
+                </motion.div>
 
-                {/* Content Overlay */}
+                {/* Content Overlay - Symmetric and Centered */}
                 <div className="relative z-10 h-full flex items-center justify-center">
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
-                    className="text-center text-white px-4 max-w-4xl mx-auto"
+                    className="text-center text-white px-6 md:px-8 lg:px-12 max-w-5xl mx-auto"
                   >
-                    <p className="text-base md:text-lg lg:text-xl font-light italic mb-4 tracking-wide">{slide.subtitle}</p>
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
-                      {slide.title}
-                    </h1>
-                    <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase mb-8">
-                      {slide.description}
-                    </p>
+                    {/* Subtitle with animated entrance and floating effect */}
+                    <motion.p 
+                      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0, 
+                        scale: 1,
+                        y: [0, -5, 0]
+                      }}
+                      transition={{ 
+                        duration: 0.6, 
+                        delay: 0.4,
+                        y: {
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }
+                      }}
+                      className="text-lg md:text-xl lg:text-2xl font-light italic mb-6 tracking-wide text-center drop-shadow-lg"
+                    >
+                      {slide.subtitle}
+                    </motion.p>
                     
-                    {/* Randevu Al Butonu */}
-                    <div className="flex justify-center">
-                      <Link
-                        href="/rezervasyon"
-                        className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
+                    {/* Main Title with staggered animation and subtle floating */}
+                    <motion.h1 
+                      initial={{ opacity: 0, y: 40, scale: 0.8 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0, 
+                        scale: 1,
+                        y: [0, -3, 0]
+                      }}
+                      transition={{ 
+                        duration: 0.8, 
+                        delay: 0.6, 
+                        ease: "easeOut",
+                        y: {
+                          duration: 6,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 1.5
+                        }
+                      }}
+                      className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.15em] md:tracking-[0.25em] mb-6 md:mb-8 text-center leading-tight drop-shadow-2xl"
+                    >
+                      {slide.title}
+                    </motion.h1>
+                    
+                    {/* Description with fade-in animation and subtle floating */}
+                    <motion.p 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0,
+                        y: [0, -2, 0]
+                      }}
+                      transition={{ 
+                        duration: 0.6, 
+                        delay: 0.8,
+                        y: {
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 2
+                        }
+                      }}
+                      className="text-sm md:text-base lg:text-lg font-light tracking-widest uppercase mb-10 text-center max-w-2xl mx-auto drop-shadow-md"
+                    >
+                      {slide.description}
+                    </motion.p>
+                    
+                    {/* Randevu Al Butonu with enhanced animation */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.6, delay: 1.0 }}
+                      className="flex justify-center"
+                    >
+                      <motion.div
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        📅 Randevu Al
-                      </Link>
-                    </div>
+                        <Link
+                          href="/rezervasyon"
+                          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 transform hover:shadow-2xl backdrop-blur-sm border border-white/30 shadow-lg"
+                        >
+                          📅 Randevu Al
+                        </Link>
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
                 </div>
               </motion.div>
@@ -211,7 +294,7 @@ export default function HeroCarousel() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-      </button>
+      </button> 
       <button
         onClick={() => goToSlide((currentSlide + 1) % heroSlides.length)}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
