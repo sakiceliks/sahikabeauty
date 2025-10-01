@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,42 @@ const Form = () => {
   })
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submissionStatus, setSubmissionStatus] = useState(null) // 'success' or 'error'
+  const [statusMessage, setStatusMessage] = useState("")
+
+  // --- Utility Component: Custom Notification/Toast ---
+  const StatusToast = ({ status, message, onClose }) => {
+    const isSuccess = status === 'success';
+    const bgColor = isSuccess ? 'bg-green-500' : 'bg-red-500';
+    const icon = isSuccess ? (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ) : (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    return (
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -50, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className={`absolute top-0 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-2xl z-50 text-white ${bgColor} flex items-center space-x-3 max-w-sm w-full mt-2`}
+      >
+        {icon}
+        <span className="font-medium text-sm flex-grow">{message}</span>
+        <button onClick={onClose} className="p-1 rounded-full hover:bg-white hover:bg-opacity-20 transition">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </motion.div>
+    );
+  };
+  // --- End Utility Component ---
 
   const validateForm = () => {
     const newErrors = {}
@@ -25,6 +61,7 @@ const Form = () => {
       newErrors.email = "Geçerli bir e-posta adresi girin"
     }
     
+    // Telefon numarasını sadece doluysa ve formata uymuyorsa kontrol et
     if (formData.phone && !/^0\d{3} \d{3} \d{2} \d{2}$/.test(formData.phone)) {
       newErrors.phone = "Geçerli telefon formatı: 0530 434 83 49"
     }
@@ -34,6 +71,11 @@ const Form = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    // Limit message length
+    if (name === 'message' && value.length > 500) {
+      return // Do not update state if over limit
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -51,10 +93,17 @@ const Form = () => {
   const handlePhoneChange = (e) => {
     let value = e.target.value.replace(/\D/g, "") // Remove all non-digits
     
-    // Format phone number
+    // Limit to 11 digits and apply formatting: XXXX YYY ZZ ZZ
     if (value.length > 0) {
-      value = value.substring(0, 11) // Limit to 11 digits
-      value = value.replace(/(\d{4})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4")
+      value = value.substring(0, 11)
+      
+      let formatted = ''
+      if (value.length >= 1) formatted += value.substring(0, 4)
+      if (value.length >= 5) formatted += ' ' + value.substring(4, 7)
+      if (value.length >= 8) formatted += ' ' + value.substring(7, 9)
+      if (value.length >= 10) formatted += ' ' + value.substring(9, 11)
+      
+      value = formatted;
     }
     
     setFormData(prev => ({
@@ -72,6 +121,8 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmissionStatus(null);
+    setStatusMessage("");
     const newErrors = validateForm()
     
     if (Object.keys(newErrors).length > 0) {
@@ -82,22 +133,41 @@ const Form = () => {
     setIsSubmitting(true)
     
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Reset form on success
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: ""
+      // Gerçek API çağrısı
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       })
       
-      alert("Mesajınız başarıyla gönderildi!")
+      const result = await response.json()
+      
+      if (result.success) {
+        // Başarı durumunda formu sıfırla ve bildirim göster
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: ""
+        })
+        setSubmissionStatus('success');
+        setStatusMessage("Mesajınız başarıyla gönderildi!");
+      } else {
+        throw new Error(result.error || 'Mesaj gönderilemedi')
+      }
+      
     } catch (error) {
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.")
+      // Hata durumunda bildirim göster
+      setSubmissionStatus('error');
+      setStatusMessage("Bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setIsSubmitting(false)
+      // Bildirimi 5 saniye sonra kapat
+      setTimeout(() => {
+        setSubmissionStatus(null);
+      }, 5000);
     }
   }
 
@@ -106,8 +176,31 @@ const Form = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-lg mx-auto"
+      className="w-full max-w-lg mx-auto relative"
     >
+      {/* Custom Tailwind CSS (for shake animation) */}
+      <style jsx global>{`
+        @keyframes shake {
+          0%, 100% {transform: translateX(0);}
+          10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+          20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+        .animate-shake {
+          animation: shake 0.5s;
+        }
+      `}</style>
+      
+      {/* Bildirim Alanı */}
+      <AnimatePresence>
+        {submissionStatus && (
+          <StatusToast 
+            status={submissionStatus} 
+            message={statusMessage} 
+            onClose={() => setSubmissionStatus(null)} 
+          />
+        )}
+      </AnimatePresence>
+
       <motion.form 
         onSubmit={handleSubmit} 
         className="space-y-6" 
@@ -117,7 +210,7 @@ const Form = () => {
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         {/* Name Field */}
-        <motion.div 
+        <motion.div // <--- Açılan etiket
           className="space-y-2"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -168,7 +261,7 @@ const Form = () => {
               {errors.name}
             </p>
           )}
-        </div>
+        </motion.div> {/* <--- DÜZELTME: motion.div olarak kapatıldı */}
 
         {/* Email Field */}
         <motion.div 
@@ -222,7 +315,7 @@ const Form = () => {
               {errors.email}
             </p>
           )}
-        </div>
+        </motion.div>
 
         {/* Phone Field */}
         <motion.div 
@@ -277,7 +370,7 @@ const Form = () => {
           <p id="phone-format" className="text-xs text-gray-600">
             Format: 0530 434 83 49
           </p>
-        </div>
+        </motion.div>
 
         {/* Message Field */}
         <motion.div 
@@ -312,7 +405,7 @@ const Form = () => {
               {formData.message.length}/500
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Submit Button */}
         <motion.div 
@@ -357,7 +450,7 @@ const Form = () => {
                 Mesaj Gönder
               </>
             )}
-          </button>
+          </motion.button>
         </motion.div>
       </motion.form>
     </motion.div>

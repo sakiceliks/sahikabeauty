@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
+import { broadcastNotification } from "../notifications/route"
 
 // Telegram bot konfigürasyonu
 const getTelegramConfig = async () => {
@@ -51,17 +52,35 @@ const sendTelegramMessage = async (message) => {
 // GET - Tüm talepleri getir
 export async function GET() {
   try {
+    console.log("Talepler API: GET request started")
+    const startTime = Date.now()
+    
     const client = await clientPromise
+    console.log("Talepler API: MongoDB client connected")
+    
     const db = client.db("beauty_center")
     const collection = db.collection("talepler")
     
+    console.log("Talepler API: Starting database query...")
     const allTaleps = await collection.find().sort({ olusturmaTarihi: -1 }).toArray()
     
-    return NextResponse.json({ success: true, data: allTaleps })
+    const endTime = Date.now()
+    console.log(`Talepler API: Query completed in ${endTime - startTime}ms, found ${allTaleps.length} records`)
+    
+    return NextResponse.json({ 
+      success: true, 
+      data: allTaleps,
+      count: allTaleps.length,
+      queryTime: endTime - startTime
+    })
   } catch (error) {
-    console.error('Database query error:', error)
+    console.error('Talepler API: Database query error:', error)
     return NextResponse.json(
-      { success: false, error: "Sunucu hatası" },
+      { 
+        success: false, 
+        error: "Sunucu hatası: " + error.message,
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      },
       { status: 500 }
     )
   }
@@ -117,6 +136,25 @@ export async function POST(request) {
     } catch (telegramError) {
       console.error('Telegram mesajı gönderilemedi:', telegramError)
       // Telegram hatası olsa bile veritabanına kaydedildiği için devam et
+    }
+    
+    // Admin'lere SSE bildirimi gönder
+    try {
+      broadcastNotification({
+        type: 'new_reservation',
+        title: 'Yeni Rezervasyon',
+        message: `${body.isimSoyisim} adlı müşteriden yeni rezervasyon alındı`,
+        data: {
+          talepId: generatedTalepId,
+          isimSoyisim: body.isimSoyisim,
+          markaModel: body.markaModel,
+          telefonNo: body.telefonNo,
+          timestamp: now.toISOString()
+        }
+      })
+    } catch (sseError) {
+      console.error('SSE bildirimi gönderilemedi:', sseError)
+      // SSE hatası olsa bile devam et
     }
     
     return NextResponse.json({ 

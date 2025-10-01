@@ -92,15 +92,28 @@ export default function TaleplerPage() {
   // Talep durumunu güncelle
   const handleStatusUpdate = async () => {
     try {
+      console.log("Talep Admin: Updating status for talep:", selectedTalep.talepId)
+      console.log("Talep Admin: Edit form data:", editForm)
+      
+      // durumId'yi integer'a çevir
+      const updateData = {
+        durumId: parseInt(editForm.durumId),
+        not: editForm.not
+      }
+      
+      console.log("Talep Admin: Sending update data:", updateData)
+      
       const response = await fetch(`/api/talepler/${selectedTalep.talepId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify(updateData),
       })
 
+      console.log("Talep Admin: Response status:", response.status)
       const data = await response.json()
+      console.log("Talep Admin: Response data:", data)
 
       if (data.success) {
         toast.success("Talep durumu başarıyla güncellendi")

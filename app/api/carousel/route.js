@@ -1,50 +1,54 @@
 import { NextResponse } from "next/server"
-
-// Geçici veri - gerçek uygulamada veritabanından gelecek
-const carouselData = [
-  {
-    id: 1,
-    title: "•CİLT BAKIMI•",
-    subtitle: "Yeni Bir Sen Hayali Değil",
-    description: "Yaşınızı sorduklarında sadece gülümseyini",
-    image: "/slide/sld1.png",
-    order: 1,
-    active: true,
-  },
-  {
-    id: 2,
-    title: "•GÜZELLIK BAKIMI•",
-    subtitle: "Profesyonel Cilt Bakımı",
-    description: "En son teknoloji ile güzelliğinizi keşfedin",
-    image: "/slide/sld2.jpg",
-    order: 2,
-    active: true,
-  },
-  {
-    id: 3,
-    title: "•ANTI-AGING•",
-    subtitle: "Zamanı Durdurun",
-    description: "Gençliğinizi koruyun ve yaşlanma karşıtı bakım alın",
-    image: "/slide/sld3.png",
-    order: 3,
-    active: true,
-  },
-]
+import { CarouselModel } from "@/models/carousel.js"
+import { logPutAction, logDeleteAction } from "@/lib/logger"
 
 // GET - Tüm carousel verilerini getir
 export async function GET() {
   try {
-    const sortedData = carouselData.sort((a, b) => (a.order || 0) - (b.order || 0))
-    return NextResponse.json({
-      success: true,
-      data: sortedData,
-    })
+    console.log("Carousel API: GET request received")
+    
+    // Test MongoDB connection
+    try {
+      const client = await import('@/lib/mongodb').then(m => m.default);
+      await client;
+      console.log("Carousel API: MongoDB connection test passed");
+    } catch (connectionError) {
+      console.error("Carousel API: MongoDB connection test failed:", connectionError);
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Database connection failed"
+        },
+        { status: 500 }
+      );
+    }
+    
+    const result = await CarouselModel.getAll()
+    console.log("Carousel API: Model result:", result)
+    
+    if (result.success) {
+      console.log("Carousel API: Success, returning", result.data?.length || 0, "slides")
+      return NextResponse.json({
+        success: true,
+        data: result.data,
+      })
+    } else {
+      console.error("Carousel API: Model error:", result.error)
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+        },
+        { status: 500 },
+      )
+    }
   } catch (error) {
-    console.error("Carousel verileri getirirken hata:", error)
+    console.error("Carousel API: Unexpected error:", error)
     return NextResponse.json(
       {
         success: false,
         error: "Carousel verileri getirilemedi",
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       },
       { status: 500 },
     )
@@ -67,22 +71,31 @@ export async function POST(request) {
       )
     }
 
-    const newSlide = {
-      id: Math.max(...carouselData.map((s) => s.id), 0) + 1,
+    const slideData = {
       title,
       subtitle,
       description,
       image: image || "",
-      order: order || carouselData.length + 1,
+      order: order || 1,
       active: active !== false,
     }
 
-    carouselData.push(newSlide)
+    const result = await CarouselModel.create(slideData)
 
-    return NextResponse.json({
-      success: true,
-      data: newSlide,
-    })
+    if (result.success) {
+      return NextResponse.json({
+        success: true,
+        data: result.data,
+      })
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+        },
+        { status: 500 },
+      )
+    }
   } catch (error) {
     console.error("Carousel slide eklenirken hata:", error)
     return NextResponse.json(
@@ -111,32 +124,33 @@ export async function PUT(request) {
       )
     }
 
-    const slideIndex = carouselData.findIndex((slide) => slide.id === id)
-    if (slideIndex === -1) {
+    const updateData = {}
+    if (title !== undefined) updateData.title = title
+    if (subtitle !== undefined) updateData.subtitle = subtitle
+    if (description !== undefined) updateData.description = description
+    if (image !== undefined) updateData.image = image
+    if (order !== undefined) updateData.order = order
+    if (active !== undefined) updateData.active = active
+
+    const result = await CarouselModel.update(id, updateData)
+
+    if (result.success) {
+      // Log the action
+      await logPutAction(`/api/carousel/${id}`, "admin", `Carousel slide güncellendi: ${title}`)
+
+      return NextResponse.json({
+        success: true,
+        data: result.data,
+      })
+    } else {
       return NextResponse.json(
         {
           success: false,
-          error: "Slide bulunamadı",
+          error: result.error,
         },
         { status: 404 },
       )
     }
-
-    // Güncelle
-    carouselData[slideIndex] = {
-      ...carouselData[slideIndex],
-      ...(title !== undefined && { title }),
-      ...(subtitle !== undefined && { subtitle }),
-      ...(description !== undefined && { description }),
-      ...(image !== undefined && { image }),
-      ...(order !== undefined && { order }),
-      ...(active !== undefined && { active }),
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: carouselData[slideIndex],
-    })
   } catch (error) {
     console.error("Carousel slide güncellenirken hata:", error)
     return NextResponse.json(

@@ -140,6 +140,7 @@ export default function TestimonialsAdmin() {
 
     const formData = new FormData()
     formData.append("file", file)
+    formData.append("type", "testimonial") // Testimonial için özel type
 
     try {
       const response = await fetch("/api/upload", {
@@ -155,6 +156,8 @@ export default function TestimonialsAdmin() {
           [type]: data.url,
         }))
         toast.success("Fotoğraf yüklendi")
+      } else {
+        toast.error(data.error || "Fotoğraf yüklenirken hata oluştu")
       }
     } catch (error) {
       console.error("Error uploading image:", error)

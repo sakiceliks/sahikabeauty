@@ -1,43 +1,18 @@
 import { NextResponse } from "next/server"
+import { CarouselModel } from "@/models/carousel.js"
+import { logDeleteAction, logPutAction } from "@/lib/logger"
 
-// Geçici veri - gerçek uygulamada veritabanından gelecek
-const carouselData = [
-  {
-    id: 1,
-    title: "•CİLT BAKIMI•",
-    subtitle: "Yeni Bir Sen Hayali Değil",
-    description: "Yaşınızı sorduklarında sadece gülümseyini",
-    image: "/slide/sld1.png",
-    order: 1,
-    active: true,
-  },
-  {
-    id: 2,
-    title: "•GÜZELLIK BAKIMI•",
-    subtitle: "Profesyonel Cilt Bakımı",
-    description: "En son teknoloji ile güzelliğinizi keşfedin",
-    image: "/slide/sld2.jpg",
-    order: 2,
-    active: true,
-  },
-  {
-    id: 3,
-    title: "•ANTI-AGING•",
-    subtitle: "Zamanı Durdurun",
-    description: "Gençliğinizi koruyun ve yaşlanma karşıtı bakım alın",
-    image: "/slide/sld3.png",
-    order: 3,
-    active: true,
-  },
-]
-
-// DELETE - Carousel slide sil
-export async function DELETE(request, { params }) {
+// PUT - Carousel slide güncelle
+export async function PUT(request, { params }) {
   try {
     const { id } = params
-    const slideId = Number.parseInt(id)
+    const body = await request.json()
+    const { title, subtitle, description, image, order, active } = body
 
-    if (!slideId) {
+    console.log("Carousel PUT: Updating slide with ID:", id)
+    console.log("Carousel PUT: Update data:", body)
+
+    if (!id) {
       return NextResponse.json(
         {
           success: false,
@@ -47,24 +22,81 @@ export async function DELETE(request, { params }) {
       )
     }
 
-    const slideIndex = carouselData.findIndex((slide) => slide.id === slideId)
-    if (slideIndex === -1) {
+    const updateData = {}
+    if (title !== undefined) updateData.title = title
+    if (subtitle !== undefined) updateData.subtitle = subtitle
+    if (description !== undefined) updateData.description = description
+    if (image !== undefined) updateData.image = image
+    if (order !== undefined) updateData.order = order
+    if (active !== undefined) updateData.active = active
+
+    console.log("Carousel PUT: Update data to send:", updateData)
+
+    const result = await CarouselModel.update(id, updateData)
+
+    if (result.success) {
+      // Log the action
+      await logPutAction(`/api/carousel/${id}`, "admin", `Carousel slide güncellendi: ${title}`)
+
+      return NextResponse.json({
+        success: true,
+        data: result.data,
+      })
+    } else {
       return NextResponse.json(
         {
           success: false,
-          error: "Slide bulunamadı",
+          error: result.error,
         },
         { status: 404 },
       )
     }
+  } catch (error) {
+    console.error("Carousel slide güncellenirken hata:", error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Carousel slide güncellenemedi",
+      },
+      { status: 500 },
+    )
+  }
+}
 
-    // Slide'ı sil
-    const deletedSlide = carouselData.splice(slideIndex, 1)[0]
+// DELETE - Carousel slide sil
+export async function DELETE(request, { params }) {
+  try {
+    const { id } = params
 
-    return NextResponse.json({
-      success: true,
-      data: deletedSlide,
-    })
+    if (!id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçerli bir slide ID gereklidir",
+        },
+        { status: 400 },
+      )
+    }
+
+    const result = await CarouselModel.delete(id)
+
+    if (result.success) {
+      // Log the action
+      await logDeleteAction(`/api/carousel/${id}`, "admin", `Carousel slide silindi`)
+
+      return NextResponse.json({
+        success: true,
+        data: result.data,
+      })
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+        },
+        { status: 404 },
+      )
+    }
   } catch (error) {
     console.error("Carousel slide silinirken hata:", error)
     return NextResponse.json(

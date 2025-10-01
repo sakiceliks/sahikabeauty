@@ -9,7 +9,14 @@ export async function GET(request) {
 
     let testimonials
     if (serviceId) {
-      testimonials = await testimonialModel.findByServiceId(parseInt(serviceId))
+      // Hem number hem de string serviceId'leri kabul et
+      const numericServiceId = parseInt(serviceId)
+      if (!isNaN(numericServiceId)) {
+        testimonials = await testimonialModel.findByServiceId(numericServiceId)
+      } else {
+        // String ise tüm testimonials'ı getir
+        testimonials = await testimonialModel.findAll()
+      }
     } else {
       testimonials = await testimonialModel.findAll()
     }

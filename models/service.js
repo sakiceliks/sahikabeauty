@@ -1,131 +1,129 @@
-import clientPromise from '../lib/mongodb';
+import clientPromise from "@/lib/mongodb"
+import { ObjectId } from "mongodb"
 
 export class ServiceModel {
-  constructor() {
-    this.collectionName = 'services';
-  }
-
-  async getCollection() {
-    const client = await clientPromise;
-    const db = client.db('beauty_center');
-    return db.collection(this.collectionName);
-  }
-
-  async findAll() {
+  static async getAll() {
     try {
-      const collection = await this.getCollection();
-      const services = await collection.find({}).sort({ id: 1 }).toArray();
-      return services;
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const services = await db.collection("services").find({}).sort({ createdAt: -1 }).toArray()
+      return { success: true, data: services }
     } catch (error) {
-      throw new Error(`Error fetching services: ${error.message}`);
+      console.error("Error getting all services:", error)
+      return { success: false, error: "Services could not be retrieved." }
     }
   }
 
-  async findById(id) {
+  static async getById(id) {
     try {
-      const collection = await this.getCollection();
-      const service = await collection.findOne({ id: parseInt(id) });
-      return service;
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const service = await db.collection("services").findOne({ _id: new ObjectId(id) })
+      return { success: true, data: service }
     } catch (error) {
-      throw new Error(`Error fetching service: ${error.message}`);
+      console.error("Error getting service by id:", error)
+      return { success: false, error: "Service could not be retrieved." }
     }
   }
 
-  async findBySlug(slug) {
+  static async create(serviceData) {
     try {
-      const collection = await this.getCollection();
-      const service = await collection.findOne({ slug });
-      return service;
-    } catch (error) {
-      throw new Error(`Error fetching service: ${error.message}`);
-    }
-  }
-
-  async findByCategory(category) {
-    try {
-      const collection = await this.getCollection();
-      const services = await collection.find({ category }).sort({ id: 1 }).toArray();
-      return services;
-    } catch (error) {
-      throw new Error(`Error fetching services by category: ${error.message}`);
-    }
-  }
-
-  async create(serviceData) {
-    try {
-      const collection = await this.getCollection();
-      
-      // Get the highest ID to auto-increment
-      const lastService = await collection.findOne({}, { sort: { id: -1 } });
-      const newId = lastService ? lastService.id + 1 : 1;
-      
-      const newService = {
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const result = await db.collection("services").insertOne({
         ...serviceData,
-        id: newId,
         createdAt: new Date(),
         updatedAt: new Date()
-      };
-
-      const result = await collection.insertOne(newService);
-      return { ...newService, _id: result.insertedId };
+      })
+      return { success: true, data: { _id: result.insertedId, ...serviceData } }
     } catch (error) {
-      throw new Error(`Error creating service: ${error.message}`);
+      console.error("Error creating service:", error)
+      return { success: false, error: "Service could not be created." }
     }
   }
 
-  async update(id, updateData) {
+  static async update(id, updateData) {
     try {
-      const collection = await this.getCollection();
+      console.log("ServiceModel.update called with:", { id, updateData });
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const objectId = new ObjectId(id)
+      console.log("ObjectId created:", objectId);
       
-      const updatedService = {
-        ...updateData,
-        updatedAt: new Date()
-      };
-
-      const result = await collection.updateOne(
-        { id: parseInt(id) },
-        { $set: updatedService }
+      // First check if service exists
+      const existingService = await db.collection("services").findOne({ _id: objectId });
+      console.log("Existing service:", existingService);
+      
+      if (!existingService) {
+        console.log("Service not found in database");
+        return { success: false, error: "Service not found." }
+      }
+      
+      // Update the service
+      const updateResult = await db.collection("services").updateOne(
+        { _id: objectId },
+        { $set: { ...updateData, updatedAt: new Date() } }
       );
-
-      if (result.matchedCount === 0) {
-        throw new Error('Service not found');
-      }
-
-      return await this.findById(id);
-    } catch (error) {
-      throw new Error(`Error updating service: ${error.message}`);
-    }
-  }
-
-  async delete(id) {
-    try {
-      const collection = await this.getCollection();
-      const result = await collection.deleteOne({ id: parseInt(id) });
+      console.log("Update result:", updateResult);
       
-      if (result.deletedCount === 0) {
-        throw new Error('Service not found');
+      if (updateResult.modifiedCount > 0) {
+        // Fetch the updated service
+        const updatedService = await db.collection("services").findOne({ _id: objectId });
+        console.log("Updated service:", updatedService);
+        return { success: true, data: updatedService }
+      } else {
+        console.log("No changes made to service");
+        return { success: false, error: "Service could not be updated." }
       }
-
-      return { success: true, message: 'Service deleted successfully' };
     } catch (error) {
-      throw new Error(`Error deleting service: ${error.message}`);
+      console.error("Error updating service:", error)
+      return { success: false, error: "Service could not be updated." }
     }
   }
 
-  async search(query) {
+  static async delete(id) {
     try {
-      const collection = await this.getCollection();
-      const services = await collection.find({
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const objectId = new ObjectId(id)
+      const result = await db.collection("services").deleteOne({ _id: objectId })
+      if (result.deletedCount === 1) {
+        return { success: true, data: { id } }
+      } else {
+        return { success: false, error: "Service not found." }
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error)
+      return { success: false, error: "Service could not be deleted." }
+    }
+  }
+
+  static async search(searchTerm) {
+    try {
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const services = await db.collection("services").find({
         $or: [
-          { title: { $regex: query, $options: 'i' } },
-          { description: { $regex: query, $options: 'i' } },
-          { category: { $regex: query, $options: 'i' } }
+          { title: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } }
         ]
-      }).sort({ id: 1 }).toArray();
-      
-      return services;
+      }).sort({ createdAt: -1 }).toArray()
+      return { success: true, data: services }
     } catch (error) {
-      throw new Error(`Error searching services: ${error.message}`);
+      console.error("Error searching services:", error)
+      return { success: false, error: "Services search failed." }
+    }
+  }
+
+  static async findByCategory(category) {
+    try {
+      const client = await clientPromise
+      const db = client.db("beauty_center")
+      const services = await db.collection("services").find({ category }).sort({ createdAt: -1 }).toArray()
+      return { success: true, data: services }
+    } catch (error) {
+      console.error("Error getting services by category:", error)
+      return { success: false, error: "Services could not be retrieved by category." }
     }
   }
 }

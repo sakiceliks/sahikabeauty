@@ -3,8 +3,7 @@ import { Marcellus } from "next/font/google"
 import { Poppins } from "next/font/google"
 import { Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import Header from "@/components/Header"
-import FloatingContactButtons from "@/components/FloatingContactButtons"
+import ConditionalLayout from "@/components/ConditionalLayout"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -125,10 +124,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr" className={`${marcellus.variable} ${poppins.variable}`}>
       <head>
-        {/* Favicon - Google için optimize edilmiş */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        {/* Favicon - PNG formatında optimize edilmiş */}
         <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
         <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
         <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
@@ -213,20 +209,12 @@ export default function RootLayout({ children }) {
         <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <style>{`
-          html {
-            font-family: ${poppins.style.fontFamily};
-            --font-heading: ${marcellus.variable};
-            --font-body: ${poppins.variable};
-            --font-elegant: ${playfair.variable};
-          }
-        `}</style>
       </head>
       <body className="font-body">
         <Suspense fallback={null}>
-          <Header />
-          {children}
-          <FloatingContactButtons />
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
           <Toaster />
         </Suspense>
         <Analytics />

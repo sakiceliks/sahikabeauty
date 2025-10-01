@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font definitions to prevent hydration issues */
+html {
+  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-marcellus);
+  --font-body: var(--font-poppins);
+  --font-elegant: var(--font-playfair);
+}
+
 /* Custom animations for Framer Motion replacement */
 @keyframes fadeInUp {
   from {

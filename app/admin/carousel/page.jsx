@@ -22,17 +22,40 @@ export default function CarouselYonetim() {
   const fetchSlides = async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/carousel")
+      console.log("Carousel Admin: Fetching slides...")
+      
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 saniye timeout
+      
+      const response = await fetch("/api/carousel", {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      console.log("Carousel Admin: Response status:", response.status)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log("Carousel Admin: Response data:", data)
 
       if (data.success) {
-        setSlides(data.data)
+        console.log("Carousel Admin: Success, setting", data.data?.length || 0, "slides")
+        setSlides(data.data || [])
       } else {
-        toast.error("Carousel verileri yüklenirken hata oluştu.")
+        console.error("Carousel Admin: API Error:", data.error)
+        toast.error(data.error || "Carousel verileri yüklenirken hata oluştu.")
       }
     } catch (error) {
-      console.error("Carousel verileri getirirken hata:", error)
-      toast.error("Carousel verileri yüklenirken hata oluştu.")
+      if (error.name === 'AbortError') {
+        console.error("Carousel Admin: Request timeout")
+        toast.error("Carousel verileri yüklenirken zaman aşımı oluştu.")
+      } else {
+        console.error("Carousel Admin: Fetch error:", error)
+        toast.error(`Carousel verileri yüklenirken hata oluştu: ${error.message}`)
+      }
     } finally {
       setLoading(false)
     }
@@ -107,10 +130,15 @@ export default function CarouselYonetim() {
     e.preventDefault()
 
     try {
-      const url = editingSlide ? `/api/carousel` : "/api/carousel"
+      const url = editingSlide ? `/api/carousel/${editingSlide._id || editingSlide.id}` : "/api/carousel"
       const method = editingSlide ? "PUT" : "POST"
 
-      const submitData = editingSlide ? { ...formData, id: editingSlide.id } : formData
+      const submitData = editingSlide ? formData : formData
+
+      console.log("Carousel Admin: Submitting form")
+      console.log("Carousel Admin: URL:", url)
+      console.log("Carousel Admin: Method:", method)
+      console.log("Carousel Admin: Data:", submitData)
 
       const response = await fetch(url, {
         method,
@@ -120,7 +148,9 @@ export default function CarouselYonetim() {
         body: JSON.stringify(submitData),
       })
 
+      console.log("Carousel Admin: Response status:", response.status)
       const data = await response.json()
+      console.log("Carousel Admin: Response data:", data)
 
       if (data.success) {
         await fetchSlides()
@@ -149,10 +179,11 @@ export default function CarouselYonetim() {
     setShowForm(true)
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (slide) => {
     if (!confirm("Bu slide silinsin mi?")) return
 
     try {
+      const id = slide._id || slide.id
       const response = await fetch(`/api/carousel/${id}`, {
         method: "DELETE",
       })
@@ -172,8 +203,9 @@ export default function CarouselYonetim() {
   }
 
   // Sıralama değiştir
-  const handleOrderChange = async (id, newOrder) => {
+  const handleOrderChange = async (slide, newOrder) => {
     try {
+      const id = slide._id || slide.id
       const response = await fetch("/api/carousel", {
         method: "PUT",
         headers: {
@@ -247,18 +279,19 @@ export default function CarouselYonetim() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="h2 text-foreground">Ana Sayfa Carousel Yönetimi</h1>
-          <p className="text-muted-foreground mt-2">Ana sayfadaki carousel slide'larını yönetin ve düzenleyin</p>
+          <h1 className="text-2xl font-bold text-foreground">Ana Sayfa Carousel Yönetimi</h1>
+          <p className="text-muted-foreground mt-1">Ana sayfadaki carousel slide'larını yönetin ve düzenleyin</p>
         </div>
-        <button onClick={handleAddNew} className="btn-primary">
+        <button onClick={handleAddNew} className="btn-primary w-full sm:w-auto">
           Yeni Slide Ekle
         </button>
       </div>
 
-      <div className="card p-0 overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden lg:block card p-0 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-muted/20 border-b border-border">
@@ -281,20 +314,20 @@ export default function CarouselYonetim() {
                       <div className="flex items-center gap-2">
                         <span className="text-foreground font-medium">{slide.order || index + 1}</span>
                         <div className="flex flex-col gap-1">
-                          <button
-                            onClick={() => handleOrderChange(slide.id, (slide.order || index + 1) - 1)}
-                            disabled={index === 0}
-                            className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            ↑
-                          </button>
-                          <button
-                            onClick={() => handleOrderChange(slide.id, (slide.order || index + 1) + 1)}
-                            disabled={index === slides.length - 1}
-                            className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            ↓
-                          </button>
+                        <button
+                          onClick={() => handleOrderChange(slide, (slide.order || index + 1) - 1)}
+                          disabled={index === 0}
+                          className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          onClick={() => handleOrderChange(slide, (slide.order || index + 1) + 1)}
+                          disabled={index === slides.length - 1}
+                          className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          ↓
+                        </button>
                         </div>
                       </div>
                     </td>
@@ -335,7 +368,7 @@ export default function CarouselYonetim() {
                         >
                           Düzenle
                         </button>
-                        <button onClick={() => handleDelete(slide.id)} className="btn-destructive text-sm px-3 py-1">
+                        <button onClick={() => handleDelete(slide)} className="btn-destructive text-sm px-3 py-1">
                           Sil
                         </button>
                       </div>
@@ -349,15 +382,90 @@ export default function CarouselYonetim() {
         {slides.length === 0 && <div className="text-center py-8 text-muted-foreground">Hiç slide bulunamadı</div>}
       </div>
 
+      {/* Mobile Cards */}
+      <div className="lg:hidden space-y-4">
+        {slides
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .map((slide, index) => (
+            <div key={slide.id} className="card p-4">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-12 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                  {slide.image ? (
+                    <img
+                      src={slide.image || "/placeholder.svg"}
+                      alt={slide.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                      Görsel Yok
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-medium text-muted-foreground">#{slide.order || index + 1}</span>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        slide.active !== false
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-destructive/20 text-destructive"
+                      }`}
+                    >
+                      {slide.active !== false ? "Aktif" : "Pasif"}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-1">{slide.title}</h3>
+                  <p className="text-sm text-foreground mb-1">{slide.subtitle}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{slide.description}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => handleOrderChange(slide, (slide.order || index + 1) - 1)}
+                    disabled={index === 0}
+                    className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    onClick={() => handleOrderChange(slide, (slide.order || index + 1) + 1)}
+                    disabled={index === slides.length - 1}
+                    className="text-xs px-2 py-1 bg-accent/20 hover:bg-accent/30 text-accent rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    ↓
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(slide)}
+                    className="bg-accent/20 hover:bg-accent/30 text-accent px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    Düzenle
+                  </button>
+                  <button onClick={() => handleDelete(slide)} className="btn-destructive text-sm px-3 py-1">
+                    Sil
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        
+        {slides.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">Hiç slide bulunamadı</div>
+        )}
+      </div>
+
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-card rounded-lg shadow-xl p-4 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold text-card-foreground mb-6">
               {editingSlide ? "Slide Düzenle" : "Yeni Slide Ekle"}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-card-foreground mb-2">Başlık *</label>
                   <input
@@ -463,14 +571,14 @@ export default function CarouselYonetim() {
               </div>
 
               {/* Form Actions */}
-              <div className="flex justify-end space-x-4 pt-6">
-                <button type="button" onClick={resetForm} className="btn-secondary">
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-4 md:pt-6">
+                <button type="button" onClick={resetForm} className="btn-secondary w-full sm:w-auto">
                   İptal
                 </button>
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {uploading ? "İşleniyor..." : editingSlide ? "Slide Güncelle" : "Slide Oluştur"}
                 </button>

@@ -40,7 +40,12 @@ export async function PUT(request, { params }) {
     const body = await request.json()
     const { durumId, not } = body
 
+    console.log("Talep API: PUT request received")
+    console.log("Talep API: Params:", params)
+    console.log("Talep API: Body:", body)
+
     if (!durumId) {
+      console.log("Talep API: Missing durumId")
       return NextResponse.json(
         { success: false, error: "Durum ID gereklidir" },
         { status: 400 }
@@ -52,8 +57,10 @@ export async function PUT(request, { params }) {
     const collection = db.collection("talepler")
 
     const talepId = parseInt(params.id)
+    console.log("Talep API: Parsed talepId:", talepId)
 
     if (isNaN(talepId)) {
+      console.log("Talep API: Invalid talepId format")
       return NextResponse.json(
         { success: false, error: "Geçersiz Talep ID formatı" },
         { status: 400 }
@@ -69,26 +76,33 @@ export async function PUT(request, { params }) {
       updateData.not = not
     }
 
+    console.log("Talep API: Update data:", updateData)
+    console.log("Talep API: Searching for talepId:", talepId)
+
     const result = await collection.updateOne(
       { talepId: talepId },
       { $set: updateData }
     )
 
+    console.log("Talep API: Update result:", result)
+
     if (result.matchedCount === 0) {
+      console.log("Talep API: No talep found with ID:", talepId)
       return NextResponse.json(
         { success: false, error: "Talep bulunamadı" },
         { status: 404 }
       )
     }
 
+    console.log("Talep API: Successfully updated talep:", talepId)
     return NextResponse.json({ 
       success: true, 
       message: "Talep durumu başarıyla güncellendi" 
     })
   } catch (error) {
-    console.error('Update error:', error)
+    console.error('Talep API: Update error:', error)
     return NextResponse.json(
-      { success: false, error: "Sunucu hatası" },
+      { success: false, error: "Sunucu hatası: " + error.message },
       { status: 500 }
     )
   }

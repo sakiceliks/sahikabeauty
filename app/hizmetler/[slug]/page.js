@@ -370,7 +370,9 @@ const ServiceDetails = () => {
         if (serviceData.success) {
           setService(serviceData.data);
           
-          const testimonialsRes = await fetch(`/api/testimonial?serviceId=${serviceData.data._id}&approved=true`);
+          // Service ID'yi kontrol et - MongoDB _id veya static id
+          const serviceId = serviceData.data.id || serviceData.data._id;
+          const testimonialsRes = await fetch(`/api/testimonial?serviceId=${serviceId}&approved=true`);
           const testimonialsData = await testimonialsRes.json();
           
           if (testimonialsData.success) {
@@ -823,108 +825,199 @@ const ServiceDetails = () => {
               className="mb-16"
             >
               <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-6">
+                  <Star className="w-4 h-4 fill-white" />
+                  Müşteri Deneyimleri
+                </div>
                 <h2 className="h2 text-gradient mb-4">Sultanbeyli Müşteri Deneyimleri</h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  {service.title} hizmetini Sultanbeyli şubemizde deneyimleyen müşterilerimizin gerçek yorumları
+                  {service.title} hizmetini Sultanbeyli şubemizde deneyimleyen müşterilerimizin gerçek yorumları ve before/after fotoğrafları
                 </p>
               </div>
               
               {testimonialsLoading ? (
-                <div className="text-center py-8">
-                  <div className="text-lg">Sultanbeyli müşteri yorumları yükleniyor...</div>
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                  <div className="text-lg text-muted-foreground">Sultanbeyli müşteri yorumları yükleniyor...</div>
                 </div>
               ) : allTestimonials.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {allTestimonials.map((review, index) => (
+                <div className="space-y-8">
+                  {/* Before/After Gallery */}
+                  {allTestimonials.some(review => review.beforeImage || review.afterImage) && (
                     <motion.div
-                      key={review.id}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ duration: 0.6 }}
                       viewport={{ once: true }}
-                      className="card-professional group hover:shadow-lg"
-                      itemScope
-                      itemType="https://schema.org/Review"
+                      className="mb-12"
                     >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
-                          <meta itemProp="ratingValue" content={review.rating || 5} />
-                          <meta itemProp="bestRating" content="5" />
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < (review.rating || 5) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"
-                              }`}
-                            />
+                      <h3 className="text-2xl font-bold text-center mb-8 text-gradient">Before & After Sonuçlar</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {allTestimonials
+                          .filter(review => review.beforeImage || review.afterImage)
+                          .map((review, index) => (
+                            <motion.div
+                              key={`gallery-${review.id || index}`}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: index * 0.1 }}
+                              viewport={{ once: true }}
+                              className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
+                            >
+                              <div className="grid grid-cols-2 gap-1">
+                                {review.beforeImage && (
+                                  <div className="relative h-48 bg-gray-100">
+                                    <Image
+                                      src={review.beforeImage}
+                                      alt={`${service.title} öncesi - ${review.name}`}
+                                      fill
+                                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                      <span className="bg-white/90 text-black px-3 py-1 rounded-full text-sm font-bold">
+                                        Öncesi
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                                {review.afterImage && (
+                                  <div className="relative h-48 bg-gray-100">
+                                    <Image
+                                      src={review.afterImage}
+                                      alt={`${service.title} sonrası - ${review.name}`}
+                                      fill
+                                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                      <span className="bg-white/90 text-black px-3 py-1 rounded-full text-sm font-bold">
+                                        Sonrası
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                                <div className="flex items-center gap-2 text-white">
+                                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">
+                                    {review.name.charAt(0)}
+                                  </div>
+                                  <div>
+                                    <p className="font-semibold text-sm">{review.name}</p>
+                                    <div className="flex items-center gap-1">
+                                      {[...Array(5)].map((_, i) => (
+                                        <Star
+                                          key={i}
+                                          className={`w-3 h-3 ${
+                                            i < (review.rating || 5) ? "fill-amber-400 text-amber-400" : "text-white/30"
+                                          }`}
+                                        />
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
                           ))}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          <span itemProp="datePublished">{review.date || "2024"}</span>
-                          <span className="ml-2 bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Sultanbeyli</span>
-                        </div>
-                      </div>
-                      
-                      <blockquote className="text-muted-foreground italic mb-4 leading-relaxed" itemProp="reviewBody">
-                        "{review.comment}"
-                      </blockquote>
-                      
-                      {(review.beforeImage || review.afterImage) && (
-                        <div className="mb-4">
-                          <div className="grid grid-cols-2 gap-2">
-                            {review.beforeImage && (
-                              <div>
-                                <p className="text-xs font-medium mb-1 text-center">Öncesi</p>
-                                <div className="relative w-full h-24 rounded-md overflow-hidden">
-                                  <Image
-                                    src={review.beforeImage || "/placeholder.svg"}
-                                    alt={`${service.title} öncesi - Sultanbeyli müşteri sonucu`}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                </div>
-                              </div>
-                            )}
-                            {review.afterImage && (
-                              <div>
-                                <p className="text-xs font-medium mb-1 text-center">Sonrası</p>
-                                <div className="relative w-full h-24 rounded-md overflow-hidden">
-                                  <Image
-                                    src={review.afterImage || "/placeholder.svg"}
-                                    alt={`${service.title} sonrası - Sultanbeyli müşteri sonucu`}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      <div className="flex items-center gap-3" itemProp="author" itemScope itemType="https://schema.org/Person">
-                        <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent text-white rounded-full flex items-center justify-center text-sm font-semibold">
-                          {review.name.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm" itemProp="name">{review.name}</p>
-                          <p className="text-xs text-muted-foreground">Sultanbeyli Doğrulanmış Müşteri</p>
-                        </div>
                       </div>
                     </motion.div>
-                  ))}
+                  )}
+
+                  {/* Testimonials Cards */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    <h3 className="text-2xl font-bold text-center mb-8 text-gradient">Müşteri Yorumları</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {allTestimonials.map((review, index) => (
+                        <motion.div
+                          key={review.id || index}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="group relative bg-white dark:bg-card rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-800 overflow-hidden"
+                          itemScope
+                          itemType="https://schema.org/Review"
+                        >
+                          {/* Gradient Background */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          
+                          <div className="relative p-6">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                                <meta itemProp="ratingValue" content={review.rating || 5} />
+                                <meta itemProp="bestRating" content="5" />
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                      i < (review.rating || 5) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="bg-gradient-to-r from-primary to-accent text-white px-3 py-1 rounded-full text-xs font-bold">
+                                  Sultanbeyli
+                                </span>
+                                <span className="text-xs text-muted-foreground" itemProp="datePublished">
+                                  {review.date || "2024"}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            {/* Quote */}
+                            <blockquote className="text-muted-foreground italic mb-6 leading-relaxed relative" itemProp="reviewBody">
+                              <div className="absolute -top-2 -left-2 text-4xl text-primary/20 font-serif">"</div>
+                              <div className="relative z-10 pl-4">
+                                {review.comment}
+                              </div>
+                              <div className="absolute -bottom-4 -right-2 text-4xl text-primary/20 font-serif">"</div>
+                            </blockquote>
+                            
+                            {/* Author */}
+                            <div className="flex items-center gap-3" itemProp="author" itemScope itemType="https://schema.org/Person">
+                              <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent text-white rounded-full flex items-center justify-center text-lg font-bold shadow-lg">
+                                {review.name.charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <p className="font-semibold text-sm" itemProp="name">{review.name}</p>
+                                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                  <CheckCircle className="w-3 h-3 text-green-500" />
+                                  Sultanbeyli Doğrulanmış Müşteri
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
                 </div>
               ) : (
-                <div className="text-center py-12 card-professional">
-                  <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">İlk Sultanbeyli Yorumu Siz Yapın!</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Bu hizmet için Sultanbeyli'den henüz yorum yapılmamış. Deneyiminizi paylaşın.
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                  className="text-center py-16 bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl border-2 border-dashed border-primary/20"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Sparkles className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gradient">İlk Sultanbeyli Yorumu Siz Yapın!</h3>
+                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                    Bu hizmet için Sultanbeyli'den henüz yorum yapılmamış. Deneyiminizi paylaşın ve diğer müşterilere yardımcı olun.
                   </p>
-                  <Link href="/yorum-yap" className="btn-primary">
+                  <Link href="/yorum-yap" className="btn-primary inline-flex items-center gap-2">
+                    <Star className="w-4 h-4" />
                     Yorum Yap
                   </Link>
-                </div>
+                </motion.div>
               )}
             </motion.section>
 

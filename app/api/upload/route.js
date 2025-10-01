@@ -4,13 +4,31 @@ import { NextResponse } from "next/server"
 import { join } from "path"
 
 export const runtime = "nodejs"
+export const maxDuration = 60 // 60 seconds timeout
 
 export async function POST(request) {
   try {
+    // Check if BLOB_READ_WRITE_TOKEN is configured
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      console.error("BLOB_READ_WRITE_TOKEN environment variable is not set")
+      return NextResponse.json({ 
+        success: false,
+        error: "Blob storage is not configured. Please set BLOB_READ_WRITE_TOKEN environment variable." 
+      }, { status: 500 })
+    }
+
     const formData = await request.formData()
     const file = formData.get("file")
     const type = formData.get("type") || "service"
     const deviceName = formData.get("deviceName")
+
+    console.log("Upload request received:", { 
+      fileName: file?.name, 
+      fileSize: file?.size, 
+      fileType: file?.type,
+      uploadType: type,
+      deviceName 
+    })
 
     if (!file) {
       return NextResponse.json({ error: "Dosya bulunamadı" }, { status: 400 })
@@ -32,6 +50,9 @@ export async function POST(request) {
         const extension = file.name.split(".").pop()
         fileName = `${deviceName.toLowerCase().replace(/\s+/g, "-")}.${extension}`
       }
+    } else if (type === "testimonial") {
+      // Testimonial görselleri için /testimonials/ klasörüne kaydet
+      folderPath = "testimonials/"
     } else {
       // Hizmet görselleri için /services/ klasörüne kaydet
       folderPath = "services/"
@@ -43,9 +64,35 @@ export async function POST(request) {
     const uniqueFileName = `${nameWithoutExt}-${timestamp}.${extension}`
 
     // Vercel Blob'a yükle
-    const blob = await put(join(folderPath, uniqueFileName), file, {
-      access: "public",
+    console.log("Uploading to Vercel Blob:", { 
+      path: join(folderPath, uniqueFileName),
       contentType: file.type,
+      fileSize: file.size 
+    })
+    
+    // Add timeout and retry logic
+    const uploadWithTimeout = async () => {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 45000) // 45 second timeout
+      
+      try {
+        const blob = await put(join(folderPath, uniqueFileName), file, {
+          access: "public",
+          contentType: file.type,
+        })
+        clearTimeout(timeoutId)
+        return blob
+      } catch (error) {
+        clearTimeout(timeoutId)
+        throw error
+      }
+    }
+    
+    const blob = await uploadWithTimeout()
+
+    console.log("Upload successful:", { 
+      url: blob.url,
+      pathname: blob.pathname 
     })
 
     return NextResponse.json({
@@ -57,12 +104,35 @@ export async function POST(request) {
     })
   } catch (error) {
     console.error("Yükleme hatası:", error)
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code
+    })
+    
+    // Handle specific error types
+    let errorMessage = "Yükleme başarısız"
+    let statusCode = 500
+    
+    if (error.name === 'AbortError' || error.code === 'ECONNRESET') {
+      errorMessage = "Dosya yükleme zaman aşımına uğradı. Lütfen daha küçük bir dosya deneyin."
+      statusCode = 408
+    } else if (error.message.includes('aborted')) {
+      errorMessage = "Bağlantı kesildi. Lütfen tekrar deneyin."
+      statusCode = 408
+    } else if (error.message.includes('BLOB_READ_WRITE_TOKEN')) {
+      errorMessage = "Depolama yapılandırması eksik. Lütfen yönetici ile iletişime geçin."
+      statusCode = 500
+    }
+    
     return NextResponse.json(
       {
         success: false,
-        error: "Yükleme başarısız: " + error.message,
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       },
-      { status: 500 },
+      { status: statusCode },
     )
   }
 }
