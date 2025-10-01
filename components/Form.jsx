@@ -218,7 +218,7 @@ const Form = () => {
         >
           <label 
             htmlFor="name" 
-            className="block text-sm font-semibold text-gray-800 transition-colors duration-200"
+            className="block text-sm font-semibold text-heading-primary transition-colors duration-200"
           >
             Ad Soyad <span className="text-red-500">*</span>
           </label>
@@ -272,7 +272,7 @@ const Form = () => {
         >
           <label 
             htmlFor="email" 
-            className="block text-sm font-semibold text-gray-800"
+            className="block text-sm font-semibold text-heading-primary"
           >
             E-posta Adresi <span className="text-red-500">*</span>
           </label>
@@ -326,7 +326,7 @@ const Form = () => {
         >
           <label 
             htmlFor="phone" 
-            className="block text-sm font-semibold text-gray-800"
+            className="block text-sm font-semibold text-heading-primary"
           >
             Telefon Numarası <span className="text-gray-500 text-xs">(Opsiyonel)</span>
           </label>
@@ -381,7 +381,7 @@ const Form = () => {
         >
           <label 
             htmlFor="message" 
-            className="block text-sm font-semibold text-gray-800"
+            className="block text-sm font-semibold text-heading-primary"
           >
             Mesajınız <span className="text-gray-500 text-xs">(Opsiyonel)</span>
           </label>

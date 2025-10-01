@@ -491,7 +491,7 @@ export default function AdminServicesPage() {
                 )}
                 {service.benefits && Array.isArray(service.benefits) && service.benefits.length > 0 && (
                   <div className="text-sm text-gray-600">
-                    <span className="font-bold text-gray-800">Faydalar:</span>
+                    <span className="font-bold text-heading-primary">Faydalar:</span>
                     <ul className="list-disc list-inside mt-1 space-y-1">
                       {service.benefits.slice(0, 2).map((benefit, idx) => (
                         <li key={idx} className="text-xs">{benefit}</li>

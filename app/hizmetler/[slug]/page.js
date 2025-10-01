@@ -723,7 +723,7 @@ const ServiceDetails = () => {
                 <div className="card-professional bg-gradient-to-r from-blue-50 to-purple-50 border-primary/20">
                   <h3 className="text-lg font-semibold mb-4">Hizmet Verdiğimiz Diğer Bölgeler</h3>
                   <div className="flex flex-wrap gap-3">
-                    {["Kartal", "Pendik", "Maltepe", "Tuzla"].map((location, index) => (
+                    {["Samandıra", "Pendik", "Sancaktepe", "Kurtköy"].map((location, index) => (
                       <Link
                         key={index}
                         href={`/hizmetler/${service.slug}-${location.toLowerCase()}`}

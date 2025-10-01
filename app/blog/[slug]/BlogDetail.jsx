@@ -56,7 +56,7 @@ const TableOfContents = ({ headings }) => {
       <h3 className="text-xl font-bold mb-4 text-primary">İçindekiler</h3>
       <ul className="list-none m-0 p-0 space-y-2">
         {headings.map((heading) => (
-          <li key={heading.id} className={`text-gray-700 hover:text-primary transition-colors ${heading.level === 3 ? 'pl-4 text-sm' : ''}`}>
+          <li key={heading.id} className={`text-gray-700 hover:text-link-primary transition-colors ${heading.level === 3 ? 'pl-4 text-sm' : ''}`}>
             <a href={`#${heading.id}`} className="block">
               {heading.text}
             </a>
@@ -290,9 +290,9 @@ const RelatedService = ({ service }) => {
             <div className="mt-4 text-sm text-gray-500">
               <strong>💡 İpucu:</strong> Hizmet sayfamızda detaylı bilgiler, fiyat listesi ve sıkça sorulan soruları bulabilirsiniz.
             </div>
-          </div>
         </div>
       </div>
+    </div>
   );
 };
 // Dummy icons for display
@@ -495,17 +495,19 @@ const EnhancedBlogDetail = ({ post, loading }) => {
     if (post) {
       // Static service data for fast matching
       const staticServices = [
-        { _id: 'yosun-peeling', slug: 'yosun-peeling', title: 'Yosun Peeling', description: 'Doğal yosun ile cilt yenileme', image: '/assets/services/yosun-peeling.png' },
-        { _id: 'lazer-epilasyon', slug: 'lazer-epilasyon', title: 'Lazer Epilasyon', description: 'Kalıcı epilasyon çözümü', image: '/assets/services/lazer-epilasyon.png' },
-        { _id: 'ipl-epilasyon', slug: 'ipl-epilasyon', title: 'IPL Epilasyon', description: 'Intense Pulsed Light epilasyon', image: '/slide/sld2.jpg' },
-        { _id: 'cilt-bakimi', slug: 'cilt-bakimi', title: 'Cilt Bakımı', description: 'Profesyonel cilt bakım hizmetleri', image: '/assets/services/cilt-bakimi.png' },
-        { _id: 'bolgesel-incelme', slug: 'bolgesel-incelme', title: 'Bölgesel İncelme', description: 'Bölgesel yağ yakma tedavileri', image: '/assets/services/EmSlimFit.png' },
-        { _id: 'kalici-makyaj', slug: 'kalici-makyaj', title: 'Kalıcı Makyaj', description: 'Kalıcı makyaj uygulamaları', image: '/assets/services/microblading.png' },
-        { _id: 'hydrafacial', slug: 'hydrafacial', title: 'HydraFacial', description: 'Gelişmiş cilt temizleme', image: '/slide/sld1.png' },
-        { _id: 'ozon-terapi', slug: 'ozon-terapi', title: 'Ozon Terapi', description: 'Ozon ile cilt tedavisi', image: '/slide/sld3.png' },
-        { _id: '24k-altin-bakim', slug: '24k-altin-bakim', title: '24K Altın Bakım', description: 'Lüks altın cilt bakımı', image: '/assets/services/primex.png' },
-        { _id: 'ignesiz-mezoterapi', slug: 'ignesiz-mezoterapi', title: 'İğnesiz Mezoterapi', description: 'İğnesiz cilt yenileme', image: '/assets/services/sculpture.png' },
-        { _id: 'dudak-renklendirme', slug: 'dudak-renklendirme', title: 'Dudak Renklendirme', description: 'Kalıcı dudak renklendirme', image: '/assets/services/dudak-renklendirme.png' }
+        { _id: 'yosun-peeling', slug: 'yosun-peeling', title: 'Yosun Peeling', description: 'Doğal yosun ile cilt yenileme', image: '/assets/services/yosun-peeling.png', benefits: ['Doğal içerik', 'Cilt yenileme', 'Güvenli uygulama'] },
+        { _id: 'lazer-epilasyon', slug: 'lazer-epilasyon', title: 'Lazer Epilasyon', description: 'Kalıcı epilasyon çözümü', image: '/assets/services/lazer-epilasyon.png', benefits: ['Kalıcı sonuç', 'Hızlı uygulama', 'Güvenli teknoloji'] },
+        { _id: 'ipl-epilasyon', slug: 'ipl-epilasyon', title: 'IPL Epilasyon', description: 'Intense Pulsed Light epilasyon', image: '/slide/sld2.jpg', benefits: ['Etkili sonuç', 'Rahat uygulama', 'Modern teknoloji'] },
+        { _id: 'cilt-bakimi', slug: 'cilt-bakimi', title: 'Cilt Bakımı', description: 'Profesyonel cilt bakım hizmetleri', image: '/assets/services/cilt-bakimi.png', benefits: ['Profesyonel bakım', 'Kişisel çözüm', 'Uzman ekip'] },
+        { _id: 'bolgesel-incelme', slug: 'bolgesel-incelme', title: 'Bölgesel İncelme', description: 'Bölgesel yağ yakma tedavileri', image: '/assets/services/EmSlimFit.png', benefits: ['Bölgesel çözüm', 'Etkili sonuç', 'Güvenli uygulama'] },
+        { _id: 'g5-masaji', slug: 'g5-masaji', title: 'G5 Masajı', description: 'Ödem attırıcı ve selülit karşıtı masaj uygulaması', image: '/slide/sld1.png', benefits: ['Selülit azalması', 'Ödem atma', 'Kan dolaşımı', 'Bölgesel incelme'] },
+        { _id: 'kalici-makyaj', slug: 'kalici-makyaj', title: 'Kalıcı Makyaj', description: 'Kalıcı makyaj uygulamaları', image: '/assets/services/microblading.png', benefits: ['Kalıcı sonuç', 'Doğal görünüm', 'Uzman teknik'] },
+        { _id: 'microblading', slug: 'microblading', title: 'Microblading', description: 'Profesyonel kaş microblading uygulaması', image: '/assets/services/microblading.png', benefits: ['Doğal kaş görünümü', 'Kalıcı sonuç', 'Uzman teknik', 'Kişisel tasarım'] },
+        { _id: 'hydrafacial', slug: 'hydrafacial', title: 'HydraFacial', description: 'Gelişmiş cilt temizleme', image: '/slide/sld1.png', benefits: ['Derin temizlik', 'Cilt yenileme', 'Rahat uygulama'] },
+        { _id: 'ozon-terapi', slug: 'ozon-terapi', title: 'Ozon Terapi', description: 'Ozon ile cilt tedavisi', image: '/slide/sld3.png', benefits: ['Doğal tedavi', 'Cilt sağlığı', 'Güvenli uygulama'] },
+        { _id: '24k-altin-bakim', slug: '24k-altin-bakim', title: '24K Altın Bakım', description: 'Lüks altın cilt bakımı', image: '/assets/services/primex.png', benefits: ['Lüks bakım', 'Altın içerik', 'Premium deneyim'] },
+        { _id: 'ignesiz-mezoterapi', slug: 'ignesiz-mezoterapi', title: 'İğnesiz Mezoterapi', description: 'İğnesiz cilt yenileme', image: '/assets/services/sculpture.png', benefits: ['İğnesiz uygulama', 'Rahat deneyim', 'Etkili sonuç'] },
+        { _id: 'dudak-renklendirme', slug: 'dudak-renklendirme', title: 'Dudak Renklendirme', description: 'Kalıcı dudak renklendirme', image: '/assets/services/dudak-renklendirme.png', benefits: ['Kalıcı renk', 'Doğal görünüm', 'Uzman teknik'] }
       ];
 
       let service = null;
@@ -518,6 +520,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
       // If no service found by serviceId, try to match by slug keywords
       if (!service && post.slug) {
         const slug = post.slug.toLowerCase();
+        console.log('BlogDetail - Matching by slug:', slug);
         
         // Fast keyword matching
         const keywordMappings = {
@@ -532,19 +535,31 @@ const EnhancedBlogDetail = ({ post, loading }) => {
           'incelme': 'bolgesel-incelme',
           'kalici': 'kalici-makyaj',
           'makyaj': 'kalici-makyaj',
+          'microblading': 'microblading',
+          'sculpture': 'ignesiz-mezoterapi',
+          'anti-age': '24k-altin-bakim',
           'hydrafacial': 'hydrafacial',
-          'ozon': 'ozon-terapi',
-          'terapi': 'ozon-terapi',
+          'ozon': 'ignesiz-mezoterapi',
+          'terapi': 'ignesiz-mezoterapi',
           'altin': '24k-altin-bakim',
+          'altin-tozu': '24k-altin-bakim',
           'mezoterapi': 'ignesiz-mezoterapi',
-          'dudak': 'dudak-renklendirme'
+          'dudak': 'dudak-renklendirme',
+          'g5': 'g5-masaji',
+          'masaj': 'g5-masaji',
+          'selulit': 'g5-masaji',
+          'odeme': 'g5-masaji'
         };
         
         // Find matching service by keywords
         for (const [keyword, serviceSlug] of Object.entries(keywordMappings)) {
           if (slug.includes(keyword)) {
+            console.log('BlogDetail - Found keyword match:', keyword, '->', serviceSlug);
             service = staticServices.find(s => s.slug === serviceSlug);
-            if (service) break;
+            if (service) {
+              console.log('BlogDetail - Service found:', service.title);
+              break;
+            }
           }
         }
       }
@@ -702,7 +717,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                 </li>
               </ol>
             </nav>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">{pageTitle}</h1>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-heading-primary mb-4">{pageTitle}</h1>
             <p className="text-xl text-gray-600 font-light max-w-2xl">{post.excerpt}</p>
           </header>
 
@@ -729,7 +744,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
               <article className="prose prose-lg max-w-none" itemScope itemType="https://schema.org/Article">
                 {/* Comprehensive content for SEO */}
                 <div className="text-gray-700 leading-relaxed mb-8" itemProp="articleBody">
-                  <h2 id="sultanbeyli-lazer-epilasyon" className="text-3xl font-bold text-gray-900 mb-6">Sultanbeyli'de Lazer Epilasyon Hizmetleri</h2>
+                  <h2 id="sultanbeyli-lazer-epilasyon" className="text-3xl font-bold text-heading-primary mb-6">Sultanbeyli'de Lazer Epilasyon Hizmetleri</h2>
                   
                   <p className="mb-6 text-lg">
                     Sultanbeyli'de bulunan Şahika Beauty güzellik merkezimiz, 8 yılı aşkın deneyimiyle bölgenin en güvenilir güzellik merkezi olarak hizmet vermektedir. 
@@ -750,21 +765,21 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                     lazer teknolojilerimiz sayesinde tüm cilt tiplerinde başarılı sonuçlar alıyoruz.
                   </p>
 
-                  <h2 id="sonrasi-bakim" className="text-3xl font-bold text-gray-900 mb-6">Lazer Epilasyon Sonrası Bakım</h2>
+                  <h2 id="sonrasi-bakim" className="text-3xl font-bold text-heading-secondary mb-6">Lazer Epilasyon Sonrası Bakım</h2>
                   <p className="mb-4">
                     Seans sonrası cildinizde hafif kızarıklık ve hassasiyet normaldir. Bu durum genellikle 24-48 saat içinde geçer. 
                     <strong>Güneş koruyucu kullanımı</strong>, <strong>düzenli nemlendirme</strong> ve <strong>sıcak su ile yıkanmama</strong> gibi 
                     bakım önerilerimizi takip ederek optimal sonuçlar elde edebilirsiniz.
                   </p>
 
-                  <h2 id="fiyat-avantajlari" className="text-3xl font-bold text-gray-900 mb-6">Sultanbeyli Şube Fiyat Avantajları</h2>
+                  <h2 id="fiyat-avantajlari" className="text-3xl font-bold text-heading-accent mb-6">Sultanbeyli Şube Fiyat Avantajları</h2>
                   <p className="mb-4">
                     Şahika Beauty Sultanbeyli şubemizde, kaliteli hizmeti uygun fiyatlarla sunuyoruz. <strong>Tam vücut lazer epilasyon paketimiz</strong> 
                     piyasa fiyatlarından %30 daha uygun olup, <strong>6 seanslık paketlerde</strong> ek indirimler sunuyoruz. 
                     <em>Şeffaf fiyatlandırma</em> politikamız sayesinde gizli maliyet yoktur.
                   </p>
 
-                  <h2 id="musteri-deneyimleri" className="text-3xl font-bold text-gray-900 mb-6">Müşteri Deneyimleri ve Başarı Hikayeleri</h2>
+                  <h2 id="musteri-deneyimleri" className="text-3xl font-bold text-heading-primary mb-6">Müşteri Deneyimleri ve Başarı Hikayeleri</h2>
                   <p className="mb-6">
                     Sultanbeyli'deki müşterilerimizin %95'i hizmetlerimizden memnun kalmaktadır. <strong>247+ doğrulanmış müşteri yorumumuz</strong> 
                     ve <strong>4.8/5 ortalama puanımız</strong> kalitemizin göstergesidir. Müşterilerimizin başarı hikayeleri, 
@@ -870,17 +885,17 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                 </div>
 
                 <LocalCitations />
-                
+
                 {sultanbeyliBlogData.seasonalContent && (
                   <SeasonalContent content={sultanbeyliBlogData.seasonalContent} />
                 )}
 
                 {/* Yorumlar ve SEO Footer */}
                 <section className="not-prose my-16 pt-8 border-t border-gray-100">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                  <h3 className="text-3xl font-bold text-heading-primary mb-8 text-center">
                     Müşteri Yorumları (4.8/5, 247 Yorum)
                   </h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {sultanbeyliBlogData.reviews.slice(0, 4).map((review, index) => (
                       <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-inner border border-gray-100">
@@ -890,28 +905,61 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                           <span className="ml-3 text-sm text-gray-500">
                             {review.author} - {review.date}
                           </span>
-                        </div>
+                          </div>
                         <p className="text-gray-700 italic">"{review.text}"</p>
-                      </div>
-                    ))}
-                  </div>
+                        </div>
+                      ))}
+                    </div>
 
                   <div className="mt-12 text-center">
                     <Link href="/yorum-ekle" className="inline-block bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors">
                       Yorumunuzu Ekleyin
-                    </Link>
-                  </div>
+                      </Link>
+                    </div>
                 </section>
+
+                {/* Hizmet Verdiğimiz Diğer Bölgeler */}
+                <div className="mt-16 pt-8 border-t border-gray-200">
+                  <h3 className="font-bold mb-6 text-xl text-center text-heading-primary">Hizmet Verdiğimiz Diğer Bölgeler</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[
+                      { name: 'Samandıra', slug: 'samandira' },
+                      { name: 'Pendik', slug: 'pendik' },
+                      { name: 'Sancaktepe', slug: 'sancaktepe' },
+                      { name: 'Kurtköy', slug: 'kurtkoy' }
+                    ].map((region, index) => (
+                      <Link
+                        key={index}
+                        href={`/bolgeler/${region.slug}`}
+                        className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300 group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">Ş</span>
+                    </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-800 group-hover:text-green-600 transition-colors">
+                              {region.name} Güzellik Merkezi
+                              </h4>
+                            <p className="text-sm text-gray-600">
+                              {region.name} bölgesinde profesyonel güzellik hizmetleri
+                            </p>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                  </div>
+                </div>
 
                 {/* SEO Footer Links */}
                 <div className="mt-16 pt-8 border-t border-gray-200 text-sm text-gray-500 text-center">
                   <h3 className="font-bold mb-4 text-lg">Diğer Sultanbeyli Hizmetlerimiz</h3>
                   <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-                    <li><Link href="/sultanbeyli/lazer-epilasyon" className="hover:text-primary hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
-                    <li><Link href="/sultanbeyli/cilt-bakimi" className="hover:text-primary hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
-                    <li><Link href="/sultanbeyli/kalici-makyaj" className="hover:text-primary hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
-                    <li><Link href="/sultanbeyli/bolgesel-incelme" className="hover:text-primary hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
-                    <li><Link href="/sultanbeyli/tirnak-protez" className="hover:text-primary hover:underline">Sultanbeyli Tırnak Protez</Link></li>
+                    <li><Link href="/sultanbeyli/lazer-epilasyon" className="text-link-primary hover:text-link-hover hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
+                    <li><Link href="/sultanbeyli/cilt-bakimi" className="text-link-primary hover:text-link-hover hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
+                    <li><Link href="/sultanbeyli/kalici-makyaj" className="text-link-primary hover:text-link-hover hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
+                    <li><Link href="/sultanbeyli/bolgesel-incelme" className="text-link-primary hover:text-link-hover hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
+                    <li><Link href="/sultanbeyli/tirnak-protez" className="text-link-primary hover:text-link-hover hover:underline">Sultanbeyli Tırnak Protez</Link></li>
                   </ul>
                 </div>
               </article>
@@ -947,34 +995,34 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                     <Calendar className="w-5 h-5" />
                     Online Randevu Al
                   </Link>
+                  </div>
                 </div>
-              </div>
 
               {/* Latest Posts */}
               <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Popüler Yazılar</h3>
-                <ul className="space-y-4">
+                  <ul className="space-y-4">
                   {/* Dummy popular posts */}
                   <li className="flex items-start gap-3">
                     <span className="text-2xl font-bold text-primary">01</span>
-                    <Link href="/blog/cilt-bakiminda-yeni-trendler" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                    <Link href="/blog/cilt-bakiminda-yeni-trendler" className="text-link-primary hover:text-link-hover hover:underline font-medium">
                       Cilt Bakımında 2024'ün En Yeni Trendleri
-                    </Link>
-                  </li>
+                        </Link>
+                    </li>
                   <li className="flex items-start gap-3">
                     <span className="text-2xl font-bold text-primary">02</span>
-                    <Link href="/blog/lazer-epilasyon-seans-sayisi" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                    <Link href="/blog/lazer-epilasyon-seans-sayisi" className="text-link-primary hover:text-link-hover hover:underline font-medium">
                       Lazer Epilasyon Kaç Seans Sürer?
-                    </Link>
+                        </Link>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-2xl font-bold text-primary">03</span>
-                    <Link href="/blog/dudak-renklendirme-kaliciligi" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                    <Link href="/blog/dudak-renklendirme-kaliciligi" className="text-link-primary hover:text-link-hover hover:underline font-medium">
                       Kalıcı Dudak Renklendirme Ne Kadar Kalıcı?
                     </Link>
-                  </li>
-                </ul>
-              </div>
+                    </li>
+                  </ul>
+                </div>
 
             </motion.aside>
           </div>

@@ -73,6 +73,28 @@ module.exports = {
           black: "#000000", // Pure black
           button: "#174067", // Button background color
         },
+        // Proje renk paleti - dikkat çekici renkler
+        brand: {
+          primary: "#2563eb", // Mavi - başlıklar için
+          secondary: "#059669", // Yeşil - linkler için
+          accent: "#dc2626", // Kırmızı - önemli vurgular için
+          warning: "#d97706", // Turuncu - uyarılar için
+          info: "#7c3aed", // Mor - bilgi için
+          success: "#16a34a", // Yeşil - başarı için
+        },
+        // Başlık renkleri
+        heading: {
+          primary: "#1e40af", // Koyu mavi - ana başlıklar
+          secondary: "#059669", // Yeşil - alt başlıklar
+          accent: "#dc2626", // Kırmızı - özel başlıklar
+        },
+        // Link renkleri
+        link: {
+          primary: "#2563eb", // Mavi - normal linkler
+          hover: "#1d4ed8", // Koyu mavi - hover
+          active: "#059669", // Yeşil - aktif linkler
+          visited: "#7c3aed", // Mor - ziyaret edilmiş
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

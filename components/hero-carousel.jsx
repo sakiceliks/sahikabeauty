@@ -215,7 +215,7 @@ export default function HeroCarousel() {
                           delay: 1.5
                         }
                       }}
-                      className="text-3xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.15em] md:tracking-[0.25em] mb-6 md:mb-8 text-center leading-tight drop-shadow-2xl whitespace-nowrap overflow-hidden"
+                      className="text-3xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 md:mb-8 text-center leading-tight drop-shadow-2xl whitespace-nowrap"
                     >
                       {slide.title}
                     </motion.h1>

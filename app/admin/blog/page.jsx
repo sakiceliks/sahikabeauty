@@ -58,11 +58,15 @@ export default function BlogYonetim() {
 
   const fetchServices = async () => {
     try {
+      console.log("Fetching services...")
       const response = await fetch("/api/services")
       const data = await response.json()
       
+      console.log("Services API response:", data)
+      
       if (data.success) {
         setServices(data.data)
+        console.log("Services loaded:", data.data.length)
       } else {
         console.error("Services fetch error:", data.error)
       }

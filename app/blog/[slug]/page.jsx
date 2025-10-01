@@ -120,7 +120,7 @@ const Page = async ({ params }) => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Blog yazısı bulunamadı</h1>
+          <h1 className="text-2xl font-bold text-heading-primary mb-4">Blog yazısı bulunamadı</h1>
           <Link href="/blog" className="text-primary hover:text-secondary transition-colors">
             Blog sayfasına dön
           </Link>

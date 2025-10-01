@@ -80,18 +80,18 @@ const Header = () => {
       )}
 
       <header className="pb-4 sm:pb-6 xl:pb-0 relative z-50 w-full bg-accent-100 xl:bg-transparent">
-        <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 py-4 xl:py-6 xl:min-h-[100px]">
+        <div className="container mx-auto flex items-center justify-between xl:justify-between px-6 sm:px-8 xl:px-12 py-4 xl:py-6">
           {/* Logo */}
           <motion.div 
-            className="flex-shrink-0 flex items-center h-full"
+            className="flex-shrink-0 flex items-center"
           >
             <Link href="/" aria-label="Sahika Beauty anasayfaya git">
               <Image 
-                src="/assets/logo.svg" 
-                width={500} 
-                height={150} 
-                sizes="(max-width: 640px) 200px, (max-width: 768px) 250px, 300px"
-                className="w-48 h-auto sm:w-[250px] xl:w-[300px] text-black"
+                src="/assets/wb-2.png" 
+                width={800} 
+                height={240} 
+                sizes="(max-width: 640px) 320px, (max-width: 768px) 400px, (max-width: 1280px) 480px, 640px"
+                className="w-80 h-24 sm:w-[400px] sm:h-30 xl:w-[480px] xl:h-36 object-contain"
                 priority 
                 alt="Sahika Beauty Logo"
                 quality={100}
