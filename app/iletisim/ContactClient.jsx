@@ -83,6 +83,8 @@ const ContactClient = () => {
 
   return (
     <>
+      {/* H1 Heading for SEO */}
+      
       {/* JSON-LD LocalBusiness Schema */}
       <script
         type="application/ld+json"

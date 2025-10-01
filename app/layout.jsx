@@ -204,7 +204,6 @@ export default function RootLayout({ children }) {
         
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Preload for performance */}
         <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />

@@ -405,6 +405,8 @@ const HomeClient = ({
   return (
     <>
       <JsonLd data={localBusinessSchema} />
+      {/* H1 Heading for SEO */}
+      <h1 className="sr-only">Şahika Beauty - Sultanbeyli Güzellik Merkezi</h1>
       <HeroCarousel />
       <StatsSection />
       <article
