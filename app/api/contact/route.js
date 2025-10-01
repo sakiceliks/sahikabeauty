@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
+import { logAction, logError } from "@/lib/logger"
 
 // POST - İletişim formu gönderimi
 export async function POST(request) {
@@ -23,6 +24,8 @@ export async function POST(request) {
     // Veritabanına kaydet
     const result = await collection.insertOne(contactData)
     
+    // Log the creation action
+    await logAction("POST", "/api/contact", "admin", "success", `Contact message received: ${body.name} - ${body.email}`);
     
     return NextResponse.json({ 
       success: true, 
@@ -31,6 +34,10 @@ export async function POST(request) {
     })
   } catch (error) {
     console.error('Contact form error:', error)
+    
+    // Log the error
+    await logError("POST", "/api/contact", "admin", error);
+    
     return NextResponse.json(
       { success: false, error: "Mesaj gönderilemedi" },
       { status: 500 }

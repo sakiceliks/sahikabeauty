@@ -125,8 +125,8 @@ export default function HeroCarousel() {
       {/* Carousel Container */}
       <div className="relative w-full h-full">
         <AnimatePresence mode="wait">
-          {heroSlides.map((slide, index) => (
-            index === currentSlide && (
+          {heroSlides.map((slide, index) => 
+            index === currentSlide ? (
               <motion.div
                 key={slide.id}
                 initial={{ opacity: 0, scale: 1.1 }}
@@ -135,49 +135,49 @@ export default function HeroCarousel() {
                 transition={{ duration: 1, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
-            {/* Background Image with Parallax and Zoom Effect */}
-            <div
-              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-&lsqb;6000ms&rsqb; ease-out ${
-                index === currentSlide ? "scale-110" : "scale-105"
-              }`}
-              style={{
-                backgroundImage: `url(${slide.image})`,
-                transform: index === currentSlide ? "scale(1.1)" : "scale(1.05)",
-              }}
-            >
-              <div className="absolute inset-0 bg-black/30"></div>
-            </div>
+                {/* Background Image with Parallax and Zoom Effect */}
+                <div
+                  className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-&lsqb;6000ms&rsqb; ease-out ${
+                    index === currentSlide ? "scale-110" : "scale-105"
+                  }`}
+                  style={{
+                    backgroundImage: `url(${slide.image})`,
+                    transform: index === currentSlide ? "scale(1.1)" : "scale(1.05)",
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black/30"></div>
+                </div>
 
-            {/* Content Overlay */}
-            <div className="relative z-10 h-full flex items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-center text-white px-4 max-w-4xl mx-auto"
-              >
-                <p className="text-base md:text-lg lg:text-xl font-light italic mb-4 tracking-wide">{slide.subtitle}</p>
-                <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
-                  {slide.title}
-                </h1>
-                <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase mb-8">
-                  {slide.description}
-                </p>
-                
-                {/* Randevu Al Butonu */}
-                <div className="flex justify-center">
-                  <Link
-                    href="/rezervasyon"
-                    className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
+                {/* Content Overlay */}
+                <div className="relative z-10 h-full flex items-center justify-center">
+                  <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    className="text-center text-white px-4 max-w-4xl mx-auto"
                   >
-                    📅 Randevu Al
-                  </Link>
+                    <p className="text-base md:text-lg lg:text-xl font-light italic mb-4 tracking-wide">{slide.subtitle}</p>
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6">
+                      {slide.title}
+                    </h1>
+                    <p className="text-xs md:text-sm lg:text-base font-light tracking-widest uppercase mb-8">
+                      {slide.description}
+                    </p>
+                    
+                    {/* Randevu Al Butonu */}
+                    <div className="flex justify-center">
+                      <Link
+                        href="/rezervasyon"
+                        className="bg-primary hover:from-pink-600 hover:to-purple-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl backdrop-blur-sm border border-white/20"
+                      >
+                        📅 Randevu Al
+                      </Link>
+                    </div>
+                  </motion.div>
                 </div>
               </motion.div>
-            </div>
-              </motion.div>
-            )
-          ))}
+            ) : null
+          )}
         </AnimatePresence>
       </div>
 

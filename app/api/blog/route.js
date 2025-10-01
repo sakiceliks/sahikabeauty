@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { BlogModel } from "@/models/blog"
+import { logAction, logError } from "@/lib/logger"
 
 const blogModel = new BlogModel()
 
@@ -54,8 +55,15 @@ export async function POST(request) {
     }
 
     const blog = await blogModel.create(body)
+    
+    // Log the creation action
+    await logAction("POST", "/api/blog", "admin", "success", `Blog post created: ${body.title}`);
+    
     return NextResponse.json({ success: true, data: blog }, { status: 201 })
   } catch (error) {
+    // Log the error
+    await logError("POST", "/api/blog", "admin", error);
+    
     return NextResponse.json({ success: false, error: error.message }, { status: 500 })
   }
 }

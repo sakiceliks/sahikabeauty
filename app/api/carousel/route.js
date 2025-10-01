@@ -83,11 +83,17 @@ export async function POST(request) {
     const result = await CarouselModel.create(slideData)
 
     if (result.success) {
+      // Log the creation action
+      await logAction("POST", "/api/carousel", "admin", "success", `Carousel slide created: ${title}`);
+      
       return NextResponse.json({
         success: true,
         data: result.data,
       })
     } else {
+      // Log the error
+      await logError("POST", "/api/carousel", "admin", new Error(result.error));
+      
       return NextResponse.json(
         {
           success: false,
@@ -97,6 +103,8 @@ export async function POST(request) {
       )
     }
   } catch (error) {
+    // Log the error
+    await logError("POST", "/api/carousel", "admin", error);
     console.error("Carousel slide eklenirken hata:", error)
     return NextResponse.json(
       {
@@ -143,6 +151,9 @@ export async function PUT(request) {
         data: result.data,
       })
     } else {
+      // Log the error
+      await logError("PUT", `/api/carousel/${id}`, "admin", new Error(result.error));
+      
       return NextResponse.json(
         {
           success: false,
@@ -153,6 +164,10 @@ export async function PUT(request) {
     }
   } catch (error) {
     console.error("Carousel slide güncellenirken hata:", error)
+    
+    // Log the error
+    await logError("PUT", `/api/carousel/${id}`, "admin", error);
+    
     return NextResponse.json(
       {
         success: false,

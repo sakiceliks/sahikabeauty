@@ -78,11 +78,17 @@ export async function POST(request) {
     const result = await ServiceModel.create(body);
 
     if (result.success) {
+      // Log the creation action
+      await logAction("POST", "/api/services", "admin", "success", `Service created: ${body.title}`);
+      
       return NextResponse.json({
         success: true,
         data: result.data,
       });
     } else {
+      // Log the error
+      await logError("POST", "/api/services", "admin", new Error(result.error));
+      
       return NextResponse.json(
         { 
           success: false, 
@@ -93,6 +99,10 @@ export async function POST(request) {
     }
   } catch (error) {
     console.error("Service creation error:", error);
+    
+    // Log the error
+    await logError("POST", "/api/services", "admin", error);
+    
     return NextResponse.json(
       { 
         success: false, 
@@ -130,6 +140,9 @@ export async function PUT(request) {
         data: result.data,
       });
     } else {
+      // Log the error
+      await logError("PUT", `/api/services/${id}`, "admin", new Error(result.error));
+      
       return NextResponse.json(
         { 
           success: false, 
@@ -140,6 +153,10 @@ export async function PUT(request) {
     }
   } catch (error) {
     console.error("Service update error:", error);
+    
+    // Log the error
+    await logError("PUT", `/api/services/${id}`, "admin", error);
+    
     return NextResponse.json(
       { 
         success: false, 

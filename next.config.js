@@ -14,8 +14,13 @@ const nextConfig = {
   
   // Image optimization
   images: {
-    domains: ['localhost', 'vercel.app'],
-    formats: ['image/webp', 'image/avif'],
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      }
+    ]
   },
   
   // Webpack configuration for better error handling

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { TestimonialModel } from "@/models/testimonial"
+import { logAction, logError } from "@/lib/logger"
 
 export async function GET(request) {
   try {
@@ -53,6 +54,9 @@ export async function POST(request) {
 
     console.log("[v0] Testimonial saved:", savedTestimonial._id)
 
+    // Log the creation action
+    await logAction("POST", "/api/testimonial", "admin", "success", `Testimonial created: ${body.name}`);
+
     return NextResponse.json(
       {
         success: true,
@@ -62,6 +66,10 @@ export async function POST(request) {
     )
   } catch (error) {
     console.error("[v0] POST testimonial error:", error)
+    
+    // Log the error
+    await logError("POST", "/api/testimonial", "admin", error);
+    
     return NextResponse.json(
       {
         success: false,

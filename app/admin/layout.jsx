@@ -65,7 +65,7 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex w-full">
       {/* Sidebar */}
       <Sidebar 
         user={user} 
@@ -75,7 +75,7 @@ export default function AdminLayout({ children }) {
       />
       
       {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:ml-80">
+      <div className="flex flex-col flex-1 w-full min-w-0">
         {/* Header */}
         <AdminHeader 
           user={user} 
@@ -85,9 +85,11 @@ export default function AdminLayout({ children }) {
         />
         
         {/* Page Content */}
-        <main className="flex-1 w-full overflow-y-auto">
-          <div className="w-full p-4 md:p-6 lg:p-8">
-            {children}
+        <main className="flex-1 w-full overflow-y-auto bg-gray-50 min-h-0">
+          <div className="w-full p-4 sm:p-6 md:p-8 lg:p-10 min-h-screen">
+            <div className="max-w-7xl mx-auto w-full">
+              {children}
+            </div>
           </div>
         </main>
       </div>

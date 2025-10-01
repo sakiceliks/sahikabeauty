@@ -14,7 +14,8 @@ import {
   Settings,
   Star,
   Clock,
-  DollarSign
+  DollarSign,
+  Loader2
 } from "lucide-react"
 
 export default function AdminServicesPage() {
@@ -26,6 +27,8 @@ export default function AdminServicesPage() {
   const [editingService, setEditingService] = useState(null)
   const [deviceImagePreview, setDeviceImagePreview] = useState(null)
   const [serviceImagePreview, setServiceImagePreview] = useState(null)
+  const [uploadingDeviceImage, setUploadingDeviceImage] = useState(false)
+  const [uploadingServiceImage, setUploadingServiceImage] = useState(false)
 
   // Hizmetleri getir
   const fetchServices = async () => {
@@ -147,30 +150,36 @@ export default function AdminServicesPage() {
       
       if (serviceImageFile?.size > 0) {
         console.log('Uploading service image...')
-        const serviceImageFormData = new FormData()
-        serviceImageFormData.append('file', serviceImageFile)
-        serviceImageFormData.append('type', 'service')
+        setUploadingServiceImage(true)
         
-        const serviceImageResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: serviceImageFormData,
-          signal: AbortSignal.timeout(60000) // 60 second timeout
-        })
-        
-        if (!serviceImageResponse.ok) {
-          throw new Error(`Upload failed with status: ${serviceImageResponse.status}`)
-        }
-        
-        const serviceImageData = await serviceImageResponse.json()
-        console.log('Service image upload response:', serviceImageData)
-        
-        if (serviceImageData.success) {
-          serviceImageUrl = serviceImageData.url
-          console.log('Service image uploaded successfully:', serviceImageUrl)
-        } else {
-          console.error('Service image upload failed:', serviceImageData.error)
-          toast.error(`Görsel yükleme hatası: ${serviceImageData.error}`)
-          return // Stop the save process if image upload fails
+        try {
+          const serviceImageFormData = new FormData()
+          serviceImageFormData.append('file', serviceImageFile)
+          serviceImageFormData.append('type', 'service')
+          
+          const serviceImageResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: serviceImageFormData,
+            signal: AbortSignal.timeout(60000) // 60 second timeout
+          })
+          
+          if (!serviceImageResponse.ok) {
+            throw new Error(`Upload failed with status: ${serviceImageResponse.status}`)
+          }
+          
+          const serviceImageData = await serviceImageResponse.json()
+          console.log('Service image upload response:', serviceImageData)
+          
+          if (serviceImageData.success) {
+            serviceImageUrl = serviceImageData.url
+            console.log('Service image uploaded successfully:', serviceImageUrl)
+          } else {
+            console.error('Service image upload failed:', serviceImageData.error)
+            toast.error(`Görsel yükleme hatası: ${serviceImageData.error}`)
+            return // Stop the save process if image upload fails
+          }
+        } finally {
+          setUploadingServiceImage(false)
         }
       } else {
         console.log('No service image file selected, keeping existing:', serviceImageUrl)
@@ -184,33 +193,39 @@ export default function AdminServicesPage() {
       
       if (deviceImageFile?.size > 0) {
         console.log('Uploading device image...')
-        const deviceImageFormData = new FormData()
-        deviceImageFormData.append('file', deviceImageFile)
-        deviceImageFormData.append('type', 'device')
-        deviceImageFormData.append('deviceName', formData.get('device'))
+        setUploadingDeviceImage(true)
         
-        console.log('Device name:', formData.get('device'))
-        
-        const deviceImageResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: deviceImageFormData,
-          signal: AbortSignal.timeout(60000) // 60 second timeout
-        })
-        
-        if (!deviceImageResponse.ok) {
-          throw new Error(`Device image upload failed with status: ${deviceImageResponse.status}`)
-        }
-        
-        const deviceImageData = await deviceImageResponse.json()
-        console.log('Device image upload response:', deviceImageData)
-        
-        if (deviceImageData.success) {
-          deviceImageUrl = deviceImageData.url
-          console.log('Device image uploaded successfully:', deviceImageUrl)
-        } else {
-          console.error('Device image upload failed:', deviceImageData.error)
-          toast.error(`Cihaz görseli yükleme hatası: ${deviceImageData.error}`)
-          return // Stop the save process if device image upload fails
+        try {
+          const deviceImageFormData = new FormData()
+          deviceImageFormData.append('file', deviceImageFile)
+          deviceImageFormData.append('type', 'device')
+          deviceImageFormData.append('deviceName', formData.get('device'))
+          
+          console.log('Device name:', formData.get('device'))
+          
+          const deviceImageResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: deviceImageFormData,
+            signal: AbortSignal.timeout(60000) // 60 second timeout
+          })
+          
+          if (!deviceImageResponse.ok) {
+            throw new Error(`Device image upload failed with status: ${deviceImageResponse.status}`)
+          }
+          
+          const deviceImageData = await deviceImageResponse.json()
+          console.log('Device image upload response:', deviceImageData)
+          
+          if (deviceImageData.success) {
+            deviceImageUrl = deviceImageData.url
+            console.log('Device image uploaded successfully:', deviceImageUrl)
+          } else {
+            console.error('Device image upload failed:', deviceImageData.error)
+            toast.error(`Cihaz görseli yükleme hatası: ${deviceImageData.error}`)
+            return // Stop the save process if device image upload fails
+          }
+        } finally {
+          setUploadingDeviceImage(false)
         }
       } else {
         console.log('No device image file selected, keeping existing:', deviceImageUrl)
@@ -302,17 +317,17 @@ export default function AdminServicesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 text-white">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Hizmet Yönetimi</h1>
-            <p className="text-blue-100 text-lg">Tüm hizmetleri yönetin ve düzenleyin</p>
-            <div className="mt-4 flex items-center gap-4">
-              <div className="bg-white/20 rounded-full px-4 py-2">
-                <span className="text-sm font-medium">Toplam: {services.length} hizmet</span>
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 text-white">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
+          <div className="flex-1">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">Hizmet Yönetimi</h1>
+            <p className="text-blue-100 text-lg sm:text-xl mb-4 sm:mb-6">Tüm hizmetleri yönetin ve düzenleyin</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="bg-white/20 rounded-full px-4 sm:px-6 py-2 sm:py-3">
+                <span className="text-sm sm:text-base font-semibold">Toplam: {services.length} hizmet</span>
               </div>
-              <div className="bg-white/20 rounded-full px-4 py-2">
-                <span className="text-sm font-medium">Yayında: {services.filter(s => s.published).length}</span>
+              <div className="bg-white/20 rounded-full px-4 sm:px-6 py-2 sm:py-3">
+                <span className="text-sm sm:text-base font-semibold">Yayında: {services.filter(s => s.published).length}</span>
               </div>
             </div>
           </div>
@@ -322,37 +337,37 @@ export default function AdminServicesPage() {
               setDeviceImagePreview(null)
               setServiceImagePreview(null)
             }}
-            className="bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-xl font-bold flex items-center gap-3 transition-all duration-200 hover:scale-105 shadow-lg"
+            className="bg-white text-blue-600 hover:bg-blue-50 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-3 sm:gap-4 transition-all duration-200 hover:scale-105 shadow-xl border-2 border-white/20 w-full sm:w-auto"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
             Yeni Hizmet Ekle
           </button>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Hizmet ara..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-lg"
+                className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-base sm:text-lg"
               />
             </div>
           </div>
 
           {/* Category Filter */}
-          <div className="sm:w-56">
+          <div className="w-full sm:w-56">
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-lg"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-base sm:text-lg"
             >
               <option value="all">Tüm Kategoriler</option>
               <option value="epilasyon">Epilasyon</option>
@@ -365,7 +380,7 @@ export default function AdminServicesPage() {
       </div>
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {filteredServices.map((service) => (
           <div key={service._id} className="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             {/* Service Image */}
@@ -442,9 +457,9 @@ export default function AdminServicesPage() {
             </div>
 
             {/* Service Content */}
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-gray-900 line-clamp-2 mb-2">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 line-clamp-2 mb-2">
                   {service.title}
                 </h3>
                 <p className="text-gray-600 text-sm line-clamp-2">
@@ -453,23 +468,23 @@ export default function AdminServicesPage() {
               </div>
 
               {/* Service Details */}
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Clock className="h-4 w-4 text-blue-600" />
+              <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
                   </div>
                   <span className="font-medium">{service.duration}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <DollarSign className="h-4 w-4 text-green-600" />
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                   </div>
                   <span className="font-bold text-green-600">{service.price}</span>
                 </div>
                 {service.device && (typeof service.device === 'string' ? service.device : service.device.name) && (
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <Settings className="h-4 w-4 text-purple-600" />
+                  <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Settings className="h-3 w-3 sm:h-4 sm:w-4 text-purple-600" />
                     </div>
                     <span>{typeof service.device === 'string' ? service.device : service.device.name}</span>
                   </div>
@@ -566,24 +581,39 @@ export default function AdminServicesPage() {
 
       {/* Add/Edit Modal */}
       {(showAddModal || editingService) && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4">
-              {editingService ? 'Hizmet Düzenle' : 'Yeni Hizmet Ekle'}
-            </h3>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-4xl w-full max-h-[95vh] overflow-y-auto relative shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
+                {editingService ? 'Hizmet Düzenle' : 'Yeni Hizmet Ekle'}
+              </h3>
+              <button
+                onClick={() => {
+                  setShowAddModal(false)
+                  setEditingService(null)
+                  setDeviceImagePreview(null)
+                  setServiceImagePreview(null)
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             
-            <form onSubmit={handleSave} className="space-y-6">
+            <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
               {/* Basic Information */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-semibold text-gray-900">Temel Bilgiler</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4 sm:space-y-6">
+                <h4 className="text-lg sm:text-xl font-bold text-gray-900">Temel Bilgiler</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Hizmet Adı *</label>
                     <input
                       type="text"
                       name="title"
                       defaultValue={editingService?.title || ''}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base"
                       placeholder="Hizmet adını girin"
                       required
                     />
@@ -594,7 +624,7 @@ export default function AdminServicesPage() {
                     <select
                       name="category"
                       defaultValue={editingService?.category || ''}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base"
                       required
                     >
                       <option value="">Kategori seçin</option>
@@ -641,7 +671,7 @@ export default function AdminServicesPage() {
                       type="text"
                       name="duration"
                       defaultValue={editingService?.duration || ''}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base"
                       placeholder="Örn: 60-75 dk"
                     />
                   </div>
@@ -652,7 +682,7 @@ export default function AdminServicesPage() {
                       type="text"
                       name="price"
                       defaultValue={editingService?.price || ''}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base"
                       placeholder="Örn: ₺300-500"
                     />
                   </div>
@@ -676,28 +706,36 @@ export default function AdminServicesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Hizmet Görseli</label>
-                    <input
-                      type="file"
-                      name="serviceImage"
-                      accept="image/*"
-                      onChange={(e) => {
-                        console.log('Service image file selected:', e.target.files[0])
-                        const file = e.target.files[0]
-                        if (file) {
-                          console.log('Service image file details:', {
-                            name: file.name,
-                            size: file.size,
-                            type: file.type
-                          })
-                          const reader = new FileReader()
-                          reader.onload = (e) => setServiceImagePreview(e.target.result)
-                          reader.readAsDataURL(file)
-                        } else {
-                          setServiceImagePreview(null)
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
+                    <div className="relative">
+                      <input
+                        type="file"
+                        name="serviceImage"
+                        accept="image/*"
+                        disabled={uploadingServiceImage}
+                        onChange={(e) => {
+                          console.log('Service image file selected:', e.target.files[0])
+                          const file = e.target.files[0]
+                          if (file) {
+                            console.log('Service image file details:', {
+                              name: file.name,
+                              size: file.size,
+                              type: file.type
+                            })
+                            const reader = new FileReader()
+                            reader.onload = (e) => setServiceImagePreview(e.target.result)
+                            reader.readAsDataURL(file)
+                          } else {
+                            setServiceImagePreview(null)
+                          }
+                        }}
+                        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${uploadingServiceImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      />
+                      {uploadingServiceImage && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                          <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
+                        </div>
+                      )}
+                    </div>
                     {(serviceImagePreview || editingService?.image) && (
                       <div className="mt-2">
                         <img 
@@ -714,22 +752,30 @@ export default function AdminServicesPage() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Cihaz Görseli</label>
-                    <input
-                      type="file"
-                      name="deviceImage"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0]
-                        if (file) {
-                          const reader = new FileReader()
-                          reader.onload = (e) => setDeviceImagePreview(e.target.result)
-                          reader.readAsDataURL(file)
-                        } else {
-                          setDeviceImagePreview(null)
-                        }
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
+                    <div className="relative">
+                      <input
+                        type="file"
+                        name="deviceImage"
+                        accept="image/*"
+                        disabled={uploadingDeviceImage}
+                        onChange={(e) => {
+                          const file = e.target.files[0]
+                          if (file) {
+                            const reader = new FileReader()
+                            reader.onload = (e) => setDeviceImagePreview(e.target.result)
+                            reader.readAsDataURL(file)
+                          } else {
+                            setDeviceImagePreview(null)
+                          }
+                        }}
+                        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${uploadingDeviceImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      />
+                      {uploadingDeviceImage && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                          <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
+                        </div>
+                      )}
+                    </div>
                     {(deviceImagePreview || editingService?.device?.imageUrl) && (
                       <div className="mt-2">
                         <img 
@@ -827,9 +873,21 @@ export default function AdminServicesPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={uploadingServiceImage || uploadingDeviceImage}
+                  className={`flex-1 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                    uploadingServiceImage || uploadingDeviceImage
+                      ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
                 >
-                  {editingService ? 'Güncelle' : 'Ekle'}
+                  {uploadingServiceImage || uploadingDeviceImage ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Yükleniyor...
+                    </>
+                  ) : (
+                    editingService ? 'Güncelle' : 'Ekle'
+                  )}
                 </button>
               </div>
             </form>

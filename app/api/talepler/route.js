@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
+import { logAction, logError } from "@/lib/logger"
 
 // Telegram bot konfigürasyonu
 const getTelegramConfig = async () => {
@@ -129,6 +130,9 @@ export async function POST(request) {
     // Veritabanına kaydet
     await collection.insertOne(formData)
     
+    // Log the creation action
+    await logAction("POST", "/api/talepler", "admin", "success", `New request created: ${body.isimSoyisim} - ${body.markaModel}`);
+    
     // Telegram'a mesaj gönder
     try {
       await sendTelegramMessage(message)
@@ -145,6 +149,10 @@ export async function POST(request) {
     })
   } catch (error) {
     console.error('Error:', error)
+    
+    // Log the error
+    await logError("POST", "/api/talepler", "admin", error);
+    
     return NextResponse.json(
       { success: false, error: "Veri kaydedilemedi" },
       { status: 500 }

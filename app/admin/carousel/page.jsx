@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { CarouselTableRowSkeleton } from "@/components/Skeletons"
+import { Loader2 } from "lucide-react"
 
 export default function CarouselYonetim() {
   const [slides, setSlides] = useState([])
@@ -280,36 +281,53 @@ export default function CarouselYonetim() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Ana Sayfa Carousel Yönetimi</h1>
-          <p className="text-muted-foreground mt-1">Ana sayfadaki carousel slide'larını yönetin ve düzenleyin</p>
+      {/* Header */}
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 text-white">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
+          <div className="flex-1">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">Ana Sayfa Carousel Yönetimi</h1>
+            <p className="text-purple-100 text-lg sm:text-xl mb-4 sm:mb-6">Ana sayfadaki carousel slide'larını yönetin ve düzenleyin</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="bg-white/20 rounded-full px-4 sm:px-6 py-2 sm:py-3">
+                <span className="text-sm sm:text-base font-semibold">Toplam: {slides.length} slide</span>
+              </div>
+              <div className="bg-white/20 rounded-full px-4 sm:px-6 py-2 sm:py-3">
+                <span className="text-sm sm:text-base font-semibold">Aktif: {slides.filter(s => s.active).length}</span>
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={handleAddNew} 
+            className="bg-white text-purple-600 hover:bg-purple-50 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-3 sm:gap-4 transition-all duration-200 hover:scale-105 shadow-xl border-2 border-white/20 w-full sm:w-auto"
+          >
+            <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Yeni Slide Ekle
+          </button>
         </div>
-        <button onClick={handleAddNew} className="btn-primary w-full sm:w-auto">
-          Yeni Slide Ekle
-        </button>
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden lg:block card p-0 overflow-hidden">
+      <div className="hidden lg:block bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/20 border-b border-border">
+            <thead className="bg-gray-50 border-b-2 border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Sıra</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Görsel</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Başlık</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Alt Başlık</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Açıklama</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Durum</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">İşlemler</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Sıra</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Görsel</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Başlık</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Alt Başlık</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Açıklama</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Durum</th>
+                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">İşlemler</th>
               </tr>
             </thead>
             <tbody>
               {slides
                 .sort((a, b) => (a.order || 0) - (b.order || 0))
                 .map((slide, index) => (
-                  <tr key={slide.id} className="border-b border-border hover:bg-muted/10 transition-colors">
+                  <tr key={slide.id} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <span className="text-foreground font-medium">{slide.order || index + 1}</span>
@@ -459,10 +477,20 @@ export default function CarouselYonetim() {
 
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-lg shadow-xl p-4 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-card-foreground mb-6">
-              {editingSlide ? "Slide Düzenle" : "Yeni Slide Ekle"}
-            </h2>
+          <div className="bg-card rounded-lg shadow-xl p-4 md:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-card-foreground">
+                {editingSlide ? "Slide Düzenle" : "Yeni Slide Ekle"}
+              </h2>
+              <button
+                onClick={resetForm}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -530,14 +558,21 @@ export default function CarouselYonetim() {
                       className="input-field w-full"
                     />
                     <div className="flex items-center gap-4">
-                      <label className="btn-primary cursor-pointer">
-                        {uploading ? "Yükleniyor..." : "Dosya Yükle"}
+                      <label className={`btn-primary cursor-pointer flex items-center gap-2 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        {uploading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Yükleniyor...
+                          </>
+                        ) : (
+                          "Dosya Yükle"
+                        )}
                         <input
                           type="file"
+                          disabled={uploading}
                           onChange={handleFileUpload}
                           className="hidden"
                           accept="image/*"
-                          disabled={uploading}
                         />
                       </label>
                       {formData.image && (
@@ -578,9 +613,16 @@ export default function CarouselYonetim() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="btn-primary w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {uploading ? "İşleniyor..." : editingSlide ? "Slide Güncelle" : "Slide Oluştur"}
+                  {uploading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      İşleniyor...
+                    </>
+                  ) : (
+                    editingSlide ? "Slide Güncelle" : "Slide Oluştur"
+                  )}
                 </button>
               </div>
             </form>

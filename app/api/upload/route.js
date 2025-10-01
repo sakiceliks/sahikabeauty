@@ -2,6 +2,7 @@
 import { put } from "@vercel/blob"
 import { NextResponse } from "next/server"
 import { join } from "path"
+import { logAction, logError } from "@/lib/logger"
 
 export const runtime = "nodejs"
 export const maxDuration = 60 // 60 seconds timeout
@@ -95,6 +96,9 @@ export async function POST(request) {
       pathname: blob.pathname 
     })
 
+    // Log the upload action
+    await logAction("POST", "/api/upload", "admin", "success", `File uploaded: ${file.name} (${type})`);
+
     return NextResponse.json({
       success: true,
       url: blob.url,
@@ -103,6 +107,8 @@ export async function POST(request) {
       blob: blob,
     })
   } catch (error) {
+    // Log the error
+    await logError("POST", "/api/upload", "admin", error);
     console.error("Yükleme hatası:", error)
     console.error("Error details:", {
       message: error.message,
