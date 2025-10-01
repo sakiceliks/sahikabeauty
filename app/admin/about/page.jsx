@@ -43,7 +43,7 @@ export default function AboutManagement() {
     ],
     address: "Abdurrahmangazi, Fatih Blv. No:73/1, Sultanbeyli/İstanbul",
     phone: "+90 530 434 83 49",
-    email: "info@sahikabeauty.com",
+    email: "info@sultanbeyliguzellikmerkezi.com.tr",
     foundingYear: "2011",
     socialMedia: {
       instagram: "https://www.instagram.com/sahikabeauty",

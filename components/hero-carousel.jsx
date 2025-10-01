@@ -101,7 +101,7 @@ export default function HeroCarousel() {
 
   if (loading) {
     return (
-      <div className="relative z-20 flex flex-col items-center justify-center text-center h-screen px-6 md:px-20 lg:px-32">
+      <div className="relative z-20 flex flex-col items-center justify-center text-center max-h-screen px-6 md:px-20 lg:px-32">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-300 rounded w-64 mb-4"></div>
           <div className="h-4 bg-gray-300 rounded w-48"></div>
@@ -121,21 +121,21 @@ export default function HeroCarousel() {
   }
 
   return (
-    <section className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+    <section className="relative h-[60vh] md:h-[80vh] overflow-hidden">
       {/* Carousel Container */}
       <div className="relative w-full h-full">
         <AnimatePresence mode="wait">
           {heroSlides.map((slide, index) => 
             index === currentSlide ? (
               <motion.div
-                key={slide.id}
+                key={`slide-${slide.id}-${currentSlide}`}
                 initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 1, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
-                {/* Background Image with Enhanced Parallax and Zoom Effect */}
+                {/* Background Image with Smooth Parallax Effect */}
                 <motion.div
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                   style={{
@@ -143,12 +143,12 @@ export default function HeroCarousel() {
                   }}
                   initial={{ scale: 1.1, x: 0, y: 0 }}
                   animate={{ 
-                    scale: 1.15,
-                    x: [0, -10, 10, 0],
-                    y: [0, -5, 5, 0]
+                    scale: [1.1, 1.2, 1.1],
+                    x: [0, -15, 15, 0],
+                    y: [0, -8, 8, 0]
                   }}
                   transition={{ 
-                    duration: 8,
+                    duration: 15,
                     ease: "easeInOut",
                     repeat: Infinity,
                     repeatType: "reverse"
@@ -160,18 +160,19 @@ export default function HeroCarousel() {
                 {/* Content Overlay - Symmetric and Centered */}
                 <div className="relative z-10 h-full flex items-center justify-center">
                   <motion.div
+                    key={`content-${slide.id}-${currentSlide}`}
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
                     className="text-center text-white px-6 md:px-8 lg:px-12 max-w-5xl mx-auto"
                   >
-                    {/* Subtitle with animated entrance and floating effect */}
+                    {/* Subtitle with smooth fade-in animation */}
                     <motion.p 
-                      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                      key={`subtitle-${slide.id}-${currentSlide}`} // Key prop for re-triggering animation on slide change
+                      initial={{ opacity: 0, y: 30 }}
                       animate={{ 
                         opacity: 1, 
-                        y: 0, 
-                        scale: 1,
+                        y: 0,
                         y: [0, -5, 0]
                       }}
                       transition={{ 
@@ -188,17 +189,23 @@ export default function HeroCarousel() {
                       {slide.subtitle}
                     </motion.p>
                     
-                    {/* Main Title with staggered animation and subtle floating */}
+                    {/* Main Title with smooth slide-in animation */}
                     <motion.h1 
-                      initial={{ opacity: 0, y: 40, scale: 0.8 }}
+                      key={`title-${slide.id}-${currentSlide}`} // Key prop for re-triggering animation on slide change
+                      initial={{ opacity: 0, x: 120, scale: 0.8 }}
                       animate={{ 
                         opacity: 1, 
-                        y: 0, 
+                        x: 0, 
                         scale: 1,
                         y: [0, -3, 0]
                       }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: -120, 
+                        scale: 0.8
+                      }}
                       transition={{ 
-                        duration: 0.8, 
+                        duration: 1.0, 
                         delay: 0.6, 
                         ease: "easeOut",
                         y: {
@@ -208,13 +215,14 @@ export default function HeroCarousel() {
                           delay: 1.5
                         }
                       }}
-                      className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.15em] md:tracking-[0.25em] mb-6 md:mb-8 text-center leading-tight drop-shadow-2xl"
+                      className="text-3xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-[0.15em] md:tracking-[0.25em] mb-6 md:mb-8 text-center leading-tight drop-shadow-2xl whitespace-nowrap overflow-hidden"
                     >
                       {slide.title}
                     </motion.h1>
                     
-                    {/* Description with fade-in animation and subtle floating */}
+                    {/* Description with smooth fade-in animation */}
                     <motion.p 
+                      key={`description-${slide.id}-${currentSlide}`} // Key prop for re-triggering animation on slide change
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ 
                         opacity: 1, 
@@ -236,8 +244,9 @@ export default function HeroCarousel() {
                       {slide.description}
                     </motion.p>
                     
-                    {/* Randevu Al Butonu with enhanced animation */}
+                    {/* Randevu Al Butonu with smooth fade-in animation */}
                     <motion.div 
+                      key={`button-${slide.id}-${currentSlide}`} // Key prop for re-triggering animation on slide change
                       initial={{ opacity: 0, y: 30, scale: 0.8 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ duration: 0.6, delay: 1.0 }}
@@ -250,7 +259,7 @@ export default function HeroCarousel() {
                       >
                         <Link
                           href="/rezervasyon"
-                          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 transform hover:shadow-2xl backdrop-blur-sm border border-white/30 shadow-lg"
+                          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:shadow-2xl backdrop-blur-sm border border-white/30 shadow-lg"
                         >
                           📅 Randevu Al
                         </Link>
@@ -283,7 +292,7 @@ export default function HeroCarousel() {
       {/* Navigation Arrows */}
       <button
         onClick={() => goToSlide(currentSlide === 0 ? heroSlides.length - 1 : currentSlide - 1)}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
+        className="hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
         aria-label="Previous slide"
       >
         <svg
@@ -297,7 +306,7 @@ export default function HeroCarousel() {
       </button> 
       <button
         onClick={() => goToSlide((currentSlide + 1) % heroSlides.length)}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
+        className="hidden md:flex absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 group"
         aria-label="Next slide"
       >
         <svg

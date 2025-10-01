@@ -2,13 +2,12 @@
 
 // Blog sayfasına entegre edilmiş tam SEO optimizasyonu
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-// Dummy imports for non-existent components to make the code runnable.
-// In a real project, these would be your actual component files.
+
 const JsonLd = ({ data }) => {
   return (
     <script
@@ -23,7 +22,24 @@ const FaqSchema = ({ faqs }) => {
 };
 const ReviewSchema = ({ reviews }) => {
   if (!reviews || reviews.length === 0) return null;
-  return <JsonLd data={{ '@context': 'https://schema.org', '@type': 'Review', itemReviewed: { '@type': 'LocalBusiness', name: 'Şahika Beauty Sultanbeyli' }, reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, author: { '@type': 'Person', name: reviews[0].author } }} />;
+  return <JsonLd data={{ 
+    '@context': 'https://schema.org', 
+    '@type': 'Review', 
+    itemReviewed: { 
+      '@type': 'LocalBusiness', 
+      name: 'Şahika Beauty - Sultanbeyli Güzellik Merkezi',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Abdurrahmangazi, Fatih Blv. No:73/1',
+        addressLocality: 'Sultanbeyli',
+        addressRegion: 'İstanbul',
+        postalCode: '34920',
+        addressCountry: 'TR'
+      }
+    }, 
+    reviewRating: { '@type': 'Rating', ratingValue: reviews[0].rating }, 
+    author: { '@type': 'Person', name: reviews[0].author } 
+  }} />;
 };
 const VideoSchema = ({ videoData }) => {
   if (!videoData) return null;
@@ -82,52 +98,7 @@ const BeforeAfterGallery = ({ images, service }) => {
     </div>
   );
 };
-/* const PriceComparisonTable = ({ services }) => {
-  if (!services || services.length === 0) return null;
-  return (
-    <div className="not-prose my-12 bg-white rounded-2xl shadow-lg p-8">
-      <h3 className="text-2xl font-bold text-center mb-8">
-        💰 Fiyat Karşılaştırması
-      </h3>
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b-2 border-primary-100">
-              <th className="py-4 px-2 font-bold text-gray-600">Hizmet</th>
-              <th className="py-4 px-2 font-bold text-gray-600 text-center">Piyasa Fiyatı</th>
-              <th className="py-4 px-2 font-bold text-gray-600 text-center">Şahika Beauty Fiyatı</th>
-              <th className="py-4 px-2 font-bold text-gray-600 text-center">Kazanç</th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service, index) => (
-              <tr key={index} className="border-b border-gray-100">
-                <td className="py-4 px-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">{service.icon}</span>
-                    <div>
-                      <div className="font-medium text-gray-800">{service.name}</div>
-                      <div className="text-sm text-gray-500">{service.description}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="py-4 px-2 text-center text-gray-500 line-through">
-                  {service.competitorPrice} TL
-                </td>
-                <td className="py-4 px-2 text-center text-primary font-bold">
-                  {service.ourPrice} TL
-                </td>
-                <td className="py-4 px-2 text-center text-green-600 font-bold">
-                  {(service.competitorPrice - service.ourPrice)} TL
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}; */
+
 const ExpertTips = ({ tips, expertName }) => {
   if (!tips || tips.length === 0) return null;
   return (
@@ -137,7 +108,7 @@ const ExpertTips = ({ tips, expertName }) => {
       </h3>
       <p className="text-center text-gray-600 mb-8">
         <span className="font-semibold text-primary">{expertName}</span>'dan, güzellik rutininizi mükemmelleştirecek önemli tavsiyeler.
-      </p>{/*  */}
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {tips.map((tip, index) => (
           <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-100">
@@ -223,6 +194,107 @@ const SeasonalContent = ({ content }) => {
     </div>
   );
 };
+
+const RelatedService = ({ service }) => {
+  if (!service) {
+    return null;
+  }
+  
+  return (
+    <div className="not-prose my-16">
+      <div className="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 rounded-3xl p-8 shadow-2xl border border-green-200">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-lg mb-4">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-green-700 font-semibold text-sm uppercase tracking-wide">Önerilen Hizmet</span>
+          </div>
+          <h3 className="text-3xl font-bold text-gray-800 mb-3">
+            {service.title}
+          </h3>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Bu blog yazısında bahsedilen <strong className="text-green-700">{service.title}</strong> hizmetimizi keşfedin. 
+            Profesyonel ekibimizle en kaliteli hizmeti alın.
+          </p>
+        </div>
+        
+        {/* Service Card */}
+        <div className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-2xl font-bold text-gray-800 mb-3">{service.title}</h4>
+              <p className="text-gray-600 leading-relaxed">{service.description}</p>
+            </div>
+            
+            {/* Benefits */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Profesyonel Ekip</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Modern Teknoloji</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Güvenli Uygulama</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Kişisel Danışmanlık</span>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link 
+                href={`/hizmetler/${service.slug}`}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                <span>Hizmet Detaylarını Gör</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              
+              <Link 
+                href="/rezervasyon"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-green-700 px-8 py-4 rounded-xl border-2 border-green-700 hover:bg-green-50 transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                <span>Hemen Randevu Al</span>
+              </Link>
+            </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* SEO Boost Section */}
+        <div className="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6 border border-blue-200">
+          <div className="text-center">
+            <h4 className="text-lg font-bold text-gray-800 mb-3">
+              🎯 Neden {service.title} Tercih Etmelisiniz?
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-green-600">✓</span>
+                <span>Sultanbeyli'nin en deneyimli ekibi</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-green-600">✓</span>
+                <span>En son teknoloji cihazlar</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-green-600">✓</span>
+                <span>Kişiye özel tedavi planı</span>
+              </div>
+            </div>
+            <div className="mt-4 text-sm text-gray-500">
+              <strong>💡 İpucu:</strong> Hizmet sayfamızda detaylı bilgiler, fiyat listesi ve sıkça sorulan soruları bulabilirsiniz.
+            </div>
+          </div>
+        </div>
+      </div>
+  );
+};
 // Dummy icons for display
 const Calendar = (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>;
 const Phone = (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>;
@@ -281,8 +353,8 @@ const sultanbeyliBlogData = {
     thumbnail: "/video-thumbnail.jpg",
     uploadDate: "2025-01-01",
     duration: "PT3M45S",
-    url: "https://sahikabeauty.com/sultanbeyli-video.mp4",
-    embedUrl: "https://sahikabeauty.com/embed/sultanbeyli"
+    url: "https://sultanbeyliguzellikmerkezi.com.tr/sultanbeyli-video.mp4",
+    embedUrl: "https://sultanbeyliguzellikmerkezi.com.tr/embed/sultanbeyli"
   },
   howToSteps: {
     supplies: ["Temiz cilt", "Rahat kıyafet"],
@@ -416,17 +488,84 @@ const sultanbeyliBlogData = {
 };
 
 const EnhancedBlogDetail = ({ post, loading }) => {
+  const [relatedService, setRelatedService] = useState(null);
+  
+  // Fast service matching using static data
+  useEffect(() => {
+    if (post) {
+      // Static service data for fast matching
+      const staticServices = [
+        { _id: 'yosun-peeling', slug: 'yosun-peeling', title: 'Yosun Peeling', description: 'Doğal yosun ile cilt yenileme', image: '/assets/services/yosun-peeling.png' },
+        { _id: 'lazer-epilasyon', slug: 'lazer-epilasyon', title: 'Lazer Epilasyon', description: 'Kalıcı epilasyon çözümü', image: '/assets/services/lazer-epilasyon.png' },
+        { _id: 'ipl-epilasyon', slug: 'ipl-epilasyon', title: 'IPL Epilasyon', description: 'Intense Pulsed Light epilasyon', image: '/slide/sld2.jpg' },
+        { _id: 'cilt-bakimi', slug: 'cilt-bakimi', title: 'Cilt Bakımı', description: 'Profesyonel cilt bakım hizmetleri', image: '/assets/services/cilt-bakimi.png' },
+        { _id: 'bolgesel-incelme', slug: 'bolgesel-incelme', title: 'Bölgesel İncelme', description: 'Bölgesel yağ yakma tedavileri', image: '/assets/services/EmSlimFit.png' },
+        { _id: 'kalici-makyaj', slug: 'kalici-makyaj', title: 'Kalıcı Makyaj', description: 'Kalıcı makyaj uygulamaları', image: '/assets/services/microblading.png' },
+        { _id: 'hydrafacial', slug: 'hydrafacial', title: 'HydraFacial', description: 'Gelişmiş cilt temizleme', image: '/slide/sld1.png' },
+        { _id: 'ozon-terapi', slug: 'ozon-terapi', title: 'Ozon Terapi', description: 'Ozon ile cilt tedavisi', image: '/slide/sld3.png' },
+        { _id: '24k-altin-bakim', slug: '24k-altin-bakim', title: '24K Altın Bakım', description: 'Lüks altın cilt bakımı', image: '/assets/services/primex.png' },
+        { _id: 'ignesiz-mezoterapi', slug: 'ignesiz-mezoterapi', title: 'İğnesiz Mezoterapi', description: 'İğnesiz cilt yenileme', image: '/assets/services/sculpture.png' },
+        { _id: 'dudak-renklendirme', slug: 'dudak-renklendirme', title: 'Dudak Renklendirme', description: 'Kalıcı dudak renklendirme', image: '/assets/services/dudak-renklendirme.png' }
+      ];
+
+      let service = null;
+      
+      // First try to find by serviceId if it exists
+      if (post.serviceId) {
+        service = staticServices.find(s => s._id === post.serviceId);
+      }
+      
+      // If no service found by serviceId, try to match by slug keywords
+      if (!service && post.slug) {
+        const slug = post.slug.toLowerCase();
+        
+        // Fast keyword matching
+        const keywordMappings = {
+          'yosun': 'yosun-peeling',
+          'peeling': 'yosun-peeling',
+          'lazer': 'lazer-epilasyon',
+          'epilasyon': 'lazer-epilasyon',
+          'ipl': 'ipl-epilasyon',
+          'cilt': 'cilt-bakimi',
+          'bakim': 'cilt-bakimi',
+          'bolgesel': 'bolgesel-incelme',
+          'incelme': 'bolgesel-incelme',
+          'kalici': 'kalici-makyaj',
+          'makyaj': 'kalici-makyaj',
+          'hydrafacial': 'hydrafacial',
+          'ozon': 'ozon-terapi',
+          'terapi': 'ozon-terapi',
+          'altin': '24k-altin-bakim',
+          'mezoterapi': 'ignesiz-mezoterapi',
+          'dudak': 'dudak-renklendirme'
+        };
+        
+        // Find matching service by keywords
+        for (const [keyword, serviceSlug] of Object.entries(keywordMappings)) {
+          if (slug.includes(keyword)) {
+            service = staticServices.find(s => s.slug === serviceSlug);
+            if (service) break;
+          }
+        }
+      }
+      
+      if (service) {
+        setRelatedService(service);
+      }
+    }
+  }, [post]);
+  
   // Dummy schemas for demonstration
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://sahikabeauty.com/blog/sultanbeyli-guzellik-merkezi"
+      "@id": "https://sultanbeyliguzellikmerkezi.com.tr/blog/sultanbeyli-guzellik-merkezi"
     },
     "headline": "Sultanbeyli Güzellik Merkezi: Lazer Epilasyon, Cilt Bakımı ve Daha Fazlası",
     "image": [
-      "https://sahikabeauty.com/images/lazer-epilasyon-sultanbeyli.jpg"
+      "https://sultanbeyliguzellikmerkezi.com.tr/images/lazer-epilasyon-sultanbeyli.jpg"
     ],
     "datePublished": "2025-01-20T09:00:00+03:00",
     "dateModified": "2025-01-20T09:00:00+03:00",
@@ -439,7 +578,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
       "name": "Şahika Beauty",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://sahikabeauty.com/logo.png"
+        "url": "https://sultanbeyliguzellikmerkezi.com.tr/logo.png"
       }
     },
     "description": "Sultanbeyli'deki güzellik merkezimizde sunduğumuz tüm hizmetleri, fiyatları ve müşteri yorumlarını keşfedin. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve daha fazlası için doğru adres."
@@ -453,19 +592,19 @@ const EnhancedBlogDetail = ({ post, loading }) => {
         "@type": "ListItem",
         "position": 1,
         "name": "Ana Sayfa",
-        "item": "https://sahikabeauty.com"
+        "item": "https://sultanbeyliguzellikmerkezi.com.tr"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Blog",
-        "item": "https://sahikabeauty.com/blog"
+        "item": "https://sultanbeyliguzellikmerkezi.com.tr/blog"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Sultanbeyli Güzellik Merkezi",
-        "item": "https://sahikabeauty.com/blog/sultanbeyli-guzellik-merkezi"
+        "item": "https://sultanbeyliguzellikmerkezi.com.tr/blog/sultanbeyli-guzellik-merkezi"
       }
     ]
   };
@@ -473,8 +612,11 @@ const EnhancedBlogDetail = ({ post, loading }) => {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Şahika Beauty Sultanbeyli",
-    "image": "https://sahikabeauty.com/images/sahika-beauty-sultanbeyli-sube.jpg",
+    "@id": "https://sultanbeyliguzellikmerkezi.com.tr",
+    "name": "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+    "alternateName": "Şahika Beauty Sultanbeyli",
+    "description": "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
+    "image": "https://sultanbeyliguzellikmerkezi.com.tr/assets/about/img.jpg",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Abdurrahmangazi, Fatih Blv. No:73/1",
@@ -483,20 +625,32 @@ const EnhancedBlogDetail = ({ post, loading }) => {
       "postalCode": "34920",
       "addressCountry": "TR"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "40.9607",
+      "longitude": "29.2675"
+    },
     "telephone": "+90 530 434 83 49",
-    "url": "https://sahikabeauty.com/sultanbeyli",
+    "email": "info@sultanbeyliguzellikmerkezi.com.tr",
+    "url": "https://sultanbeyliguzellikmerkezi.com.tr",
     "priceRange": "$$",
     "openingHours": "Mo-Sa 09:00-20:00",
+    "paymentAccepted": "Cash, Credit Card",
+    "currenciesAccepted": "TRY",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
       "reviewCount": "247"
-    }
+    },
+    "sameAs": [
+      "https://www.instagram.com/sahikabeauty",
+      "https://www.facebook.com/sahikabeauty"
+    ]
   };
 
 
   if (loading) return (
-    <div className="min-h-screen pt-32 pb-12">
+    <div className="min-h-screen pb-12">
       <div className="container mx-auto px-6">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Yükleniyor...</h1>
         <div>İçerik yükleniyor...</div>
@@ -505,7 +659,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
   );
   
   if (!post) return (
-    <div className="min-h-screen pt-32 pb-12">
+    <div className="min-h-screen pb-12">
       <div className="container mx-auto px-6">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">İçerik Bulunamadı</h1>
         <div>Üzgünüz, aradığınız içerik bulunamadı.</div>
@@ -530,7 +684,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
         title="Sultanbeyli'de Lazer Epilasyon Nasıl Yapılır?"
       />
 
-      <div className="min-h-screen pt-32 pb-12">
+      <div className="min-h-screen pb-12">
         <div className="container mx-auto px-6">
           <header className="mb-12">
             <nav className="text-sm font-semibold text-gray-500 mb-2" aria-label="Breadcrumb">
@@ -633,6 +787,9 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   <div dangerouslySetInnerHTML={{ __html: post.content }} className="text-gray-700 leading-relaxed" />
                 )}
 
+                {/* Related Service */}
+                {relatedService && <RelatedService service={relatedService} />}
+
                 {sultanbeyliBlogData.video && (
                   <div className="not-prose my-12">
                     <div className="bg-gray-900 rounded-2xl p-8 text-center">
@@ -643,8 +800,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                       <div
   className="absolute inset-0 flex items-center justify-center bg-cover bg-top before:absolute before:inset-0 before:bg-black/50"
   style={{
-    backgroundImage:
-      "url('https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqyWqlNiWVNb-Z2g-tR98GpKZfLLRDQ5Vt9Y6LfOyEQGsyJ1Bax_W38LNQftEbZbjDJ9Uk4WF_RDFfUeXPgmwv1dU9QtuGNDa-LkTMtcMrq0msR2_LdDVWmmc-jpGwaN_E7V-vjoQ=s680-w680-h510-rw')",
+    backgroundImage: "url('/video-thumbnail.jpg')",
   }}
 >
   <div className="relative text-center">
@@ -675,8 +831,7 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   service="Lazer Epilasyon"
                 />
 
-{/*                 <PriceComparisonTable services={sultanbeyliBlogData.priceServices} />
- */}
+
                 <ExpertTips
                   tips={sultanbeyliBlogData.expertTips}
                   expertName="Uzm. Şahika Hanım"
@@ -705,426 +860,123 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                               </svg>
                             </div>
                           </summary>
-                          <div className="px-6 pb-6">
-                            <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                          <div className="p-6 pt-0 text-gray-600">
+                            <p>{faq.answer}</p>
                           </div>
                         </details>
                       ))}
                     </div>
-
-                    <div className="text-center mt-8 pt-6 border-t border-gray-100">
-                      <p className="text-gray-600 mb-4">Başka sorularınız mı var?</p>
-                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                        <Link
-                          href="/sss"
-                          className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          Tüm SSS
-                        </Link>
-                        <Link
-                          href="/iletisim"
-                          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                        >
-                          <Phone className="w-4 h-4" />
-                          Bize Sorun
-                        </Link>
-                      </div>
-                    </div>
                   </div>
                 </div>
-
-                <SeasonalContent
-                  season="winter"
-                  content={sultanbeyliBlogData.seasonalContent}
-                />
 
                 <LocalCitations />
+                
+                {sultanbeyliBlogData.seasonalContent && (
+                  <SeasonalContent content={sultanbeyliBlogData.seasonalContent} />
+                )}
 
-                <div className="not-prose my-12">
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-                    <h3 className="text-2xl font-bold text-center mb-8">
-                      🗺️ Sultanbeyli'de Güzellik Yolculuğunuz
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-                      <div className="hidden md:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400" style={{ top: '4rem' }}></div>
-
-                      {[
-                        {
-                          step: 1,
-                          title: "Ücretsiz Konsültasyon",
-                          description: "Uzmanımızla görüşün",
-                          icon: "📋",
-                          link: "/rezervasyon"
-                        },
-                        {
-                          step: 2,
-                          title: "Kişisel Plan",
-                          description: "Size özel program hazırlayın",
-                          icon: "📝",
-                          link: "/rezervasyon"
-                        },
-                        {
-                          step: 3,
-                          title: "Tedavi Süreci",
-                          description: "Rahat ortamda hizmet alın",
-                          icon: "✨",
-                          link: "/rezervasyon"
-                        },
-                        {
-                          step: 4,
-                          title: "Sonuç & Takip",
-                          description: "Kalıcı sonuçlar elde edin",
-                          icon: "🎯",
-                          link: "/rezervasyon"
-                        }
-                      ].map((item, index) => (
-                        <div key={index} className="relative">
-                          <div className="bg-white rounded-xl p-6 shadow-lg text-center relative z-10 hover:shadow-xl transition-shadow">
-                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
-                              {item.step}
-                            </div>
-                            <span className="text-3xl mb-3 block">{item.icon}</span>
-                            <h4 className="font-semibold mb-2">{item.title}</h4>
-                            <p className="text-sm text-gray-600 mb-4">{item.description}</p>
-                            <Link
-                              href={item.link}
-                              className="text-primary hover:text-secondary transition-colors text-sm font-medium"
-                            >
-                              Detaylar →
-                            </Link>
-                          </div>
+                {/* Yorumlar ve SEO Footer */}
+                <section className="not-prose my-16 pt-8 border-t border-gray-100">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                    Müşteri Yorumları (4.8/5, 247 Yorum)
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {sultanbeyliBlogData.reviews.slice(0, 4).map((review, index) => (
+                      <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-inner border border-gray-100">
+                        <div className="flex items-center mb-3">
+                          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500 mr-2" />
+                          <span className="font-bold text-lg">{review.rating}.0</span>
+                          <span className="ml-3 text-sm text-gray-500">
+                            {review.author} - {review.date}
+                          </span>
                         </div>
-                      ))}
-                    </div>
-
-                    <div className="text-center mt-8">
-                      <Link
-                        href="/rezervasyon"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
-                      >
-                        <Calendar className="w-5 h-5" />
-                        Yolculuğunuza Başlayın
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="not-prose my-12">
-                  <div className="bg-white rounded-2xl shadow-lg p-8">
-                    <h3 className="text-2xl font-bold text-center mb-8 flex items-center justify-center gap-3">
-                      <Star className="w-7 h-7 text-yellow-500" />
-                      Sultanbeyli Müşteri Başarı Hikayeleri
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sultanbeyliBlogData.reviews.map((review, index) => (
-                        <div key={index} className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-xl">
-                          <div className="flex items-center gap-1 mb-4">
-                            {[...Array(review.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                            ))}
-                          </div>
-                          <blockquote className="text-gray-700 italic mb-4">
-                            "{review.text}"
-                          </blockquote>
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                              {review.author.charAt(0)}
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm">{review.author}</div>
-                              <div className="text-xs text-gray-500">Doğrulanmış Müşteri</div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="text-center mt-8 pt-6 border-t border-gray-100">
-                      <p className="text-gray-600 mb-4">Siz de başarı hikayenizi paylaşın!</p>
-                      <Link
-                        href="/yorumlar"
-                        className="inline-flex items-center gap-2 bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        Deneyiminizi Paylaşın
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="not-prose my-12">
-                  <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-8">
-                    <h3 className="text-2xl font-bold text-center mb-8">
-                      🏆 Neden Şahika Beauty Sultanbeyli?
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-6">
-                        <h4 className="text-lg font-semibold text-green-800 mb-4">✅ Bizden Beklediğiniz</h4>
-                        {[
-                          "8+ yıl Sultanbeyli'de hizmet tecrübesi",
-                          "T.C. Sağlık Bakanlığı onaylı güzellik merkezi",
-                          "Son teknoloji FDA onaylı cihazlar",
-                          "Şeffaf fiyatlandırma, gizli maliyet yok",
-                          "Ücretsiz park alanı ve kolay ulaşım",
-                          "Hijyen protokollerine %100 uyum",
-                          "Seanslar arası ücretsiz kontrol",
-                          "Müşteri memnuniyet garantisi"
-                        ].map((item, index) => (
-                          <div key={index} className="flex items-start gap-3">
-                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700">{item}</span>
-                          </div>
-                        ))}
+                        <p className="text-gray-700 italic">"{review.text}"</p>
                       </div>
-
-                      <div className="space-y-6">
-                        <h4 className="text-lg font-semibold text-red-800 mb-4">❌ Diğer Merkezlerde Yaşananlar</h4>
-                        {[
-                          "Deneyimsiz personel ve eski teknoloji",
-                          "Gizli ek ücretler ve belirsiz fiyatlar",
-                          "Hijyen kurallarına uyumsuzluk",
-                          "Randevu alamama ve uzun bekleme",
-                          "Sonuç garantisi yok, takipsizlik",
-                          "Park sorunu ve ulaşım zorluğu",
-                          "Müşteri şikayetlerine duyarsızlık",
-                          "Seanslar arası destek eksikliği"
-                        ].map((item, index) => (
-                          <div key={index} className="flex items-start gap-3">
-                            <X className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700">{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="text-center mt-8 pt-6 border-t border-gray-200">
-                      <p className="text-gray-600 mb-4 text-lg">
-                        Farkı kendiniz görmek için <strong>ücretsiz konsültasyon</strong> alın!
-                      </p>
-                      <Link
-                        href="/konsultasyon"
-                        className="inline-flex items-center gap-2 bg-green-600 text-white px-8 py-3 rounded-xl hover:bg-green-700 transition-colors font-medium"
-                      >
-                        <Star className="w-5 h-5" />
-                        Ücretsiz Konsültasyon
-                      </Link>
-                    </div>
+                    ))}
                   </div>
-                </div>
 
-                <div className="not-prose my-12">
-                  <div className="bg-white rounded-2xl shadow-lg p-8">
-                    <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
-                      <BookOpen className="w-7 h-7 text-primary" />
-                      İlgili Makaleler
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {[
-                        {
-                          title: "Lazer Epilasyon Hazırlık Rehberi",
-                          excerpt: "Seansa gelmeden önce bilmeniz gerekenler...",
-                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/epilasyon-hazirlik.png",
-                          href: "/blog/sultanbeyli-guzellik-merkezi",
-                          category: "Hazırlık",
-                          readTime: "5 dk"
-                        },
-                        {
-                          title: "Cilt Tipi Belirleme ve Bakım",
-                          excerpt: "Cilt tipinizi doğru belirleyin ve ona göre bakım yapın...",
-                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/cilt-tipi-belirleme.png",
-                          href: "/blog/sultanbeyli-guzellik-merkezi",
-                          category: "Cilt Bakımı",
-                          readTime: "7 dk"
-                        },
-                        {
-                          title: "Kalıcı Makyaj Sonrası Bakım",
-                          excerpt: "Kalıcı makyaj sonrası dikkat edilecek önemli noktalar...",
-                          image: "https://styirqnih357hnts.public.blob.vercel-storage.com/kalici-makyaj-bakim.png",
-                          href: "/blog/sultanbeyli-guzellik-merkezi",
-                          category: "Kalıcı Makyaj",
-                          readTime: "4 dk"
-                        }
-                      ].map((article, index) => (
-                        <Link key={index} href={article.href} className="group block">
-                          <div className="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                            <div className="relative h-48 bg-gray-200">
-                              <Image
-                                src={article.image}
-                                alt={`${article.title} - Şahika Beauty Sultanbeyli`}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute top-4 left-4">
-                                <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">
-                                  {article.category}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="p-6">
-                              <h4 className="font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                                {article.title}
-                              </h4>
-                              <p className="text-sm text-gray-600 mb-4 line-clamp-2">{article.excerpt}</p>
-                              <div className="flex items-center justify-between text-xs text-gray-500">
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-3 h-3" />
-                                  {article.readTime}
-                                </span>
-                                <span className="flex items-center gap-1 text-primary font-medium">
-                                  Devamını Oku
-                                  <ArrowRight className="w-3 h-3" />
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
+                  <div className="mt-12 text-center">
+                    <Link href="/yorum-ekle" className="inline-block bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors">
+                      Yorumunuzu Ekleyin
+                    </Link>
                   </div>
-                </div>
+                </section>
 
-                <div className="not-prose my-12">
-                  <div className="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 text-white text-center">
-                    <h3 className="text-3xl font-bold mb-4">
-                      Sultanbeyli'de Güzelliğe Giden Yolculuk Başlasın! ✨
-                    </h3>
-                    <p className="text-lg mb-8 opacity-90">
-                      8+ yıllık deneyimimiz ve memnun müşterilerimizle, siz de hayalinizdeki güzelliğe kavuşun!
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">🏆</div>
-                        <div className="text-2xl font-bold">247+</div>
-                        <div className="text-sm opacity-90">Memnun Müşteri</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">⭐</div>
-                        <div className="text-2xl font-bold">4.8/5</div>
-                        <div className="text-sm opacity-90">Müşteri Puanı</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-4xl mb-2">📅</div>
-                        <div className="text-2xl font-bold">8+</div>
-                        <div className="text-sm opacity-90">Yıl Tecrübe</div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Link
-                        href="/rezervasyon"
-                        className="inline-flex items-center gap-2 bg-white text-primary px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors font-semibold"
-                      >
-                        <Calendar className="w-5 h-5" />
-                        Hemen Randevu Al
-                      </Link>
-                      <Link
-                        href="/iletisim"
-                        className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-3 rounded-xl hover:bg-white hover:text-primary transition-all duration-300 font-semibold"
-                      >
-                        <Phone className="w-5 h-5" />
-                        Hemen Ara: 0530 434 83 49
-                      </Link>
-                    </div>
-                  </div>
+                {/* SEO Footer Links */}
+                <div className="mt-16 pt-8 border-t border-gray-200 text-sm text-gray-500 text-center">
+                  <h3 className="font-bold mb-4 text-lg">Diğer Sultanbeyli Hizmetlerimiz</h3>
+                  <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                    <li><Link href="/sultanbeyli/lazer-epilasyon" className="hover:text-primary hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
+                    <li><Link href="/sultanbeyli/cilt-bakimi" className="hover:text-primary hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
+                    <li><Link href="/sultanbeyli/kalici-makyaj" className="hover:text-primary hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
+                    <li><Link href="/sultanbeyli/bolgesel-incelme" className="hover:text-primary hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
+                    <li><Link href="/sultanbeyli/tirnak-protez" className="hover:text-primary hover:underline">Sultanbeyli Tırnak Protez</Link></li>
+                  </ul>
                 </div>
               </article>
             </motion.main>
 
+            {/* Sidebar */}
             <motion.aside
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0, transition: { delay: 0.6 } }}
-              className="lg:col-span-1"
+              className="lg:col-span-1 space-y-12"
             >
-              <div className="sticky top-32 space-y-8">
-                {/* Search Bar */}
-                <div className="bg-white rounded-2xl shadow-lg p-6">
-                  <h3 className="font-bold mb-4 text-gray-800">Blogda Ara</h3>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Anahtar kelime girin..."
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
-                  </div>
+              {/* Randevu Card */}
+              <div className="sticky top-28 bg-primary-50 p-6 rounded-2xl shadow-lg border border-primary-100">
+                <div className="flex items-center gap-3 mb-4">
+                  <Calendar className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-primary-900">Randevu Alın</h3>
                 </div>
-
-                {/* Popular Posts */}
-                <div className="bg-white rounded-2xl shadow-lg p-6">
-                  <h3 className="font-bold mb-4 text-gray-800">Popüler Yazılar</h3>
-                  <ul className="space-y-4">
-                    <li className="flex items-start gap-4">
-                      <Image src="https://styirqnih357hnts.public.blob.vercel-storage.com/istenmeyen-tuyler.png" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
-                      <div>
-                        <Link href="#" className="font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2">
-                          İstenmeyen Tüylerden Kurtulmanın En Etkili Yolları
-                        </Link>
-                        <p className="text-sm text-gray-500">12 Ocak 2025</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4">
-                      <Image src="https://styirqnih357hnts.public.blob.vercel-storage.com/4-adimda-puruzsuz-cilt.png" alt="Popüler Makale" width={80} height={80} className="rounded-lg object-cover flex-shrink-0" />
-                      <div>
-                        <Link href="#" className="font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2">
-                          4 Adımda Pürüzsüz ve Işıltılı Bir Cilt
-                        </Link>
-                        <p className="text-sm text-gray-500">08 Ocak 2025</p>
-                      </div>
-                    </li>
-                  </ul>
+                <p className="text-primary-700 mb-6">
+                  Şahika Beauty Sultanbeyli şubesine kolayca randevu oluşturun.
+                </p>
+                <div className="space-y-4">
+                  <a
+                    href="tel:+905304348349"
+                    className="w-full flex items-center justify-center gap-2 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors shadow-md"
+                  >
+                    <Phone className="w-5 h-5" />
+                    Hemen Ara
+                  </a>
+                  <Link
+                    href="/rezervasyon"
+                    className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors shadow-md"
+                  >
+                    <Calendar className="w-5 h-5" />
+                    Online Randevu Al
+                  </Link>
                 </div>
               </div>
+
+              {/* Latest Posts */}
+              <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-3">Popüler Yazılar</h3>
+                <ul className="space-y-4">
+                  {/* Dummy popular posts */}
+                  <li className="flex items-start gap-3">
+                    <span className="text-2xl font-bold text-primary">01</span>
+                    <Link href="/blog/cilt-bakiminda-yeni-trendler" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                      Cilt Bakımında 2024'ün En Yeni Trendleri
+                    </Link>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-2xl font-bold text-primary">02</span>
+                    <Link href="/blog/lazer-epilasyon-seans-sayisi" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                      Lazer Epilasyon Kaç Seans Sürer?
+                    </Link>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-2xl font-bold text-primary">03</span>
+                    <Link href="/blog/dudak-renklendirme-kaliciligi" className="text-gray-700 hover:text-primary hover:underline font-medium">
+                      Kalıcı Dudak Renklendirme Ne Kadar Kalıcı?
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
             </motion.aside>
-          </div>
-
-          {/* Comments Section */}
-          <section className="my-16 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Yorumlar ({sultanbeyliBlogData.reviews.length})</h2>
-            <div className="space-y-8">
-              {sultanbeyliBlogData.reviews.map((review, index) => (
-                <div key={index} className="flex gap-4 p-6 bg-gray-50 rounded-xl">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-lg font-bold text-gray-600">
-                    {review.author.charAt(0)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="font-semibold text-gray-900">{review.author}</div>
-                      <div className="text-sm text-gray-500">{review.date}</div>
-                    </div>
-                    <div className="flex items-center gap-1 mb-2">
-                      {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                    <p className="text-gray-700">{review.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link href="/yorum-ekle" className="inline-block bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors">
-                Yorumunuzu Ekleyin
-              </Link>
-            </div>
-          </section>
-
-          {/* SEO Footer Links */}
-          <div className="mt-16 pt-8 border-t border-gray-200 text-sm text-gray-500 text-center">
-            <h3 className="font-bold mb-4 text-lg">Diğer Sultanbeyli Hizmetlerimiz</h3>
-            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-              <li><Link href="/sultanbeyli/lazer-epilasyon" className="hover:text-primary hover:underline">Sultanbeyli Lazer Epilasyon</Link></li>
-              <li><Link href="/sultanbeyli/cilt-bakimi" className="hover:text-primary hover:underline">Sultanbeyli Cilt Bakımı</Link></li>
-              <li><Link href="/sultanbeyli/kalici-makyaj" className="hover:text-primary hover:underline">Sultanbeyli Kalıcı Makyaj</Link></li>
-              <li><Link href="/sultanbeyli/bolgesel-incelme" className="hover:text-primary hover:underline">Sultanbeyli Bölgesel İncelme</Link></li>
-              <li><Link href="/sultanbeyli/tirnak-protez" className="hover:text-primary hover:underline">Sultanbeyli Tırnak Protez</Link></li>
-            </ul>
           </div>
         </div>
       </div>

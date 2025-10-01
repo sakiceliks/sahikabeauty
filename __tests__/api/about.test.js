@@ -135,7 +135,7 @@ describe('/api/about', () => {
         contactInfo: {
           address: 'İstanbul, Türkiye',
           phone: '+90 212 123 45 67',
-          email: 'info@sahikabeauty.com'
+          email: 'info@sultanbeyliguzellikmerkezi.com.tr'
         },
         socialMedia: {
           facebook: 'https://facebook.com/sahikabeauty',

@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react"
 
 export default function BlogYonetim() {
   const [posts, setPosts] = useState([])
+  const [services, setServices] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [editingPost, setEditingPost] = useState(null)
   const [uploading, setUploading] = useState(false)
@@ -28,6 +29,7 @@ export default function BlogYonetim() {
     tags: [],
     featured: false,
     published: true,
+    serviceId: "", // Hizmet bağlantısı için
   })
 
   const fetchPosts = async () => {
@@ -54,8 +56,24 @@ export default function BlogYonetim() {
     }
   }
 
+  const fetchServices = async () => {
+    try {
+      const response = await fetch("/api/services")
+      const data = await response.json()
+      
+      if (data.success) {
+        setServices(data.data)
+      } else {
+        console.error("Services fetch error:", data.error)
+      }
+    } catch (error) {
+      console.error("Services yüklenirken hata:", error)
+    }
+  }
+
   useEffect(() => {
     fetchPosts()
+    fetchServices()
   }, [])
 
   const handleFileUpload = async (e) => {
@@ -459,6 +477,23 @@ export default function BlogYonetim() {
                       placeholder="Kategori adını girin"
                       required
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-base font-semibold text-gray-700 mb-2">Bağlı Hizmet</label>
+                    <select
+                      name="serviceId"
+                      value={formData.serviceId}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-base"
+                    >
+                      <option value="">Hizmet seçin (opsiyonel)</option>
+                      {services.map((service) => (
+                        <option key={service._id} value={service._id}>
+                          {service.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>

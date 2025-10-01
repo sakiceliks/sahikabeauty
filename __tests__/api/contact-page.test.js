@@ -84,7 +84,7 @@ describe('/api/contact-page', () => {
         mainImage: '/assets/contact/contact-hero.jpg',
         address: 'İstanbul, Türkiye',
         phone: '+90 212 123 45 67',
-        email: 'info@sahikabeauty.com',
+        email: 'info@sultanbeyliguzellikmerkezi.com.tr',
         whatsapp: '+90 212 123 45 67',
         workingHours: 'Pazartesi - Cuma: 09:00 - 18:00\nCumartesi: 09:00 - 16:00\nPazar: Kapalı',
         socialMedia: {

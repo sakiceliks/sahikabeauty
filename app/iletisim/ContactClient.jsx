@@ -17,7 +17,7 @@ const ContactClient = () => {
       full: "Abdurrahmangazi, Fatih Blv. No:73/1, 34920 Sultanbeyli/İstanbul"
     },
     phone: "+90 530 434 83 49",
-    email: "info@sahikabeauty.com",
+    email: "info@sultanbeyliguzellikmerkezi.com.tr",
     whatsapp: "https://wa.me/905304348349",
     workingHours: {
       weekdays: "09:00 - 19:00",

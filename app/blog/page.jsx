@@ -153,7 +153,7 @@ const BlogPage = () => {
           setBlogs([]);
         }
       } catch (err) {
-        console.error("Blog yazıları çekilirken hata oluştu:", err);
+        // Blog yazıları çekilirken hata oluştu
         setBlogs([]);
       } finally {
         setLoading(false);

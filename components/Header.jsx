@@ -88,10 +88,10 @@ const Header = () => {
             <Link href="/" aria-label="Sahika Beauty anasayfaya git">
               <Image 
                 src="/assets/logo.svg" 
-                width={400} 
-                height={152} 
-                sizes="(max-width: 640px) 160px, (max-width: 768px) 200px, 240px"
-                className="w-40 h-auto sm:w-[200px] xl:w-[240px]"
+                width={500} 
+                height={150} 
+                sizes="(max-width: 640px) 200px, (max-width: 768px) 250px, 300px"
+                className="w-48 h-auto sm:w-[250px] xl:w-[300px] text-black"
                 priority 
                 alt="Sahika Beauty Logo"
                 quality={100}

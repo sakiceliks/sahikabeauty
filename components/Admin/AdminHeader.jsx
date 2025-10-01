@@ -66,7 +66,7 @@ export default function AdminHeader({ user, onLogout, onMenuToggle, isMenuOpen }
               <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border-2 border-gray-200 py-3 z-50">
                 <div className="px-4 py-3 border-b border-gray-100">
                   <p className="text-base font-semibold text-gray-900">{user?.username}</p>
-                  <p className="text-sm text-gray-600">admin@sahikabeauty.com</p>
+                  <p className="text-sm text-gray-600">admin@sultanbeyliguzellikmerkezi.com.tr</p>
                 </div>
                 <button
                   onClick={handleLogout}

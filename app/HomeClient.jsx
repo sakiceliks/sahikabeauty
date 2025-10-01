@@ -55,7 +55,7 @@ const HomeClient = ({
           setFeaturedServices(servicesList.filter(service => service.featured === true))
         }
       } catch (err) {
-        console.error('Client-side fetch error:', err)
+        // Client-side fetch error
         setError('Veriler yüklenirken bir hata oluştu')
       } finally {
         setIsLoading(false)

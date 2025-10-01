@@ -65,9 +65,9 @@ const Home = async () => {
   try {
     // Skip server-side fetch for now to avoid connection issues
     // The client-side component will handle data loading
-    console.log("Skipping server-side fetch to avoid connection issues")
+    // Skipping server-side fetch to avoid connection issues
   } catch (err) {
-    console.error("Server-side veri hatası:", err)
+    // Server-side veri hatası
     error = "Veriler yüklenirken bir hata oluştu"
   }
 

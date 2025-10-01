@@ -109,8 +109,8 @@ const FloatingContactButtons = () => {
         }}
         className={`${
           isExpanded 
-            ? "bg-gray-600 hover:bg-gray-700" 
-            : "bg-primary hover:bg-primary/90"
+            ? "bg-green-500 hover:bg-green-600" 
+            : "bg-green-500 hover:bg-green-600"
         } text-white w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group cursor-pointer pointer-events-auto relative z-[10000]`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -126,8 +126,11 @@ const FloatingContactButtons = () => {
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
             </svg>
           ) : (
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+            <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+              <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+              <circle cx="12" cy="12" r="3" fill="white"/>
+              <path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="white"/>
             </svg>
           )}
         </motion.div>
@@ -136,7 +139,7 @@ const FloatingContactButtons = () => {
       {/* Pulse animasyonu */}
       {!isExpanded && (
         <motion.div
-          className="absolute inset-0 bg-primary rounded-full pointer-events-none"
+          className="absolute inset-0 bg-green-500 rounded-full pointer-events-none"
           animate={{ scale: [1, 1.2, 1], opacity: [0.7, 0, 0.7] }}
           transition={{ duration: 2, repeat: Infinity }}
           style={{ zIndex: -1 }}
