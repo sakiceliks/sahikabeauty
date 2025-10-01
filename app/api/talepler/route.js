@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
-import { broadcastNotification } from "../notifications/route"
+import { broadcastNotification } from "@/lib/sse-manager"
 
 // Telegram bot konfigürasyonu
 const getTelegramConfig = async () => {

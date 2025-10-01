@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
-import { broadcastNotification } from "../notifications/route"
+import { broadcastNotification } from "@/lib/sse-manager"
 
 // POST - İletişim formu gönderimi
 export async function POST(request) {

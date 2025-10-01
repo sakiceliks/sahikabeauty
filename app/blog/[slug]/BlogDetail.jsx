@@ -82,7 +82,7 @@ const BeforeAfterGallery = ({ images, service }) => {
     </div>
   );
 };
-const PriceComparisonTable = ({ services }) => {
+/* const PriceComparisonTable = ({ services }) => {
   if (!services || services.length === 0) return null;
   return (
     <div className="not-prose my-12 bg-white rounded-2xl shadow-lg p-8">
@@ -127,7 +127,7 @@ const PriceComparisonTable = ({ services }) => {
       </div>
     </div>
   );
-};
+}; */
 const ExpertTips = ({ tips, expertName }) => {
   if (!tips || tips.length === 0) return null;
   return (
@@ -137,7 +137,7 @@ const ExpertTips = ({ tips, expertName }) => {
       </h3>
       <p className="text-center text-gray-600 mb-8">
         <span className="font-semibold text-primary">{expertName}</span>'dan, güzellik rutininizi mükemmelleştirecek önemli tavsiyeler.
-      </p>
+      </p>{/*  */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {tips.map((tip, index) => (
           <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-100">
@@ -675,8 +675,8 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   service="Lazer Epilasyon"
                 />
 
-                <PriceComparisonTable services={sultanbeyliBlogData.priceServices} />
-
+{/*                 <PriceComparisonTable services={sultanbeyliBlogData.priceServices} />
+ */}
                 <ExpertTips
                   tips={sultanbeyliBlogData.expertTips}
                   expertName="Uzm. Şahika Hanım"

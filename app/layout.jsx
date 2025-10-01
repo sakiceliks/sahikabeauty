@@ -2,7 +2,6 @@ import React from "react"
 import { Marcellus } from "next/font/google"
 import { Poppins } from "next/font/google"
 import { Playfair_Display } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import ConditionalLayout from "@/components/ConditionalLayout"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
@@ -216,7 +215,6 @@ export default function RootLayout({ children }) {
           </ConditionalLayout>
           <Toaster />
         </Suspense>
-        <Analytics />
       </body>
     </html>
   )
