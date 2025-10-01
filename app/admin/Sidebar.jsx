@@ -17,7 +17,9 @@ import {
   Star,
   Menu,
   X,
-  FileText as LogsIcon
+  FileText as LogsIcon,
+  Info,
+  Mail
 } from "lucide-react"
 
 const menuItems = [
@@ -57,6 +59,27 @@ const menuItems = [
     description: "Ana sayfa slider"
   },
   { 
+    id: "about", 
+    label: "Hakkımızda", 
+    href: "/admin/about", 
+    icon: Info,
+    description: "Hakkımızda sayfası yönetimi"
+  },
+  { 
+    id: "contact", 
+    label: "İletişim", 
+    href: "/admin/contact", 
+    icon: MessageSquare,
+    description: "İletişim sayfası yönetimi"
+  },
+  { 
+    id: "contacts", 
+    label: "İletişim Mesajları", 
+    href: "/admin/contacts", 
+    icon: Mail,
+    description: "Gelen mesajları yönet"
+  },
+  { 
     id: "talepler", 
     label: "Talep Yönetimi", 
     href: "/admin/talepler", 
@@ -87,14 +110,14 @@ export default function Sidebar({ user, onLogout, isOpen, onToggle }) {
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
           onClick={onToggle}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed lg:static top-0 left-0 h-screen w-96 bg-white border-r-2 border-gray-300 flex flex-col transform transition-transform duration-300 z-40 shadow-xl lg:shadow-none
+        className={`fixed top-0 left-0 h-screen w-96 bg-white border-r-2 border-gray-300 flex flex-col transform transition-transform duration-300 z-50 shadow-xl
         ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         {/* Header */}

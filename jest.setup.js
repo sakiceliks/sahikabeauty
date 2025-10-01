@@ -61,12 +61,60 @@ global.Response = class Response {
 
 // Mock NextResponse
 global.NextResponse = {
-  json: jest.fn((data, init) => ({
-    json: () => Promise.resolve(data),
-    status: init?.status || 200,
-    headers: new Map(Object.entries(init?.headers || {}))
+  json: jest.fn((data, init) => {
+    const response = {
+      json: () => Promise.resolve(data),
+      status: init?.status || 200,
+      headers: new Map(Object.entries(init?.headers || {}))
+    }
+    return response
+  }),
+  redirect: jest.fn((url, status) => ({
+    status: status || 302,
+    headers: new Map([['Location', url]])
+  })),
+  rewrite: jest.fn((url) => ({
+    status: 200,
+    headers: new Map([['x-rewrite-url', url]])
   }))
 }
+
+// Mock NextResponse module
+jest.mock('next/server', () => ({
+  NextRequest: class NextRequest {
+    constructor(input, init) {
+      Object.defineProperty(this, 'url', {
+        value: input,
+        writable: false
+      })
+      this.method = init?.method || 'GET'
+      this.headers = new Map(Object.entries(init?.headers || {}))
+      this.body = init?.body
+    }
+    
+    async json() {
+      return JSON.parse(this.body)
+    }
+  },
+  NextResponse: {
+    json: jest.fn((data, init) => {
+      const response = {
+        json: () => Promise.resolve(data),
+        status: init?.status || 200,
+        headers: new Map(Object.entries(init?.headers || {}))
+      }
+      return response
+    }),
+    redirect: jest.fn((url, status) => ({
+      status: status || 302,
+      headers: new Map([['Location', url]])
+    })),
+    rewrite: jest.fn((url) => ({
+      status: 200,
+      headers: new Map([['x-rewrite-url', url]])
+    }))
+  }
+}))
 
 // Mock window.Notification
 Object.defineProperty(window, 'Notification', {
@@ -112,3 +160,27 @@ global.console = {
   warn: jest.fn(),
   error: jest.fn(),
 }
+
+// Mock MongoDB
+jest.mock('@/lib/mongodb', () => ({
+  __esModule: true,
+  default: jest.fn(() => Promise.resolve({
+    db: jest.fn(() => ({
+      collection: jest.fn(() => ({
+        find: jest.fn().mockReturnThis(),
+        findOne: jest.fn(),
+        insertOne: jest.fn(),
+        updateOne: jest.fn(),
+        deleteOne: jest.fn(),
+        sort: jest.fn().mockReturnThis(),
+        toArray: jest.fn()
+      }))
+    }))
+  }))
+}))
+
+// Mock ObjectId
+jest.mock('mongodb', () => ({
+  ObjectId: jest.fn((id) => ({ toString: () => id, valueOf: () => id })),
+  isObjectId: jest.fn((id) => /^[0-9a-fA-F]{24}$/.test(id))
+}))

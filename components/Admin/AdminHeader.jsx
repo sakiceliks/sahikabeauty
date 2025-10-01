@@ -15,7 +15,7 @@ export default function AdminHeader({ user, onLogout, onMenuToggle, isMenuOpen }
   }
 
   return (
-    <header className="bg-white border-b-2 border-gray-300 shadow-lg px-4 py-4 sm:px-6 md:px-8 lg:px-10 sticky top-0 z-30 w-full min-h-[80px]">
+    <header className="bg-white border-b-2 border-gray-300 shadow-lg px-4 py-4 sm:px-6 md:px-8 lg:px-10 sticky top-0 z-40 w-full min-h-[80px]">
       <div className="flex items-center justify-between w-full h-full">
         {/* Left side - Menu button and title */}
         <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">

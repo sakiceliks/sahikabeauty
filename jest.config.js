@@ -11,10 +11,11 @@ const customJestConfig = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^mongodb$': '<rootDir>/node_modules/mongodb/lib/index.js'
   },
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   transformIgnorePatterns: [
-    'node_modules/(?!(mongodb|bson)/)'
+    'node_modules/(?!(mongodb|bson|@mongodb-js|@aws-sdk)/)'
   ],
   collectCoverageFrom: [
     'components/**/*.{js,jsx}',

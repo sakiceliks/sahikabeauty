@@ -75,7 +75,7 @@ export default function AdminLayout({ children }) {
       />
       
       {/* Main Content */}
-      <div className="flex flex-col flex-1 w-full min-w-0">
+      <div className="flex flex-col flex-1 w-full min-w-0 lg:ml-96">
         {/* Header */}
         <AdminHeader 
           user={user} 
