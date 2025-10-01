@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
-import { broadcastNotification } from "@/lib/sse-manager"
 
 // POST - İletişim formu gönderimi
 export async function POST(request) {
@@ -24,29 +23,6 @@ export async function POST(request) {
     // Veritabanına kaydet
     const result = await collection.insertOne(contactData)
     
-    // Admin'lere SSE bildirimi gönder
-    try {
-      console.log('Contact API: Sending SSE notification...')
-      const notificationData = {
-        type: 'new_contact',
-        title: 'Yeni İletişim Mesajı',
-        message: `${body.name} adlı kişiden yeni mesaj alındı`,
-        data: {
-          id: result.insertedId,
-          name: body.name,
-          email: body.email,
-          phone: body.phone,
-          message: body.message,
-          timestamp: now.toISOString()
-        }
-      }
-      console.log('Contact API: Notification data:', notificationData)
-      broadcastNotification(notificationData)
-      console.log('Contact API: SSE notification sent successfully')
-    } catch (sseError) {
-      console.error('SSE bildirimi gönderilemedi:', sseError)
-      // SSE hatası olsa bile devam et
-    }
     
     return NextResponse.json({ 
       success: true, 

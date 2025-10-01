@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
-import { broadcastNotification } from "@/lib/sse-manager"
 
 // Telegram bot konfigürasyonu
 const getTelegramConfig = async () => {
@@ -138,24 +137,6 @@ export async function POST(request) {
       // Telegram hatası olsa bile veritabanına kaydedildiği için devam et
     }
     
-    // Admin'lere SSE bildirimi gönder
-    try {
-      broadcastNotification({
-        type: 'new_reservation',
-        title: 'Yeni Rezervasyon',
-        message: `${body.isimSoyisim} adlı müşteriden yeni rezervasyon alındı`,
-        data: {
-          talepId: generatedTalepId,
-          isimSoyisim: body.isimSoyisim,
-          markaModel: body.markaModel,
-          telefonNo: body.telefonNo,
-          timestamp: now.toISOString()
-        }
-      })
-    } catch (sseError) {
-      console.error('SSE bildirimi gönderilemedi:', sseError)
-      // SSE hatası olsa bile devam et
-    }
     
     return NextResponse.json({ 
       success: true, 

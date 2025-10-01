@@ -7,7 +7,6 @@ import LoginForm from "../../components/Auth/LoginForm.jsx"
 import AdminHeader from "../../components/Admin/AdminHeader.jsx"
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as HotToaster } from "react-hot-toast"
-import { useNotifications } from "@/hooks/useNotifications"
 import Sidebar from "./Sidebar.jsx"
 
 export default function AdminLayout({ children }) {
@@ -16,8 +15,6 @@ export default function AdminLayout({ children }) {
   const [loading, setLoading] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   
-  // Bildirim sistemi - sadece admin oturumu açıkken aktif
-  const { notifications, isConnected } = useNotifications()
 
   useEffect(() => {
     // Check authentication status on mount
@@ -85,8 +82,6 @@ export default function AdminLayout({ children }) {
           onLogout={handleLogout}
           onMenuToggle={toggleSidebar}
           isMenuOpen={sidebarOpen}
-          notifications={notifications}
-          isConnected={isConnected}
         />
         
         {/* Page Content */}

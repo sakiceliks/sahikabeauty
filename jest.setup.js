@@ -29,6 +29,45 @@ jest.mock('next/image', () => ({
   },
 }))
 
+// Mock Next.js Request
+global.Request = class Request {
+  constructor(input, init) {
+    Object.defineProperty(this, 'url', {
+      value: input,
+      writable: false
+    })
+    this.method = init?.method || 'GET'
+    this.headers = new Map(Object.entries(init?.headers || {}))
+    this.body = init?.body
+  }
+  
+  async json() {
+    return JSON.parse(this.body)
+  }
+}
+
+// Mock Next.js Response
+global.Response = class Response {
+  constructor(body, init) {
+    this.body = body
+    this.status = init?.status || 200
+    this.headers = new Map(Object.entries(init?.headers || {}))
+  }
+  
+  async json() {
+    return JSON.parse(this.body)
+  }
+}
+
+// Mock NextResponse
+global.NextResponse = {
+  json: jest.fn((data, init) => ({
+    json: () => Promise.resolve(data),
+    status: init?.status || 200,
+    headers: new Map(Object.entries(init?.headers || {}))
+  }))
+}
+
 // Mock window.Notification
 Object.defineProperty(window, 'Notification', {
   value: jest.fn(() => ({
