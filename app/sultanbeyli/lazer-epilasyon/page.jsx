@@ -24,7 +24,7 @@ export default function SultanbeyliLazerEpilasyon() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Sultanbeyli Şubemiz</h2>
                 <div className="space-y-3 text-gray-600">
                   <p><strong>Adres:</strong> Sultanbeyli Merkez, İstanbul</p>
-                  <p><strong>Telefon:</strong> 0216 XXX XX XX</p>
+                  <p><strong>Telefon:</strong> 0530 434 83 49</p>
                   <p><strong>Çalışma Saatleri:</strong> Pazartesi-Cumartesi 09:00-19:00</p>
                 </div>
               </div>
