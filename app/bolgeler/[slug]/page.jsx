@@ -246,7 +246,7 @@ const generateLocalBusinessSchema = (region) => ({
         "@type": "Service",
         "name": service
       }
-    })
+    }))
   }
 })
 
