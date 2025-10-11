@@ -29,7 +29,7 @@ const links = [
 const Nav = () => {
   const pathname = usePathname();
   return (
-    <nav className="flex items-center space-x-8">
+    <nav className="flex items-center space-x-4 xl:space-x-6">
       {links.map((link, index) => {
         return (
           <motion.div
@@ -44,8 +44,8 @@ const Nav = () => {
               className={`${
                 pathname === link.href 
                   ? "text-blue-600 border-b-2 border-blue-600 font-semibold" 
-                  : "text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600"
-              } uppercase text-sm font-medium tracking-wide px-3 py-2 transition-all duration-300 border-b-2 border-transparent`}
+                  : "text-gray-700 hover:text-blue-600 hover:border-b-2 hover:border-blue-600"
+              } text-sm xl:text-base font-medium tracking-wide px-2 xl:px-3 py-2 transition-all duration-300 border-b-2 border-transparent hover:bg-gray-50 rounded-md`}
               title={`${link.name} sayfasına git`}
             >
               {link.name}
@@ -61,13 +61,13 @@ const Nav = () => {
         transition={{ duration: 0.5, delay: 0.6 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="ml-6"
+        className="ml-2 xl:ml-4"
       >
         <Link
           href="/rezervasyon"
-          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-full font-medium text-sm uppercase tracking-wide transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
+          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-3 xl:px-5 py-2 xl:py-2.5 rounded-full font-semibold text-sm xl:text-base tracking-wide transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
         >
-          Randevu Al
+          📅 Randevu Al
         </Link>
       </motion.div>
     </nav>

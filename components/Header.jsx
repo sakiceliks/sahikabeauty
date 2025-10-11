@@ -79,21 +79,24 @@ const Header = () => {
         />
       )}
 
-      <header className="pb-4 sm:pb-6 xl:pb-0 relative z-50 w-full bg-accent-100 xl:bg-transparent">
-        <div className="container mx-auto flex items-center justify-between xl:justify-between px-6 sm:px-8 xl:px-12 py-4 xl:py-6">
-          {/* Logo */}
+      <header className="relative z-50 w-full bg-accent-100 xl:bg-transparent">
+        <div className="w-full flex items-center justify-between px-4 sm:px-6 xl:px-8 py-3 xl:py-4">
+          {/* Logo - Tam solda */}
           <motion.div 
             className="flex-shrink-0 flex items-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <Link href="/" aria-label="Sahika Beauty anasayfaya git">
+            <Link href="/" aria-label="Şahika Beauty anasayfaya git" className="block">
               <Image 
                 src="/assets/wb-2.png" 
-                width={800} 
-                height={240} 
-                sizes="(max-width: 640px) 320px, (max-width: 768px) 400px, (max-width: 1280px) 480px, 640px"
-                className="w-80 h-24 sm:w-[400px] sm:h-30 xl:w-[480px] xl:h-36 object-contain"
+                width={500} 
+                height={150} 
+                sizes="(max-width: 640px) 180px, (max-width: 768px) 220px, (max-width: 1280px) 280px, 320px"
+                className="h-10 w-auto sm:h-12 md:h-14 lg:h-16 xl:h-18 object-contain transition-transform duration-300 hover:scale-105"
                 priority 
-                alt="Sahika Beauty Logo"
+                alt="Şahika Beauty Logo"
                 quality={100}
                 style={{ imageRendering: 'crisp-edges' }}
               />
@@ -101,21 +104,26 @@ const Header = () => {
           </motion.div>
 
           {/* Mobile Menu Toggle Button */}
-          <button
-            className="xl:hidden cursor-pointer bg-transparent border-none p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
+          <motion.button
+            className="xl:hidden cursor-pointer bg-transparent border-none p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
             onClick={handleMenuToggle}
             onKeyDown={handleKeyDown}
             aria-label={mobileNav ? "Menüyü kapat" : "Menüyü aç"}
             aria-expanded={mobileNav}
             aria-controls="mobile-navigation"
             aria-haspopup="true"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {mobileNav ? (
-              <AiOutlineClose className="text-2xl sm:text-3xl text-primary" aria-hidden="true" />
+              <AiOutlineClose className="text-xl sm:text-2xl text-gray-700" aria-hidden="true" />
             ) : (
-              <AiOutlineMenu className="text-2xl sm:text-3xl text-primary" aria-hidden="true" />
+              <AiOutlineMenu className="text-xl sm:text-2xl text-gray-700" aria-hidden="true" />
             )}
-          </button>
+          </motion.button>
 
           {/* Mobile Navigation */}
           <motion.div
@@ -131,7 +139,10 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <motion.div 
-            className="hidden xl:flex items-center justify-center h-full"
+            className="hidden xl:flex items-center justify-end flex-1"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Nav />
           </motion.div>

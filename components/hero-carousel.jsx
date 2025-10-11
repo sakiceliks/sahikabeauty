@@ -101,12 +101,21 @@ export default function HeroCarousel() {
 
   if (loading) {
     return (
-      <div className="relative z-20 flex flex-col items-center justify-center text-center max-h-screen px-6 md:px-20 lg:px-32">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-300 rounded w-64 mb-4"></div>
-          <div className="h-4 bg-gray-300 rounded w-48"></div>
+      <section className="relative h-[60vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30"></div>
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="text-center text-gray-600 px-6 md:px-8 lg:px-12 max-w-5xl mx-auto">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-gray-300 rounded-full w-3/4 mx-auto"></div>
+              <div className="h-12 bg-gray-300 rounded w-2/3 mx-auto"></div>
+              <div className="h-6 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              <div className="flex justify-center mt-8">
+                <div className="h-12 w-32 bg-gray-300 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     )
   }
 
@@ -121,7 +130,12 @@ export default function HeroCarousel() {
   }
 
   return (
-    <section className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+    <motion.section 
+      className="relative h-[60vh] md:h-[80vh] overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Carousel Container */}
       <div className="relative w-full h-full">
         <AnimatePresence mode="wait">
@@ -318,6 +332,6 @@ export default function HeroCarousel() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>
-    </section>
+    </motion.section>
   )
 }

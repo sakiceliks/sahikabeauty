@@ -103,7 +103,7 @@ const Skeleton = ({ className = "" }) => (
 const ServiceDetailsSkeleton = () => (
   <div className="min-h-screen bg-background">
     {/* Existing skeleton code remains the same */}
-    <section className="hero-gradient pt-32 pb-16">
+    <section className="hero-gradient pt-2 pb-16">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-6">
@@ -508,7 +508,7 @@ const ServiceDetails = () => {
 
       <div className="min-h-screen bg-background">
         {/* Enhanced Hero Section */}
-        <section className="hero-gradient pt-32 pb-16">
+        <section className="hero-gradient pt-2 pb-16">
           <div className="container mx-auto px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

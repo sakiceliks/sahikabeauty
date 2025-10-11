@@ -12,6 +12,9 @@ const nextConfig = {
     serverComponentsExternalPackages: ['mongodb'],
   },
   
+  // Disable scroll restoration to prevent scroll position persistence
+  scrollRestoration: false,
+  
   // Image optimization
   images: {
     unoptimized: true,

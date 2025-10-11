@@ -12,8 +12,8 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <AlertCircle className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <p className="text-neutral-600">Blog yazıları yüklenirken bir hata oluştu.</p>
+            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">Blog yazıları yüklenirken bir hata oluştu.</p>
           </div>
         </div>
       </section>
@@ -34,10 +34,10 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl lg:text-4xl font-primary text-primary-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
             Son Blog Yazıları
           </h2>
-          <p className="text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 max-w-2xl mx-auto">
             Güzellik ve bakım hakkında güncel bilgiler ve ipuçları
           </p>
         </motion.div>
@@ -57,7 +57,7 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
                 <div key={blog.id || index} className={isFeatured ? 'md:col-span-2 lg:col-span-1' : ''}>
                   {isFeatured && (
                     <div className="mb-4 text-center">
-                      <span className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                      <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                         ⭐ Öne Çıkan Yazı
                       </span>
                     </div>
@@ -69,7 +69,7 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
           ) : (
             // Veri yoksa boş durum
             <div className="col-span-full text-center py-12">
-              <p className="text-neutral-600">Henüz blog yazısı bulunmuyor.</p>
+              <p className="text-gray-600">Henüz blog yazısı bulunmuyor.</p>
             </div>
           )}
         </div>
@@ -81,19 +81,19 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
           viewport={{ once: true }}
           className="mt-12 mb-8"
         >
-          <div className="bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20 rounded-2xl p-8 text-center">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg mb-4">
               ⭐ Öne Çıkan Rehber
             </div>
-            <h3 className="text-2xl font-semibold mb-4 text-primary">
+            <h3 className="text-2xl font-semibold mb-4 text-gray-800">
               Sultanbeyli Güzellik Merkezi Rehberi
             </h3>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
               Aradığınız tüm hizmetler bir arada! Uzman kadromuz ve son teknoloji cihazlarımızla güvenilir hizmet sunuyoruz.
             </p>
             <Link 
               href="/blog/sultanbeyli-guzellik-merkezi"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-lg"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-all duration-300 font-medium shadow-lg"
             >
               📖 Detaylı Rehberi Oku
               <ArrowRight className="w-5 h-5" />
@@ -111,7 +111,7 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-8 py-3 rounded-xl hover:bg-primary-700 transition-all duration-300 font-medium shadow-beauty"
+                className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition-all duration-300 font-medium shadow-lg"
               >
                 📝 Tüm Blog Yazıları
                 <ArrowRight className="w-5 h-5" />
@@ -119,18 +119,18 @@ const BlogSection = ({ blogs = [], loading = false, error = null }) => {
               
               <Link
                 href="/hizmetler"
-                className="inline-flex items-center gap-2 border-2 border-primary-600 text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-600 hover:text-white transition-all duration-300 font-medium"
+                className="inline-flex items-center gap-2 border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 font-medium"
               >
                 ✨ Hizmetlerimizi Keşfedin
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
             
-            <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-              <span className="bg-primary/10 px-3 py-1 rounded-full">💡 Uzman Tavsiyeleri</span>
-              <span className="bg-primary/10 px-3 py-1 rounded-full">📚 Güzellik Rehberleri</span>
-              <span className="bg-primary/10 px-3 py-1 rounded-full">🔬 Son Teknolojiler</span>
-              <span className="bg-primary/10 px-3 py-1 rounded-full">⭐ Müşteri Deneyimleri</span>
+            <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">💡 Uzman Tavsiyeleri</span>
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">📚 Güzellik Rehberleri</span>
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">🔬 Son Teknolojiler</span>
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">⭐ Müşteri Deneyimleri</span>
             </div>
           </motion.div>
         )}
@@ -175,14 +175,14 @@ const BlogCard = ({ blog, index, isFeatured = false }) => {
         
         {/* Blog Category Badge */}
         {blog.category && (
-          <div className="absolute top-4 left-4 bg-primary-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+          <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
             {blog.category}
           </div>
         )}
       </div>
       
       <div className="p-6">
-        <div className="flex items-center gap-4 text-sm text-neutral-500 mb-3">
+        <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <span>{formatDate(blog.date) || blog.publishDate}</span>
@@ -199,11 +199,11 @@ const BlogCard = ({ blog, index, isFeatured = false }) => {
           )}
         </div>
         
-        <h3 className="text-xl font-semibold mb-3 text-primary-800 group-hover:text-primary-600 transition-colors line-clamp-2">
+        <h3 className="text-xl font-semibold mb-3 text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2">
           {blog.title}
         </h3>
         
-        <p className="text-neutral-600 mb-4 line-clamp-3">
+        <p className="text-gray-600 mb-4 line-clamp-3">
           {blog.excerpt || blog.description || blog.content?.substring(0, 150) + '...'}
         </p>
         
@@ -221,13 +221,13 @@ const BlogCard = ({ blog, index, isFeatured = false }) => {
                   />
                 </div>
               )}
-              <span className="text-sm text-neutral-500">{blog.author}</span>
+              <span className="text-sm text-gray-500">{blog.author}</span>
             </div>
           )}
           
           <Link 
             href={`/blog/${blog.slug}`}
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 transition-colors font-medium group-hover:gap-3"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-medium group-hover:gap-3"
           >
             Devamını Oku
             <ArrowRight className="w-4 h-4 transition-all duration-300" />

@@ -3,6 +3,8 @@ import { Marcellus } from "next/font/google"
 import { Poppins } from "next/font/google"
 import { Playfair_Display } from "next/font/google"
 import ConditionalLayout from "@/components/ConditionalLayout"
+import ScrollToTop from "@/components/ScrollToTop"
+import ScrollToTopOnRouteChange from "@/components/ScrollToTopOnRouteChange"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -210,9 +212,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className="font-body">
         <Suspense fallback={null}>
+          <ScrollToTopOnRouteChange />
           <ConditionalLayout>
             {children}
           </ConditionalLayout>
+          <ScrollToTop />
           <Toaster />
         </Suspense>
       </body>

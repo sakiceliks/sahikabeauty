@@ -8,6 +8,7 @@ import ServiceCards from "@/components/service-cards"
 import FeaturedServices from "@/components/FeaturedServices"
 import BlogSection from "@/components/BlogSection"
 import StatsSection from "@/components/StatsSection"
+import ManualGoogleReviews from "@/components/ManualGoogleReviews"
 import JsonLd from "@/components/JsonLd"
 import { 
   HeroSkeleton, 
@@ -31,7 +32,8 @@ const HomeClient = ({
   const [services, setServices] = useState(initialServices)
   const [featuredServices, setFeaturedServices] = useState(initialFeaturedServices)
   const [error, setError] = useState(initialError)
-  const [isLoading, setIsLoading] = useState(loading)
+  const [isLoading, setIsLoading] = useState(false) // Başlangıçta false, sadece veri yüklenirken true olacak
+  const [dataLoaded, setDataLoaded] = useState(initialBlogs.length > 0 || initialServices.length > 0) // İlk veri durumunu kontrol et
 
   // Client-side data fetching
   useEffect(() => {
@@ -54,9 +56,12 @@ const HomeClient = ({
           setServices(servicesList)
           setFeaturedServices(servicesList.filter(service => service.featured === true))
         }
+        
+        setDataLoaded(true) // Veri yüklendiğini işaretle
       } catch (err) {
         // Client-side fetch error
         setError('Veriler yüklenirken bir hata oluştu')
+        setDataLoaded(true) // Hata durumunda da yükleme tamamlandı say
       } finally {
         setIsLoading(false)
       }
@@ -65,6 +70,8 @@ const HomeClient = ({
     // Only fetch if we don't have initial data
     if (initialBlogs.length === 0 && initialServices.length === 0) {
       fetchData()
+    } else {
+      setDataLoaded(true) // İlk veri varsa zaten yüklü say
     }
   }, [initialBlogs.length, initialServices.length])
 
@@ -353,7 +360,8 @@ const HomeClient = ({
     return <div className="text-center py-12">Hata: {error}</div>
   }
 
-  if (isLoading) {
+  // Sadece veri yüklenirken ve henüz hiç veri yokken skeleton göster
+  if (isLoading && !dataLoaded) {
     return (
       <div className="space-y-12">
         <HeroSkeleton />
@@ -431,6 +439,7 @@ const HomeClient = ({
         </motion.section>
       </article>
       <FeaturedServices services={featuredServices} />
+      <ManualGoogleReviews />
       <BlogSection blogs={blogs} />
       <TestimonialsCarousel />
     </>

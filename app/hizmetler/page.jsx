@@ -141,7 +141,7 @@ const Services = () => {
         animate={{ opacity: 1, transition: { delay: 0.3 } }}
         className="min-h-screen flex flex-col items-center overflow-x-hidden"
       >
-        <div className="container mx-auto pt-32 pb-12 px-6 xl:px-0">
+        <div className="container mx-auto pt-2 pb-12 px-6 xl:px-0">
           <div className="text-center mb-10">
             <h1 className="h1 mb-4 text-gradient">
               {currentCategory.seoTitle || "Sultanbeyli Güzellik Merkezi Hizmetleri"}
