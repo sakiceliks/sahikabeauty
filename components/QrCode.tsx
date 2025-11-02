@@ -1,4 +1,4 @@
-
+// components/BeautyWelcomeScreen.tsx
 import React from 'react';
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ const BeautyWelcomeScreen: React.FC<BeautyWelcomeScreenProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border p-10 border-gray-100 overflow-hidden">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border px-8 pt-10 pb-8 border-gray-100 overflow-hidden">
         
         {/* Header */}
         <div className="px-8 pt-10 pb-8 text-center border-b min-h-full border-gray-100">
