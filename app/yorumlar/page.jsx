@@ -1,3 +1,5 @@
+import TrustmaryWidget from "@/components/TrustmaryWidget"
+
 export const metadata = {
   title: 'Müşteri Yorumları | Şahika Beauty',
   description: 'Şahika Beauty güzellik merkezi müşteri yorumları ve deneyimleri. Gerçek müşteri hikayeleri ve memnuniyet oranları.',
@@ -76,24 +78,7 @@ export default function Yorumlar() {
 
           {/* Testimonials Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <span key={i}>★</span>
-                    ))}
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4 italic">
-                  "{testimonial.comment}"
-                </p>
-                <div className="border-t pt-4">
-                  <div className="font-bold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500">{testimonial.service}</div>
-                </div>
-              </div>
-            ))}
+           <TrustmaryWidget/>
           </div>
 
           {/* CTA */}
