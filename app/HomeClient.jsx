@@ -18,6 +18,7 @@ import {
   BlogCardSkeleton, 
   TestimonialsSkeleton 
 } from "@/components/Skeletons" // Yeni skeleton'ları import et (oluşturman gerekebilir)
+import { TrustmaryWidget } from "./widget/page"
 
 const HomeClient = ({ 
   blogs: initialBlogs = [], 
@@ -439,7 +440,7 @@ const HomeClient = ({
         </motion.section>
       </article>
       <FeaturedServices services={featuredServices} />
-      <ManualGoogleReviews />
+        <TrustmaryWidget />
       <BlogSection blogs={blogs} />
       <TestimonialsCarousel />
     </>
