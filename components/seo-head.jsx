@@ -1,5 +1,8 @@
 import Head from "next/head"
 
+const DEFAULT_SITE_URL = "https://sultanbeyliguzellikmerkezi.com.tr"
+const SITE_NAME = "Şahika Beauty"
+
 export function SEOHead({
   title,
   description,
@@ -12,9 +15,12 @@ export function SEOHead({
   tags,
   noindex = false,
 }) {
-  const siteName = "Coşkun Hafriyat"
-  const siteUrl = "https://sultanbeyliguzellikmerkezi.com.tr"
-  const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl
+  const siteUrl = DEFAULT_SITE_URL
+  const fullCanonical = canonical
+    ? canonical.startsWith("http")
+      ? canonical
+      : `${siteUrl}${canonical}`
+    : siteUrl
   const fullOgImage = ogImage.startsWith("http") ? ogImage : `${siteUrl}${ogImage}`
 
   return (
@@ -33,7 +39,7 @@ export function SEOHead({
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={fullCanonical} />
       <meta property="og:image" content={fullOgImage} />
-      <meta property="og:site_name" content={siteName} />
+      <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="tr_TR" />
 
       {/* Twitter Card */}
