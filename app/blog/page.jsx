@@ -1,5 +1,5 @@
 import BlogClient from "./BlogClient"
-import { blogCategories } from "./BlogClient"
+import { blogCategories } from "@/data/blogCategories"
 
 export async function generateMetadata({ searchParams }) {
   const category = searchParams?.category || "all"

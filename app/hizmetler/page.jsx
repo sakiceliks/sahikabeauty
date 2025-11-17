@@ -1,5 +1,5 @@
 import ServicesClient from "./ServicesClient"
-import { serviceCategories } from "./ServicesClient"
+import { serviceCategories } from "@/data/serviceCategories"
 
 export async function generateMetadata({ searchParams }) {
   const category = searchParams?.category || "all"
