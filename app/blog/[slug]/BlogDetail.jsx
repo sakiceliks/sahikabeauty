@@ -347,15 +347,6 @@ const sultanbeyliBlogData = {
       date: "2025-01-08"
     }
   ],
-  video: {
-    title: "Sultanbeyli Güzellik Merkezi Tanıtım",
-    description: "Şahika Beauty Sultanbeyli şubemizin tanıtım videosu. Merkezimizi ve hizmetlerimizi yakından tanıyın.",
-    thumbnail: "/video-thumbnail.jpg",
-    uploadDate: "2025-01-01",
-    duration: "PT3M45S",
-    url: "https://sultanbeyliguzellikmerkezi.com.tr/sultanbeyli-video.mp4",
-    embedUrl: "https://sultanbeyliguzellikmerkezi.com.tr/embed/sultanbeyli"
-  },
   howToSteps: {
     supplies: ["Temiz cilt", "Rahat kıyafet"],
     tools: ["Son teknoloji lazer cihazı", "Koruyucu gözlük"],
