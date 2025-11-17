@@ -33,10 +33,12 @@ const playfair = Playfair_Display({
 })
 
 export const metadata = {
+  metadataBase: new URL("https://sultanbeyliguzellikmerkezi.com.tr"),
   title: {
     default: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı",
     template: "%s | Şahika Beauty",
   },
+  applicationName: "Şahika Beauty",
   description:
     "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj, bölgesel incelme ve estetik hizmetler. Uzman kadromuz ve son teknoloji cihazlarımızla hizmetinizdeyiz.",
   keywords: [
@@ -89,8 +91,8 @@ export const metadata = {
     type: "website",
     locale: "tr_TR",
     url: "https://sultanbeyliguzellikmerkezi.com.tr",
-    siteName: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
-    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+    siteName: "Şahika Beauty",
+    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı",
     description:
       "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
     images: [
@@ -104,7 +106,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+    title: "Şahika Beauty - Sultanbeyli Güzellik Merkezi | Lazer Epilasyon & Cilt Bakımı",
     description:
       "Sultanbeyli'nin en kaliteli güzellik merkezi. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik hizmetler.",
     images: ["https://sultanbeyliguzellikmerkezi.com.tr/assets/about/img.jpg"],
