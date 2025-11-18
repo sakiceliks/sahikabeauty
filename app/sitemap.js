@@ -28,17 +28,6 @@ const blogPosts = [
   },
 ]
 
-// Kategoriler
-const categories = [
-  "epilasyon",
-  "cilt-bakimi",
-  "bolgesel-incelme",
-  "kalici-makyaj",
-  "tirnak-kirpik",
-  "sac-bakimi",
-  "anti-age",
-]
-
 export default function sitemap() {
   const baseUrl = "https://sultanbeyliguzellikmerkezi.com.tr"
 
@@ -98,21 +87,5 @@ export default function sitemap() {
     priority: 0.7,
   }))
 
-  // Kategori sayfaları
-  const categoryPages = categories.map((category) => ({
-    url: `${baseUrl}/hizmetler?category=${category}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }))
-
-  // Blog kategori sayfaları
-  const blogCategoryPages = categories.map((category) => ({
-    url: `${baseUrl}/blog?category=${category}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }))
-
-  return [...staticPages, ...servicePages, ...blogPages, ...categoryPages, ...blogCategoryPages]
+  return [...staticPages, ...servicePages, ...blogPages]
 }
