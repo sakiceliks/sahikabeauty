@@ -682,13 +682,13 @@ const EnhancedBlogDetail = ({ post, loading }) => {
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={localBusinessSchema} />
 
-      <FaqSchema faqs={sultanbeyliBlogData.faqs} />
-      <ReviewSchema reviews={sultanbeyliBlogData.reviews} />
-      <VideoSchema videoData={sultanbeyliBlogData.video} />
-      <HowToSchema
-        steps={sultanbeyliBlogData.howToSteps}
-        title="Sultanbeyli'de Lazer Epilasyon Nasıl Yapılır?"
-      />
+      {/* Only show general FAQs and reviews, not service-specific content */}
+      {post.category === 'epilasyon' && sultanbeyliBlogData.faqs && (
+        <FaqSchema faqs={sultanbeyliBlogData.faqs} />
+      )}
+      {sultanbeyliBlogData.reviews && (
+        <ReviewSchema reviews={sultanbeyliBlogData.reviews} />
+      )}
 
       <div className="min-h-screen pb-12">
         <div className="container mx-auto px-6">
@@ -730,150 +730,68 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                 />
               </div>
 
-              <TableOfContents headings={sultanbeyliBlogData.headings} />
-
               <article className="prose prose-lg max-w-none" itemScope itemType="https://schema.org/Article">
-                {/* Comprehensive content for SEO */}
-                <div className="text-gray-700 leading-relaxed mb-8" itemProp="articleBody">
-                  <h2 id="sultanbeyli-lazer-epilasyon" className="text-3xl font-bold text-heading-primary mb-6">Sultanbeyli'de Lazer Epilasyon Hizmetleri</h2>
-                  
-                  <p className="mb-6 text-lg">
-                    Sultanbeyli'de bulunan Şahika Beauty güzellik merkezimiz, 8 yılı aşkın deneyimiyle bölgenin en güvenilir güzellik merkezi olarak hizmet vermektedir. 
-                    <strong>Lazer epilasyon</strong>, <strong>cilt bakımı</strong>, <strong>kalıcı makyaj</strong> ve <strong>bölgesel incelme</strong> gibi profesyonel güzellik hizmetlerimizle 
-                    müşterilerimizin güzellik yolculuğunda yanlarında yer alıyoruz.
-                  </p>
-
-                  <h3 id="hazirlik-sureci" className="text-2xl font-semibold text-gray-800 mb-4">Lazer Epilasyon Hazırlık Süreci</h3>
-                  <p className="mb-4">
-                    Lazer epilasyon seansından önce, uzman ekibimiz sizinle detaylı bir konsültasyon gerçekleştirir. Bu süreçte cilt tipiniz, tüy yapınız ve 
-                    genel sağlık durumunuz değerlendirilir. <em>FDA onaylı son teknoloji lazer cihazlarımız</em> ile güvenli ve etkili sonuçlar elde ediyoruz.
-                  </p>
-
-                  <h3 id="seans-sureci" className="text-2xl font-semibold text-gray-800 mb-4">Seans Süreci Nasıl İşliyor?</h3>
-                  <p className="mb-4">
-                    Lazer epilasyon seanslarımız ortalama 30-60 dakika sürmektedir. Seans öncesi cilt temizliği yapılır ve koruyucu gözlük takılır. 
-                    Lazer ışını, tüy köklerindeki melanin pigmentini hedef alarak tüy üretimini durdurur. <strong>Alexandrite</strong> ve <strong>Diode</strong> 
-                    lazer teknolojilerimiz sayesinde tüm cilt tiplerinde başarılı sonuçlar alıyoruz.
-                  </p>
-
-                  <h2 id="sonrasi-bakim" className="text-3xl font-bold text-heading-secondary mb-6">Lazer Epilasyon Sonrası Bakım</h2>
-                  <p className="mb-4">
-                    Seans sonrası cildinizde hafif kızarıklık ve hassasiyet normaldir. Bu durum genellikle 24-48 saat içinde geçer. 
-                    <strong>Güneş koruyucu kullanımı</strong>, <strong>düzenli nemlendirme</strong> ve <strong>sıcak su ile yıkanmama</strong> gibi 
-                    bakım önerilerimizi takip ederek optimal sonuçlar elde edebilirsiniz.
-                  </p>
-
-                  <h2 id="fiyat-avantajlari" className="text-3xl font-bold text-heading-accent mb-6">Sultanbeyli Şube Fiyat Avantajları</h2>
-                  <p className="mb-4">
-                    Şahika Beauty Sultanbeyli şubemizde, kaliteli hizmeti uygun fiyatlarla sunuyoruz. <strong>Tam vücut lazer epilasyon paketimiz</strong> 
-                    piyasa fiyatlarından %30 daha uygun olup, <strong>6 seanslık paketlerde</strong> ek indirimler sunuyoruz. 
-                    <em>Şeffaf fiyatlandırma</em> politikamız sayesinde gizli maliyet yoktur.
-                  </p>
-
-                  <h2 id="musteri-deneyimleri" className="text-3xl font-bold text-heading-primary mb-6">Müşteri Deneyimleri ve Başarı Hikayeleri</h2>
-                  <p className="mb-6">
-                    Sultanbeyli'deki müşterilerimizin %95'i hizmetlerimizden memnun kalmaktadır. <strong>247+ doğrulanmış müşteri yorumumuz</strong> 
-                    ve <strong>4.8/5 ortalama puanımız</strong> kalitemizin göstergesidir. Müşterilerimizin başarı hikayeleri, 
-                    güzellik yolculuklarında yanlarında olduğumuzun en güzel kanıtıdır.
-                  </p>
-
-                  <div className="bg-blue-50 p-6 rounded-xl mb-8">
-                    <h4 className="text-xl font-semibold text-blue-800 mb-3">💡 Uzman Tavsiyesi</h4>
-                    <p className="text-blue-700">
-                      "Lazer epilasyon için en uygun dönem kış aylarıdır. Güneş ışınlarına maruz kalmadan yapılan seanslar, 
-                      daha etkili sonuçlar verir. Sultanbeyli şubemizde ücretsiz konsültasyon ile kişiye özel plan hazırlıyoruz."
-                      <br />
-                      <strong>- Uzm. Şahika Hanım, Güzellik Uzmanı</strong>
-                    </p>
+                {/* Blog post content */}
+                {post.content ? (
+                  <div dangerouslySetInnerHTML={{ __html: post.content }} className="text-gray-700 leading-relaxed" itemProp="articleBody" />
+                ) : (
+                  <div className="text-gray-700 leading-relaxed" itemProp="articleBody">
+                    <p className="mb-6 text-lg">{post.excerpt || post.description}</p>
                   </div>
-                </div>
-
-                {/* Original content if exists */}
-                {post.content && (
-                  <div dangerouslySetInnerHTML={{ __html: post.content }} className="text-gray-700 leading-relaxed" />
                 )}
 
                 {/* Related Service */}
                 {relatedService && <RelatedService service={relatedService} />}
 
-                {sultanbeyliBlogData.video && (
-                  <div className="not-prose my-12">
-                    <div className="bg-gray-900 rounded-2xl p-8 text-center">
-                      <h3 className="text-2xl font-bold text-white mb-4">
-                        🎥 Sultanbeyli Güzellik Merkezi Tanıtım
-                      </h3>
-                      <div className="relative bg-gray-800 rounded-xl overflow-hidden aspect-video mb-4">
-                      <div
-  className="absolute inset-0 flex items-center justify-center bg-cover bg-top before:absolute before:inset-0 before:bg-black/50"
-  style={{
-    backgroundImage: "url('/video-thumbnail.jpg')",
-  }}
->
-  <div className="relative text-center">
-    <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-      <svg
-        className="w-8 h-8 text-white ml-1"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-      </svg>
-    </div>
-    <p className="text-white text-lg">Merkezimizi Tanıyın</p>
-    <p className="text-gray-400 text-sm">3:45 dakika</p>
-  </div>
-</div>
+                {/* Only show service-specific content for relevant blog posts */}
+                {post.category === 'epilasyon' && sultanbeyliBlogData.beforeAfterImages && (
+                  <BeforeAfterGallery
+                    images={sultanbeyliBlogData.beforeAfterImages}
+                    service="Lazer Epilasyon"
+                  />
+                )}
 
+                {post.category === 'epilasyon' && sultanbeyliBlogData.expertTips && (
+                  <ExpertTips
+                    tips={sultanbeyliBlogData.expertTips}
+                    expertName="Uzm. Şahika Hanım"
+                  />
+                )}
+
+                {/* Only show FAQs for epilasyon category or if post has its own FAQs */}
+                {(post.category === 'epilasyon' || post.faqs) && (
+                  <div className="not-prose my-12">
+                    <div className="bg-white rounded-2xl shadow-lg p-8">
+                      <h3 className="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-3">
+                        <MessageCircle className="w-7 h-7 text-primary" />
+                        Sıkça Sorulan Sorular
+                      </h3>
+
+                      <div className="space-y-6">
+                        {(post.faqs && post.faqs.length > 0 ? post.faqs : (post.category === 'epilasyon' ? sultanbeyliBlogData.faqs : [])).map((faq, index) => (
+                          <details key={index} className="group border border-gray-200 rounded-xl">
+                            <summary className="flex justify-between items-center cursor-pointer p-6 font-semibold text-gray-800 group-open:text-primary transition-colors">
+                              <span className="pr-4">{faq.question || faq.title}</span>
+                              <div className="flex-shrink-0 ml-4">
+                                <svg
+                                  className="w-5 h-5 transform transition-transform group-open:rotate-180"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </div>
+                            </summary>
+                            <div className="p-6 pt-0 text-gray-600">
+                              <p>{faq.answer || faq.description}</p>
+                            </div>
+                          </details>
+                        ))}
                       </div>
-                      <p className="text-gray-300 text-sm">
-                        Sultanbeyli şubemizin içini görün, uzmanlarımızla tanışın ve hizmetlerimiz hakkında bilgi alın.
-                      </p>
                     </div>
                   </div>
                 )}
-
-                <BeforeAfterGallery
-                  images={sultanbeyliBlogData.beforeAfterImages}
-                  service="Lazer Epilasyon"
-                />
-
-
-                <ExpertTips
-                  tips={sultanbeyliBlogData.expertTips}
-                  expertName="Uzm. Şahika Hanım"
-                />
-
-                <div className="not-prose my-12">
-                  <div className="bg-white rounded-2xl shadow-lg p-8">
-                    <h3 className="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-3">
-                      <MessageCircle className="w-7 h-7 text-primary" />
-                      Sıkça Sorulan Sorular
-                    </h3>
-
-                    <div className="space-y-6">
-                      {sultanbeyliBlogData.faqs.map((faq, index) => (
-                        <details key={index} className="group border border-gray-200 rounded-xl">
-                          <summary className="flex justify-between items-center cursor-pointer p-6 font-semibold text-gray-800 group-open:text-primary transition-colors">
-                            <span className="pr-4">{faq.question}</span>
-                            <div className="flex-shrink-0 ml-4">
-                              <svg
-                                className="w-5 h-5 transform transition-transform group-open:rotate-180"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </div>
-                          </summary>
-                          <div className="p-6 pt-0 text-gray-600">
-                            <p>{faq.answer}</p>
-                          </div>
-                        </details>
-                      ))}
-                    </div>
-                  </div>
-                </div>
 
                 <LocalCitations />
 

@@ -29,7 +29,7 @@ const ServicesClient = ({ initialCategory = "all" }) => {
     "@type": "ItemList",
     name: "Şahika Beauty Güzellik Hizmetleri",
     description:
-      "Sultanbeyli'nin en kaliteli güzellik merkezi hizmetleri. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik uygulamalar.",
+      "Sultanbeyli'nin en kaliteli güzellik merkezi hizmetleri. Lazer epilasyon, cilt bakımı, kalıcı makyaj ve estetik uygulamalar. 8+ yıl deneyim, uzman kadro, son teknoloji cihazlar.",
     url: "https://sultanbeyliguzellikmerkezi.com.tr/hizmetler",
     numberOfItems: services.length,
     itemListElement: services.map((service, index) => ({
@@ -38,12 +38,29 @@ const ServicesClient = ({ initialCategory = "all" }) => {
       name: service.title,
       item: {
         "@type": "Service",
+        "@id": `https://sultanbeyliguzellikmerkezi.com.tr/hizmetler/${service.slug}`,
         name: service.title,
         description: service.description,
         url: `https://sultanbeyliguzellikmerkezi.com.tr/hizmetler/${service.slug}`,
         provider: {
           "@type": "BeautySalon",
-          name: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+          "@id": "https://sultanbeyliguzellikmerkezi.com.tr",
+          name: "Şahika Beauty",
+          alternateName: "Şahika Beauty - Sultanbeyli Güzellik Merkezi",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Abdurrahmangazi, Fatih Blv. No:73/1",
+            addressLocality: "Sultanbeyli",
+            addressRegion: "İstanbul",
+            postalCode: "34920",
+            addressCountry: "TR",
+          },
+          telephone: "+90 530 434 83 49",
+        },
+        serviceType: service.category,
+        areaServed: {
+          "@type": "City",
+          name: "Sultanbeyli",
         },
       },
     })),

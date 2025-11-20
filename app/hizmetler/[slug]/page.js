@@ -438,8 +438,7 @@ const ServiceDetails = () => {
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Ana Sayfa", url: "/" },
     { name: "Hizmetler", url: "/hizmetler" },
-    { name: "Sultanbeyli", url: "/hizmetler?location=sultanbeyli" },
-    { name: service.category || "Kategori", url: `/hizmetler?category=${service.category}` },
+    { name: service.category || "Kategori", url: service.category ? `/hizmetler?category=${service.category}` : "/hizmetler" },
     { name: service.title || "Hizmet" },
   ]);
 
@@ -493,11 +492,20 @@ const ServiceDetails = () => {
     <>
       <SEOHead
         title={`${service.title} - Sultanbeyli Güzellik Merkezi | Şahika Beauty`}
-        description={`Sultanbeyli'de ${service.title} hizmeti. 8+ yıl deneyim, uzman kadro, son teknoloji cihazlarla güvenli uygulama. ${service.description}`}
-        canonical={`https://sultanbeyliguzellikmerkezi.com.tr/hizmetler/${service.slug}`}
+        description={`Sultanbeyli'de ${service.title} hizmeti. 8+ yıl deneyim, uzman kadro, son teknoloji cihazlarla güvenli uygulama. ${service.description || ''} Ücretsiz konsültasyon, şeffaf fiyatlandırma, 1000+ memnun müşteri.`}
+        canonical={`/hizmetler/${service.slug}`}
         ogImage={service.image || "/og-default.png"}
         ogType="service"
-        tags={[...(service.keywords || []), 'sultanbeyli', 'güzellik merkezi', 'istanbul']}
+        tags={[
+          ...(service.keywords || []), 
+          'sultanbeyli', 
+          'güzellik merkezi', 
+          'istanbul',
+          `${service.title.toLowerCase()} sultanbeyli`,
+          'şahika beauty',
+          'sultanbeyli estetik',
+          service.category || ''
+        ]}
       />
       
       {/* Enhanced Schema Markup */}
@@ -521,10 +529,14 @@ const ServiceDetails = () => {
                 <Link href="/" itemProp="itemListElement" className="hover:text-primary transition-colors">Ana Sayfa</Link>
                 <span className="mx-2">/</span>
                 <Link href="/hizmetler" itemProp="itemListElement" className="hover:text-primary transition-colors">Hizmetler</Link>
+                {service.category && (
+                  <>
+                    <span className="mx-2">/</span>
+                    <Link href={`/hizmetler?category=${service.category}`} itemProp="itemListElement" className="hover:text-primary transition-colors capitalize">{service.category}</Link>
+                  </>
+                )}
                 <span className="mx-2">/</span>
-                <Link href="/hizmetler?location=sultanbeyli" itemProp="itemListElement" className="hover:text-primary transition-colors">Sultanbeyli</Link>
-                <span className="mx-2">/</span>
-                <span className="text-primary capitalize font-medium" itemProp="name">{service.category}</span>
+                <span className="text-primary font-medium" itemProp="name">{service.title}</span>
               </nav>
 
               <h1 className="h1 text-gradient mb-6" itemProp="name">{service.title}</h1>
@@ -736,6 +748,100 @@ const ServiceDetails = () => {
                 </div>
               </motion.div>
             </div>
+
+            {/* Detailed Description Section */}
+            {service.detailedDescription && (
+              <motion.section
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="mb-16"
+              >
+                <div className="max-w-4xl mx-auto">
+                  <div className="card-professional bg-gradient-to-br from-white via-primary/5 to-accent/5 border-2 border-primary/10">
+                    {/* Header */}
+                    <div className="flex items-center gap-4 mb-8 pb-6 border-b border-primary/20">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg">
+                        <BookOpen className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-bold text-gradient mb-2">
+                          {service.title} Hakkında Detaylı Bilgi
+                        </h2>
+                        <p className="text-muted-foreground text-sm">
+                          Sultanbeyli'de {service.title} hizmetimiz hakkında bilmeniz gereken her şey
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div 
+                      className="prose prose-lg max-w-none 
+                        prose-headings:text-heading-primary prose-headings:font-bold
+                        prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+                        prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                        prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                        prose-strong:text-primary prose-strong:font-semibold
+                        prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4
+                        prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4
+                        prose-li:text-gray-700 prose-li:mb-2
+                        prose-a:text-primary prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+                        prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600
+                        prose-img:rounded-xl prose-img:shadow-lg prose-img:my-6
+                        prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm
+                        prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:p-4
+                        prose-hr:border-primary/20 prose-hr:my-8
+                        [&>h2]:text-gradient [&>h2]:font-heading
+                        [&>h3]:text-primary [&>h3]:font-semibold
+                        [&>p]:text-pretty
+                        [&>ul>li]:flex [&>ul>li]:items-start [&>ul>li]:gap-2
+                        [&>ul>li]:before:content-['✓'] [&>ul>li]:before:text-primary [&>ul>li]:before:font-bold [&>ul>li]:before:mt-1
+                        [&>ol>li]:text-gray-700
+                        [&>blockquote]:bg-primary/5 [&>blockquote]:p-4 [&>blockquote]:rounded-lg [&>blockquote]:border-l-4 [&>blockquote]:border-primary
+                        [&>table]:w-full [&>table]:border-collapse [&>table]:my-6
+                        [&>table>thead]:bg-primary/10
+                        [&>table>thead>tr>th]:p-3 [&>table>thead>tr>th]:text-left [&>table>thead>tr>th]:font-semibold [&>table>thead>tr>th]:border [&>table>thead>tr>th]:border-primary/20
+                        [&>table>tbody>tr>td]:p-3 [&>table>tbody>tr>td]:border [&>table>tbody>tr>td]:border-primary/20
+                        [&>table>tbody>tr:nth-child(even)]:bg-primary/5"
+                      dangerouslySetInnerHTML={{ __html: service.detailedDescription }}
+                    />
+
+                    {/* Footer CTA */}
+                    <div className="mt-8 pt-6 border-t border-primary/20">
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-6">
+                        <div className="text-center sm:text-left">
+                          <h3 className="font-semibold text-lg mb-2 text-primary">
+                            {service.title} Hizmeti Hakkında Sorularınız mı Var?
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Uzman ekibimizle iletişime geçin, size özel bilgilendirme yapalım
+                          </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <a
+                            href="https://wa.me/905304348349"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
+                          >
+                            <MessageCircle className="w-5 h-5" />
+                            WhatsApp
+                          </a>
+                          <a
+                            href="tel:+905304348349"
+                            className="inline-flex items-center justify-center gap-2 bg-white text-primary border-2 border-primary px-6 py-3 rounded-xl font-medium hover:bg-primary/5 transition-all duration-300 shadow-md hover:shadow-lg"
+                          >
+                            <Phone className="w-5 h-5" />
+                            Hemen Ara
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.section>
+            )}
 
             {/* Enhanced Competitive Advantages */}
             <CompetitiveAdvantages />
