@@ -1,35 +1,73 @@
 import { services } from "@/data/services"
 
-// Blog yazıları (şu anda hardcoded, gelecekte API'den gelecek)
-const blogPosts = [
-  {
-    slug: "2024-guzellik-trendleri",
-    lastModified: "2024-03-15",
+// Bölge verileri (bolgeler sayfasından)
+const regionData = {
+  'sultanbeyli': {
+    name: 'Sultanbeyli',
+    slug: 'sultanbeyli',
   },
-  {
-    slug: "lazer-epilasyon-rehberi",
-    lastModified: "2024-03-10",
+  'samandira': {
+    name: 'Samandıra',
+    slug: 'samandira',
   },
-  {
-    slug: "kis-cilt-bakimi",
-    lastModified: "2024-03-05",
+  'pendik': {
+    name: 'Pendik',
+    slug: 'pendik',
   },
-  {
-    slug: "kalici-makyaj-teknikleri",
-    lastModified: "2024-03-01",
+  'sancaktepe': {
+    name: 'Sancaktepe',
+    slug: 'sancaktepe',
   },
-  {
-    slug: "bolgesel-incelme-yontemleri",
-    lastModified: "2024-02-28",
-  },
-  {
-    slug: "kirpik-permasi-bakim",
-    lastModified: "2024-02-25",
-  },
-]
+  'kurtkoy': {
+    name: 'Kurtköy',
+    slug: 'kurtkoy',
+  }
+}
 
-export default function sitemap() {
+// Blog yazılarını API'den çekme fonksiyonu
+async function getBlogPosts() {
+  try {
+    // Production'da absolute URL, development'ta relative URL kullan
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+                    'https://sultanbeyliguzellikmerkezi.com.tr'
+    
+    const apiUrl = process.env.NEXT_PUBLIC_BASE_URL 
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/blog?published=true`
+      : `${baseUrl}/api/blog?published=true`
+    
+    const res = await fetch(apiUrl, {
+      next: { revalidate: 3600 }, // 1 saat cache
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (res.ok) {
+      const data = await res.json()
+      if (data.success && data.data && Array.isArray(data.data)) {
+        return data.data
+          .filter((post) => post.slug && post.published !== false)
+          .map((post) => ({
+            slug: post.slug,
+            lastModified: post.updatedAt || post.date || new Date().toISOString(),
+          }))
+      }
+    }
+  } catch (error) {
+    // Sitemap generation sırasında hata olursa sessizce devam et
+    console.error('Error fetching blog posts for sitemap:', error)
+  }
+  
+  // Fallback: Eğer API'den çekilemezse boş array döndür
+  return []
+}
+
+export default async function sitemap() {
   const baseUrl = "https://sultanbeyliguzellikmerkezi.com.tr"
+  
+  // Blog yazılarını API'den çek
+  const blogPosts = await getBlogPosts()
 
   // Statik sayfalar
   const staticPages = [
@@ -69,6 +107,18 @@ export default function sitemap() {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/kampanyalar`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/sss`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
   ]
 
   // Hizmet sayfaları
@@ -79,7 +129,23 @@ export default function sitemap() {
     priority: 0.8,
   }))
 
-  // Blog yazı sayfaları
+  // Hizmet kategori sayfaları
+  const serviceCategoryPages = [
+    'epilasyon',
+    'cilt-bakimi',
+    'bolgesel-incelme',
+    'kalici-makyaj',
+    'tirnak-kirpik',
+    'sac-bakimi',
+    'anti-age'
+  ].map((category) => ({
+    url: `${baseUrl}/hizmetler?category=${category}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }))
+
+  // Blog yazı sayfaları (API'den gelen dinamik veriler)
   const blogPages = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.lastModified),
@@ -87,5 +153,36 @@ export default function sitemap() {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...servicePages, ...blogPages]
+  // Blog kategori sayfaları
+  const blogCategoryPages = [
+    'epilasyon',
+    'cilt-bakimi',
+    'bolgesel-incelme',
+    'kalici-makyaj',
+    'tirnak-kirpik',
+    'sac-bakimi',
+    'anti-age'
+  ].map((category) => ({
+    url: `${baseUrl}/blog?category=${category}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }))
+
+  // Bölge sayfaları
+  const regionPages = Object.values(regionData).map((region) => ({
+    url: `${baseUrl}/bolgeler/${region.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }))
+
+  return [
+    ...staticPages,
+    ...servicePages,
+    ...serviceCategoryPages,
+    ...blogPages,
+    ...blogCategoryPages,
+    ...regionPages,
+  ]
 }
