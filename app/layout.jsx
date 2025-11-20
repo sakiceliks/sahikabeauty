@@ -5,6 +5,7 @@ import { Playfair_Display } from "next/font/google"
 import ConditionalLayout from "@/components/ConditionalLayout"
 import ScrollToTop from "@/components/ScrollToTop"
 import ScrollToTopOnRouteChange from "@/components/ScrollToTopOnRouteChange"
+import Footer from "@/components/footer"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
@@ -222,6 +223,7 @@ export default function RootLayout({ children }) {
           <Toaster />
         </Suspense>
       </body>
+      <Footer/>
     </html>
   )
 }
