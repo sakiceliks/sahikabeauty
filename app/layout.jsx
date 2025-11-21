@@ -9,7 +9,7 @@ import Footer from "@/components/footer"
 import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
-import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/seo-schemas"
+import { generateOrganizationSchema, generateLocalBusinessSchema, generateWebsiteSchema } from "@/lib/seo-schemas"
 import "./globals.css"
 
 const marcellus = Marcellus({
@@ -124,6 +124,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   const organizationSchema = generateOrganizationSchema()
   const localBusinessSchema = generateLocalBusinessSchema()
+  const websiteSchema = generateWebsiteSchema()
 
   return (
     <html lang="tr" className={`${marcellus.variable} ${poppins.variable}`}>
@@ -208,6 +209,7 @@ export default function RootLayout({ children }) {
         
         <JsonLd data={organizationSchema} />
         <JsonLd data={localBusinessSchema} />
+        <JsonLd data={websiteSchema} />
         {/* Preload for performance */}
         <link rel="preload" href="/assets/about/img.jpg" as="image" fetchPriority="high" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
