@@ -105,21 +105,38 @@ export default function Navbar() {
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="md:hidden relative z-50 w-10 h-10 flex items-center justify-center focus:outline-none"
-          aria-label="Toggle Menu"
+          aria-label={isMobileMenuOpen ? "Close Menu" : "Open Menu"}
         >
-          <div className="w-6 flex flex-col items-end gap-1.5">
-            <motion.span 
-              animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className={`w-full h-0.5 origin-center transition-all duration-300 ${hamburgerColor}`}
-            />
-            <motion.span 
-              animate={isMobileMenuOpen ? { opacity: 0, x: 10 } : { opacity: 1, x: 0 }}
-              className={`w-4 h-0.5 transition-all duration-300 ${isMobileMenuOpen ? 'bg-slate-800' : 'bg-blue-600'}`}
-            />
-            <motion.span 
-              animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className={`w-full h-0.5 origin-center transition-all duration-300 ${hamburgerColor}`}
-            />
+          <div className="w-6 h-6 flex items-center justify-center">
+            {isMobileMenuOpen ? (
+              // Close Icon (X)
+              <motion.svg
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+                className="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke={isScrolled ? "#1e293b" : "#ffffff"}
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </motion.svg>
+            ) : (
+              // Menu Icon (Hamburger)
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="w-6 flex flex-col items-center justify-center gap-1.5"
+              >
+                <span className={`w-full h-0.5 ${hamburgerColor} transition-all duration-300`} />
+                <span className={`w-4 h-0.5 bg-blue-600 transition-all duration-300`} />
+                <span className={`w-full h-0.5 ${hamburgerColor} transition-all duration-300`} />
+              </motion.div>
+            )}
           </div>
         </button>
       </div>

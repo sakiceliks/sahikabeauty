@@ -176,7 +176,7 @@ export default function HeroCarousel() {
 
   return (
     <section 
-      className="relative h-[90vh] w-full overflow-hidden bg-slate-900 group"
+      className="relative h-[100vh] md:h-[90vh] w-full overflow-hidden bg-slate-900 group"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -205,7 +205,7 @@ export default function HeroCarousel() {
                   <img 
                     src={slides[currentSlide].image} 
                     alt={slides[currentSlide].title}
-                    className="w-full h-[110%] object-cover" // 110% height to accommodate parallax movement
+                    className="w-full h-full md:h-[110%] object-contain md:object-cover" // Mobilde tam görünsün, desktop'ta cover
                   />
                 </motion.div>
              </motion.div>
@@ -215,7 +215,7 @@ export default function HeroCarousel() {
                 Removed heavy black tint. 
                 Using a subtle gradient only at the bottom for text contrast.
              */}
-             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-90" />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent md:via-transparent opacity-90" />
           </div>
 
           {/* 2. Text Content */}
