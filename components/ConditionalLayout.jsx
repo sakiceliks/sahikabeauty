@@ -19,7 +19,9 @@ export default function ConditionalLayout({ children }) {
   return (
     <>
       <Header />
-      {children}
+      <div className="pt-24 md:pt-28">
+        {children}
+      </div>
       <FloatingContactButtons />
     </>
   )
