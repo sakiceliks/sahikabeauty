@@ -608,9 +608,6 @@ const ServiceDetails = () => {
                     Hemen Ara
                   </ContactButton>
                 </motion.div>
-                  <Phone className="w-5 h-5 mr-2" />
-                  Hemen Ara
-                </motion.a>
               </div>
             </motion.div>
           </div>
