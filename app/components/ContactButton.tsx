@@ -270,11 +270,12 @@ declare global {
         phone_number?: string
         page_location?: string
         page_title?: string
+        page_path?: string
         value?: number
         [key: string]: any
       }
-    ) => void
-    dataLayer?: any[]
+    ) => void;
+    dataLayer?: any[];
   }
 }
 
