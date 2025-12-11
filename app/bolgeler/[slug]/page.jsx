@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import ContactButton from '@/app/components/ContactButton'
 import { MapPin, Phone, Clock, Star, ArrowRight, CheckCircle } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 
@@ -342,12 +343,16 @@ export default function RegionPage({ params }) {
                 >
                   Randevu Al
                 </Link>
-                <Link 
-                  href="tel:+905304348349"
+                <ContactButton
+                  type="phone"
+                  phoneNumber="905304348349"
+                  variant="outline"
+                  size="lg"
                   className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-green-600 transition-colors"
+                  trackingLabel="bolgeler_hero_phone"
                 >
                   Hemen Ara
-                </Link>
+                </ContactButton>
               </div>
             </div>
           </div>
@@ -448,12 +453,16 @@ export default function RegionPage({ params }) {
                     >
                       Online Randevu Al
                     </Link>
-                    <Link 
-                      href="tel:+905304348349"
+                    <ContactButton
+                      type="phone"
+                      phoneNumber="905304348349"
+                      variant="outline"
+                      size="lg"
                       className="w-full border-2 border-green-600 text-green-600 py-4 px-6 rounded-xl font-semibold hover:bg-green-600 hover:text-white transition-colors text-center block"
+                      trackingLabel="bolgeler_sidebar_phone"
                     >
                       Telefon ile Randevu
-                    </Link>
+                    </ContactButton>
                   </div>
                 </div>
               </div>

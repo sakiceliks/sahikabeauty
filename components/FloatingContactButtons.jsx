@@ -2,9 +2,55 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackUmamiContactClick } from "@/app/components/UmamiAnalytics";
 
 const FloatingContactButtons = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Tracking function for contact clicks
+  const trackContactClick = (contactType, label) => {
+    if (typeof window !== 'undefined') {
+      const phoneNumber = '905304348349';
+      
+      // GA4 Event Tracking
+      if (window.gtag) {
+        window.gtag('event', 'contact_click', {
+          event_category: 'Contact',
+          event_label: label || `floating_${contactType}_${phoneNumber}`,
+          contact_type: contactType,
+          phone_number: phoneNumber,
+          page_location: window.location.href,
+          page_title: document.title,
+          value: 1
+        });
+      }
+      
+      // Data Layer için (GTM kullanılıyorsa)
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'contact_click',
+          event_category: 'Contact',
+          event_label: label || `floating_${contactType}_${phoneNumber}`,
+          contact_type: contactType,
+          phone_number: phoneNumber,
+          page_location: window.location.href,
+          page_title: document.title
+        });
+      }
+      
+      // Umami Analytics Event Tracking
+      trackUmamiContactClick(contactType, phoneNumber, label || `floating_${contactType}_${phoneNumber}`);
+      
+      // Console log (development için)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Floating Contact Button Click Tracked:', {
+          contact_type: contactType,
+          label: label || `floating_${contactType}_${phoneNumber}`,
+          phone_number: phoneNumber
+        });
+      }
+    }
+  };
 
   const buttons = [
     {
@@ -82,10 +128,16 @@ const FloatingContactButtons = () => {
                   className={`${button.color} text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 min-w-[140px] group cursor-pointer pointer-events-auto`}
                   onClick={(e) => {
                     e.preventDefault();
-                    if (button.target === "_blank") {
-                      window.open(button.href, '_blank');
-                    } else if (button.href.startsWith('tel:')) {
+                    
+                    // Tracking for phone and WhatsApp buttons
+                    if (button.id === 'phone') {
+                      trackContactClick('phone', 'floating_phone_button');
                       window.location.href = button.href;
+                    } else if (button.id === 'whatsapp') {
+                      trackContactClick('whatsapp', 'floating_whatsapp_button');
+                      window.open(button.href, '_blank');
+                    } else if (button.target === "_blank") {
+                      window.open(button.href, '_blank');
                     } else {
                       window.location.href = button.href;
                     }
@@ -150,3 +202,9 @@ const FloatingContactButtons = () => {
 };
 
 export default FloatingContactButtons;
+
+// TypeScript declarations for window objects
+if (typeof window !== 'undefined') {
+  window.gtag = window.gtag || function() {};
+  window.dataLayer = window.dataLayer || [];
+}

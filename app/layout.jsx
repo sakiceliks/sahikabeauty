@@ -10,6 +10,8 @@ import { Toaster } from "react-hot-toast"
 import { Suspense } from "react"
 import JsonLd from "@/components/JsonLd"
 import { generateOrganizationSchema, generateLocalBusinessSchema, generateWebsiteSchema } from "@/lib/seo-schemas"
+import GoogleAnalytics from "./components/GoogleAnaly"
+import UmamiAnalytics from "./components/UmamiAnalytics"
 import "./globals.css"
 
 const marcellus = Marcellus({
@@ -216,6 +218,8 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
       </head>
       <body className="font-body">
+        <GoogleAnalytics />
+        <UmamiAnalytics />
         <Suspense fallback={null}>
           <ScrollToTopOnRouteChange />
           <ConditionalLayout>

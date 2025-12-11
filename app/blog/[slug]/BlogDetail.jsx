@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import ContactButton from '@/app/components/ContactButton';
 
 
 const JsonLd = ({ data }) => {
@@ -143,9 +144,31 @@ const LocalCitations = () => (
         </p>
         <p className="text-gray-700">
           <strong className="block mb-1">Telefon:</strong>
-          <a href="tel:+905304348349" className="text-blue-600 hover:underline">
-            0530 434 83 49
-          </a>
+          <div className="flex gap-2 mt-2">
+            <ContactButton
+              type="phone"
+              phoneNumber="905304348349"
+              variant="outline"
+              size="sm"
+              className="text-blue-600 hover:text-blue-700"
+              trackingLabel="blog_detail_local_citations_phone"
+              showIcon={false}
+            >
+              0530 434 83 49
+            </ContactButton>
+            <ContactButton
+              type="whatsapp"
+              phoneNumber="905304348349"
+              message="Merhaba, blog yazınızı okudum ve daha fazla bilgi almak istiyorum."
+              variant="outline"
+              size="sm"
+              className="text-green-600 hover:text-green-700"
+              trackingLabel="blog_detail_local_citations_whatsapp"
+              showIcon={false}
+            >
+              WhatsApp
+            </ContactButton>
+          </div>
         </p>
         <p className="text-gray-700">
           <strong className="block mb-1">Çalışma Saatleri:</strong>
@@ -890,13 +913,29 @@ const EnhancedBlogDetail = ({ post, loading }) => {
                   Şahika Beauty Sultanbeyli şubesine kolayca randevu oluşturun.
                 </p>
                 <div className="space-y-4">
-                  <a
-                    href="tel:+905304348349"
-                    className="w-full flex items-center justify-center gap-2 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors shadow-md"
+                  <ContactButton
+                    type="phone"
+                    phoneNumber="905304348349"
+                    variant="default"
+                    size="lg"
+                    className="w-full bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors shadow-md"
+                    trackingLabel="blog_detail_sidebar_phone"
                   >
                     <Phone className="w-5 h-5" />
                     Hemen Ara
-                  </a>
+                  </ContactButton>
+                  <ContactButton
+                    type="whatsapp"
+                    phoneNumber="905304348349"
+                    message="Merhaba, blog yazınızı okudum ve randevu almak istiyorum."
+                    variant="default"
+                    size="lg"
+                    className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors shadow-md"
+                    trackingLabel="blog_detail_sidebar_whatsapp"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    WhatsApp ile İletişim
+                  </ContactButton>
                   <Link
                     href="/rezervasyon"
                     className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors shadow-md"

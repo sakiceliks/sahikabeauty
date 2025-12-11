@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import ContactButton from '@/app/components/ContactButton';
 import { 
   Calendar, 
   Clock, 
@@ -1229,22 +1230,29 @@ ${personalInfo.notes ? `Özel Notlar: ${personalInfo.notes}` : ''}
             Randevu alma sürecinde herhangi bir sorunuz varsa, uzman ekibimiz size yardımcı olmaktan mutluluk duyar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="tel:+905304348349"
+            <ContactButton
+              type="phone"
+              phoneNumber="905304348349"
+              variant="default"
+              size="lg"
               className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
+              trackingLabel="rezervasyon_page_phone"
             >
               <Phone className="w-5 h-5" />
               0530 434 83 49
-            </a>
-            <a 
-              href="https://wa.me/905304348349"
+            </ContactButton>
+            <ContactButton
+              type="whatsapp"
+              phoneNumber="905304348349"
+              message="Merhaba, randevu almak istiyorum."
+              variant="default"
+              size="lg"
               className="flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
+              trackingLabel="rezervasyon_page_whatsapp"
             >
               <MessageCircle className="w-5 h-5" />
               WhatsApp
-            </a>
+            </ContactButton>
           </div>
         </div>
       </div>

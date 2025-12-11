@@ -8,6 +8,7 @@ import { generateBreadcrumbSchema } from "@/lib/seo-schemas"
 import { ServiceCardSkeleton } from "@/components/Skeletons"
 import Link from "next/link"
 import RelatedBlogs from "@/components/RelatedBlogs"
+import ContactButton from "@/app/components/ContactButton"
 import { ArrowRight } from "lucide-react"
 import { serviceCategories } from "@/data/serviceCategories"
 
@@ -314,12 +315,27 @@ const ServicesClient = ({ initialCategory = "all" }) => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="https://wa.me/905304348349" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                <ContactButton
+                  type="whatsapp"
+                  phoneNumber="905304348349"
+                  message="Merhaba, hizmetler sayfasından randevu almak istiyorum."
+                  variant="default"
+                  size="lg"
+                  className="btn-primary"
+                  trackingLabel="services_page_whatsapp"
+                >
                   WhatsApp ile Randevu Al
-                </a>
-                <a href="tel:+905304348349" className="btn-secondary">
+                </ContactButton>
+                <ContactButton
+                  type="phone"
+                  phoneNumber="905304348349"
+                  variant="secondary"
+                  size="lg"
+                  className="btn-secondary"
+                  trackingLabel="services_page_phone"
+                >
                   Hemen Ara
-                </a>
+                </ContactButton>
               </div>
 
               <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">

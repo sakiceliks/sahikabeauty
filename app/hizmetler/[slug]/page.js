@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { SEOHead } from "@/components/seo-head"
+import ContactButton from "@/app/components/ContactButton"
 import { 
   Star, Clock, Award, CheckCircle, Phone, MessageCircle, Shield, Users, 
   Sparkles, ArrowRight, MapPin, Calendar, ExternalLink, BookOpen,
@@ -574,23 +575,39 @@ const ServiceDetails = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.a
-                  href="https://wa.me/905304348349"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="btn-primary flex justify-center items-center"
                 >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Sultanbeyli'den Randevu Al
-                </motion.a>
-                <motion.a
-                  href="tel:+905304348349"
+                  <ContactButton
+                    type="whatsapp"
+                    phoneNumber="905304348349"
+                    message="Merhaba, hizmet detay sayfasından randevu almak istiyorum."
+                    variant="default"
+                    size="lg"
+                    className="btn-primary flex justify-center items-center"
+                    trackingLabel="service_detail_hero_whatsapp"
+                  >
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    Sultanbeyli'den Randevu Al
+                  </ContactButton>
+                </motion.div>
+                <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="btn-secondary flex justify-center items-center"
                 >
+                  <ContactButton
+                    type="phone"
+                    phoneNumber="905304348349"
+                    variant="secondary"
+                    size="lg"
+                    className="btn-secondary flex justify-center items-center"
+                    trackingLabel="service_detail_hero_phone"
+                  >
+                    <Phone className="w-5 h-5 mr-2" />
+                    Hemen Ara
+                  </ContactButton>
+                </motion.div>
                   <Phone className="w-5 h-5 mr-2" />
                   Hemen Ara
                 </motion.a>
@@ -819,22 +836,29 @@ const ServiceDetails = () => {
                           </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3">
-                          <a
-                            href="https://wa.me/905304348349"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <ContactButton
+                            type="whatsapp"
+                            phoneNumber="905304348349"
+                            message="Merhaba, hizmet detay sayfasından randevu almak istiyorum."
+                            variant="default"
+                            size="lg"
                             className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
+                            trackingLabel="service_detail_cta_whatsapp"
                           >
                             <MessageCircle className="w-5 h-5" />
                             WhatsApp
-                          </a>
-                          <a
-                            href="tel:+905304348349"
+                          </ContactButton>
+                          <ContactButton
+                            type="phone"
+                            phoneNumber="905304348349"
+                            variant="outline"
+                            size="lg"
                             className="inline-flex items-center justify-center gap-2 bg-white text-primary border-2 border-primary px-6 py-3 rounded-xl font-medium hover:bg-primary/5 transition-all duration-300 shadow-md hover:shadow-lg"
+                            trackingLabel="service_detail_cta_phone"
                           >
                             <Phone className="w-5 h-5" />
                             Hemen Ara
-                          </a>
+                          </ContactButton>
                         </div>
                       </div>
                     </div>
@@ -1255,22 +1279,29 @@ const ServiceDetails = () => {
                   
                   {/* Enhanced contact options */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto mb-8">
-                    <a
-                      href="https://wa.me/905304348349"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <ContactButton
+                      type="whatsapp"
+                      phoneNumber="905304348349"
+                      message="Merhaba, hizmet detay sayfasından randevu almak istiyorum."
+                      variant="default"
+                      size="lg"
                       className="flex-1 bg-white text-primary px-6 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 shadow-lg"
+                      trackingLabel="service_detail_footer_whatsapp"
                     >
                       <MessageCircle className="w-5 h-5" />
                       WhatsApp'tan Randevu
-                    </a>
-                    <a
-                      href="tel:+905304348349"
+                    </ContactButton>
+                    <ContactButton
+                      type="phone"
+                      phoneNumber="905304348349"
+                      variant="outline"
+                      size="lg"
                       className="flex-1 border-2 border-white text-white px-6 py-4 rounded-xl font-semibold hover:bg-white hover:text-primary transition-colors flex items-center justify-center gap-2"
+                      trackingLabel="service_detail_footer_phone"
                     >
                       <Phone className="w-5 h-5" />
                       Hemen Ara
-                    </a>
+                    </ContactButton>
                   </div>
 
                   {/* Business stats */}

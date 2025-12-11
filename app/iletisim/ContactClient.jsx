@@ -2,6 +2,7 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Form from "@/components/Form"
+import ContactButton from "@/app/components/ContactButton"
 import { Clock, MapPin, Phone, Mail, MessageCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 
@@ -89,23 +90,32 @@ const ContactClient = () => {
       content: (
         <div className="space-y-3">
           <p className="text-gray-700">
-            <a
-              href={`tel:${contactData.phone.replace(/\s/g, '')}`}
-              className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline"
+            <ContactButton
+              type="phone"
+              phoneNumber="905304348349"
+              variant="ghost"
+              size="sm"
+              className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline p-0 h-auto"
+              trackingLabel="contact_page_phone"
+              showIcon={false}
             >
               {contactData.phone}
-            </a>
+            </ContactButton>
           </p>
           <div className="flex items-center gap-2">
             <MessageCircle className="w-4 h-4 text-green-500" />
-            <a
-              href={contactData.whatsapp}
-              className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200 hover:underline inline-flex items-center gap-1"
-              target="_blank"
-              rel="noopener noreferrer"
+            <ContactButton
+              type="whatsapp"
+              phoneNumber="905304348349"
+              message="Merhaba, iletişim sayfasından yazıyorum."
+              variant="ghost"
+              size="sm"
+              className="text-green-600 hover:text-green-800 font-medium transition-colors duration-200 hover:underline inline-flex items-center gap-1 p-0 h-auto"
+              trackingLabel="contact_page_whatsapp"
+              showIcon={false}
             >
-              WhatsApp ile mesaj gönder
-            </a>
+              WhatsApp ile İletişim
+            </ContactButton>
           </div>
         </div>
       ),

@@ -9,6 +9,7 @@ import { blogCategories } from "@/data/blogCategories";
 import Link from "next/link";
 import { ServiceCardSkeleton } from "@/components/Skeletons";
 import { ArrowRight } from "lucide-react";
+import ContactButton from "@/app/components/ContactButton";
 
 const skeletonCount = 6;
 
@@ -299,12 +300,27 @@ const BlogClient = ({ initialCategory = "all" }) => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="https://wa.me/905304348349" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                <ContactButton
+                  type="whatsapp"
+                  phoneNumber="905304348349"
+                  message="Merhaba, blog yazınızı okudum ve daha fazla bilgi almak istiyorum."
+                  variant="default"
+                  size="lg"
+                  className="btn-primary"
+                  trackingLabel="blog_page_whatsapp"
+                >
                   📱 WhatsApp ile İletişime Geç
-                </a>
-                <a href="tel:+905304348349" className="btn-secondary">
+                </ContactButton>
+                <ContactButton
+                  type="phone"
+                  phoneNumber="905304348349"
+                  variant="secondary"
+                  size="lg"
+                  className="btn-secondary"
+                  trackingLabel="blog_page_phone"
+                >
                   📞 Hemen Ara
-                </a>
+                </ContactButton>
               </div>
 
               {/* Hizmetler Linkleri */}
