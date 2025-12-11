@@ -93,7 +93,7 @@ declare global {
         [key: string]: any
       }
     ) => void;
-    dataLayer: any[];
+    dataLayer?: any[];
   }
 }
 
